@@ -1,0 +1,17 @@
+.app-bar {
+    display: flex;
+}
+
+.small-app-bar {
+    display: none;
+}
+
+@media screen and (max-width: 1000px) {
+    .app-bar {
+        display: none;
+    }
+
+    .small-app-bar {
+        display: flex;
+    }
+}

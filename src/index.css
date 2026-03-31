@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@layer base {
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-3xl;
+  }
+
+  h3 {
+    @apply text-2xl;
+  }
+}
+
+body {
+  position: relative;
+  height: 100%;
+}
+
+* {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  --facebook : rgba(9, 103, 255, 1.00);
+  --linkedin : rgba(1, 99, 200, 1.00);
+  --youtube : rgba(255, 0, 50, 1.00);
+  --blue-sky: rgba(169, 255, 248, 0.304);
+  --primary-green: rgb(87, 255, 141);
+  --primary-green-2: rgba(87, 255, 140, 0.364);
+}
+
+.page {
+  padding-top: 80px;
+  min-height: 100vh;
+  background-color: rgba(128, 128, 128, 0.02);
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
