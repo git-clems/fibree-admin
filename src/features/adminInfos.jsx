@@ -4,6 +4,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import AddInfo from '../ux/addInfo'
 
 
+export const formatDate = (date) => {
+  const d = new Date(date);
+
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};
+
 const AdminInfos = () => {
   const [infos, setInfos] = useState([])
 
@@ -72,7 +82,8 @@ const AdminInfos = () => {
                       <p className='text-gray-500 truncate max-w-[60vw]'>{info.subtitle}</p>
                     </td>
                     <td>
-                      <span>{info.publishDate}</span>
+                      {/* <span>{info.publishDate - Date()}</span> */}
+                      <span className='text-gray-500'>{formatDate(info.publishDate)}</span>
                     </td>
                     <td>
                       <input type="checkbox" className="m-2"

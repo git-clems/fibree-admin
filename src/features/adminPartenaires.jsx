@@ -63,7 +63,7 @@ const AdminPartenaires = () => {
                 </tr>
               </thead>
               <tbody>
-                {partenaires.reverse().map((partenaire, index) => (
+                {partenaires.map((partenaire, index) => (
                   <tr>
                     <th scope="row" className='bg-red-200'>{index + 1}</th>
                     <td>{partenaire.name}</td>

@@ -26,21 +26,19 @@ const FlashInfo = ({ flashInfoId }) => {
 
     return (
         flashInfo.displayed &&
-        <div className="border-2 border-gray-300 flex-1 mt-1 rounded-1 bg-white p-2 flex justify-between">
-            <div className="flex flew-wrap">
-                <img src={flashInfo.image} alt="" className="h-[70px] w-[100px] object-contain float-right rounded-md" />
-                <div className="ml-3 ">
-                    <div className="hover:underline w-[max-content]">
-                        <Link to={`/actualite/${flashInfo._id}`}>{flashInfo.title}</Link>
-                    </div>
-                    <span className="text-gray-400">{flashInfo.subtitle}</span>
+        <Link to={`/actualite/${flashInfo._id}`} className="hover:bg-red ">
+            <div className='hover:bg-gray-200 flex flew-wrap border-t-1 overflow-hidden border-gray-300 flex-1 p-2'>
+                <div className='w-[100px] h-[100px'>
+                    <img src={flashInfo.image} alt="" className={`${flashInfo.image ? 'object-contain border-1 border-gray-300 rounded-md' : ''}`} />
+                </div>
+                <div className="flex-1 ml-2">
+                    <div className='truncate max-w-[300px]'>{flashInfo.title}</div>
+                    <div className="text-gray-400 truncate max-w-[300px]">{flashInfo.subtitle}</div>
+                    {flashInfo.comingDate && <span>{flashInfo.comingDate}</span>}
+                    {flashInfo.town && <span> {flashInfo.comingDate  && <span> - </span>} {flashInfo.town}</span>}
                 </div>
             </div>
-            {
-                flashInfo.externalLink &&
-                <a href={flashInfo.externalLink} target="_blank" className="text-red-400"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-            }
-        </div>
+        </Link>
     )
 }
 

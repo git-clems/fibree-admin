@@ -51,7 +51,7 @@ const AppBar = () => {
             <div className="flex items-center border-l-2 border-r-2 border-gray-300">
                 <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 pl-3 pr-3 rounded-full pt-1 pb-1"
                     to="/a-propos">
-                    À propos de nous
+                    Qui sommes-nous ?
                 </NavLink>
 
                 <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 pl-3 pr-3 rounded-full pt-1 pb-1"

@@ -10,8 +10,6 @@ const Chiffre = ({ chiffreId }) => {
                 const response = await axios.get('http://localhost:8000/api/partenaire')
                 const foundChiffre = response.data.find((e) => e._id === chiffreId);
                 setChiffre(foundChiffre || null);
-                console.log(foundChiffre);
-
             } catch (error) {
                 console.log(error);
             }

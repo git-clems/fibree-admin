@@ -78,8 +78,8 @@ const AddFlashInfo = () => {
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">Description</label>
-                                    <input type="text" onChange={inputHandler} name='description' class="form-control" id="exampleFormControlInput1" placeholder="description l'info" />
+                                    <label for="exampleFormControlTextarea1" class="form-label">Descrption de l'évènement</label>
+                                    <textarea class="form-control" required name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
 
                                 <div class="mb-3">

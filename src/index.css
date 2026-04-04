@@ -14,10 +14,6 @@
   }
 }
 
-body {
-  position: relative;
-  height: 100%;
-}
 
 * {
   font-family: "Roboto", sans-serif;
@@ -33,7 +29,7 @@ body {
 .page {
   padding-top: 80px;
   min-height: 100vh;
-  background-color: rgba(128, 128, 128, 0.02);
+  /* background-color: rgba(128, 128, 128, 0.05); */
 }
 
 a {
