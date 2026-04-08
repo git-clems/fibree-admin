@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
-import axios from 'axios';
-import { Link } from 'react-router';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../auth/firebase';
 
 const MyCarousel = () => {
   const interval = 4000;
 
-  const [affiches, setAffiche] = useState([])
+  const [affiches, setAffiche] = useState()
 
   useEffect(() => {
     const dataFect = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/affiche')
-        setAffiche(response.data)
+        const response = await getDocs(collection(db, 'carrousel-affiche'))
+        const data = response.docs.map((doc) => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setAffiche(data)
       } catch (error) {
         console.log(error);
       }
@@ -20,20 +24,36 @@ const MyCarousel = () => {
     dataFect()
   }, [])
 
+  while (!affiches) {
+    return (
+      <div class="card" aria-hidden="true">
+        <img src="..." class="card-img-top" alt="..." />
+        <div class="card-body">
+          <h5 class="card-title placeholder-glow">
+            <span class="placeholder col-6"></span>
+          </h5>
+          <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+          </p>
+          <a class="btn btn-primary disabled placeholder col-6" aria-disabled="true"></a>
+        </div>
+      </div>
+    )
+  }
+
   return (
-        (affiches && affiches.length > 0) &&
-        < Carousel className="overflow-hidden rounded-md border-2 border-gray-300 p-2 bg-[rgba(0,0,0,0.2)]">
-          {
-            affiches.map((affiche) => (
-              (affiche.images.length && affiche.displayed) > 0 &&
-              <Carousel.Item interval={interval}>
-                <img src={affiche.images[0]} alt="" className="w-full max-[800px]:h-[200px] h-[400px] object-contain rounded-md" />
-                <Carousel.Caption>
-                  <p className='bg-[rgba(0,0,0,0.5)] rounded-md truncate'>{affiche.title}</p>
-                </Carousel.Caption>
-              </Carousel.Item>))
-          }
-        </Carousel >
+    affiches &&
+    < Carousel className="overflow-hidden rounded-md border-2 border-gray-300 p-2 bg-[rgba(0,0,0,0.2)]">
+      {affiches.map((affiche) => (
+        (affiche.displayed) > 0 &&
+        <Carousel.Item interval={interval}>
+          <img src={affiche.image} alt="" className="w-full max-[800px]:h-[200px] h-[400px] object-contain rounded-md" />
+        </Carousel.Item>))}
+    </Carousel >
   );
 };
 

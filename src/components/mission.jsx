@@ -1,21 +1,53 @@
 import { useEffect, useState } from 'react'
 import './css/autoplayCarous.scss'
-import axios from 'axios'
-import { Link } from 'react-router'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../auth/firebase'
 
 const Missions = () => {
-    const [missions, setMissions] = useState([])
+    const [missions, setMissions] = useState()
     useEffect(() => {
         const dataFect = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/mission')
-                setMissions(response.data)
+                const response = await getDocs(collection(db, 'mission'))
+                const data = response.docs.map((doc) => ({
+                    _id: doc.id,
+                    ...doc.data()
+                }))
+                setMissions(data)
             } catch (error) {
                 console.log(error);
             }
         };
         dataFect()
     }, [])
+
+    while (!missions) {
+        return (
+            <div className='slide-track flex'>
+                <div class="card w-55 min-h-50 m-2" aria-hidden="true">
+                    <div class="card-body">
+                        <h5 class="card-title placeholder-glow">
+                            <span class="placeholder col-6"></span>
+                        </h5>
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-7"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="card w-55 min-h-50 m-2" aria-hidden="true">
+                    <div class="card-body">
+                        <h5 class="card-title placeholder-glow">
+                            <span class="placeholder col-6"></span>
+                        </h5>
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-7"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <>
             {(missions && missions.length > 0) &&

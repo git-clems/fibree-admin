@@ -2,16 +2,23 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AddMission from '../ux/addMission';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../auth/firebase';
+import Loading from '../components/LoadingPage';
 
 const AdminMissions = () => {
-  const [missions, setMissions] = useState([]);
+  const [missions, setMissions] = useState();
   const [deletingIds, setDeletingIds] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/mission');
-        setMissions(response.data);
+        const response = await getDocs(collection(db, 'mission'))
+        const data = response.docs.map(doc => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setMissions(data);
       } catch (error) {
         console.log(error);
       }
@@ -59,6 +66,10 @@ const AdminMissions = () => {
     }
   };
 
+  while (!missions) {
+    return <Loading></Loading>
+  }
+
   return (
     <div className="page">
       {missions.length === 0 ? (
@@ -80,7 +91,7 @@ const AdminMissions = () => {
 
       ) : (
         <>
-          <h1 className='ml-3'>Les missions</h1>
+          {/* <h1 className='ml-3'>Les missions</h1> */}
           <AddMission />
           <table className="table">
             <thead>

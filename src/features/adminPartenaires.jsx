@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import AddPartenaire from '../ux/addPartenaire'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../auth/firebase'
+import Loading from '../components/LoadingPage'
 
 
 const AdminPartenaires = () => {
@@ -10,8 +13,12 @@ const AdminPartenaires = () => {
   useEffect(() => {
     const fectData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/partenaire')
-        setPartenaires(response.data)
+        const response = await getDocs(collection(db, 'partenaire'))
+        const data = response.docs.map((doc) => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setPartenaires(data)
       } catch (error) {
         console.log(error);
       }
@@ -45,6 +52,9 @@ const AdminPartenaires = () => {
     }
   };
 
+  while (!partenaires) {
+    return <Loading></Loading>
+  }
 
   return (
     <div className='page'>

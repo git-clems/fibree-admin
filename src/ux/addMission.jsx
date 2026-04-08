@@ -1,16 +1,13 @@
 import React, { useEffect, useState, } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { db } from '../auth/firebase';
+import missionSchema from '../models/missionModel'
+import { addDoc, collection } from 'firebase/firestore';
 
 const AddMission = () => {
 
-    const [mission, setMission] = useState(
-        {
-            title: "",
-            description: "",
-            image: ""
-        })
-
+    const [mission, setMission] = useState(missionSchema)
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -24,32 +21,25 @@ const AddMission = () => {
     const SubmitForm = async (e) => {
         setLoading(true)
         e.preventDefault()
-        await axios
-            .post('http://localhost:8000/api/mission/create', mission)
-            .then((res) => {
-                setTimeout(() => {
-                    const modalElement = document.getElementById('staticBackdrop');
-                    const modal = window.bootstrap.Modal.getInstance(modalElement);
-                    document.body.classList.remove('modal-open');
-                    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-                    modal.hide();
-                    setLoading(false)
-                }, 2000);
-                
-                setTimeout(() => {
-                    setMessage('Missionrmation enregistré avec succès !')
-                }, 1000);
-
-            })
-            .catch((e) => {
-                console.log(e);
-                setMessage("Une erreur s'est produite !!")
-            })
+        await addDoc(collection(db, 'mission'), mission).then((res) => {
+            setMessage('Mission enregistrée avec succès !')
+            setLoading(false)
+            const modalElement = document.getElementById('staticBackdrop');
+            const modal = window.bootstrap.Modal.getInstance(modalElement);
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            modal.hide();
+        }).catch((e) => {
+            console.log(e);
+            setMessage("Une erreur s'est produite !!")
+        })
     }
+
 
     return (
         <div>
             <div className='flex justify-between p-3'>
+                <h2>Les missions</h2>
                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <span className="max-[800px]:hidden">Ajouter une mission</span> <i class="fa-solid fa-plus"></i>
                 </button>
@@ -81,7 +71,7 @@ const AddMission = () => {
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                 <button type="submit" class="btn btn-primary" disabled={loading}>
-                                    <span class={`${loading? "spinner-border spinner-border-sm": "hidden"}`} aria-hidden="true"></span>
+                                    <span class={`${loading ? "spinner-border spinner-border-sm" : "hidden"}`} aria-hidden="true"></span>
                                     {loading ? "Chargement..." : "Enregistrer"}
                                 </button>
                             </div>

@@ -2,20 +2,32 @@ import React, { useEffect, useState } from 'react'
 import Info from '../components/info';
 import axios from 'axios';
 import { Link } from 'react-router';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../auth/firebase';
+import Loading from '../components/LoadingPage';
 
 const Infos = () => {
-    const [infos, setInfos] = useState([])
+    const [infos, setInfos] = useState()
     useEffect(() => {
         const fectData = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/info')
-                setInfos(response.data)
+                // const response = await axios.get('http://localhost:8000/api/info')
+                const response = await getDocs(collection(db,'infos'))
+                const data = response.docs.map((doc)=>({
+                    _id : doc.id,
+                    ...doc.data()
+                }))
+                setInfos(data)
             } catch (error) {
                 console.log(error);
             }
         };
         fectData();
     }, [])
+
+    while (!infos) {
+        return <Loading></Loading>
+    }
 
     return (
         <div className='page'>

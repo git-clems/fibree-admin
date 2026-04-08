@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Loading from "../components/loadingPage"
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../auth/firebase";
+import Loading from "../components/LoadingPage";
+// import Loading from "../components/loadingPage"
 
 const DetailsFlashInfo = () => {
-    const [info, setFlashInfo] = useState(null);
+    const [info, setFlashInfo] = useState();
     const { id } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/flash");
-                const foundFlashInfo = response.data.find((e) => e._id === id);
+                const response = await getDocs(collection(db, 'flash-info'));
+                const data = response.docs.map((doc) => ({
+                    _id: doc.id,
+                    ...doc.data()
+                }))
+                const foundFlashInfo = data.find((e) => e._id === id);
                 console.log(response.data);
                 setFlashInfo(foundFlashInfo || null);
             } catch (error) {
@@ -20,9 +27,9 @@ const DetailsFlashInfo = () => {
         };
         fetchData();
     }, [id]);
-    
+
     while (!info) {
-        return <Loading></Loading>
+        return <Loading />
     }
 
     return (
@@ -30,11 +37,13 @@ const DetailsFlashInfo = () => {
             <div className="flex flex-wrap">
                 <div className="ml-5 description">
                     <h2 className="name">{info.title}</h2>
-                    <span className="text-gray-500">{info.subtitle}</span>
+                    <p className="text-gray-500">{info.subtitle}</p>
+                    {info.comingDate && <span>Date: {info.comingDate} <br /></span>}
+                    {info.city && <span className="text-green-600"><i class="fa-solid fa-location-dot"></i>: {info.city}</span>}
                 </div>
-                
+
                 <div className="p-4 mt-4 bg-gray-100" style={{ float: 'left' }}>
-                    <img src={info.images[0]} alt="" className="
+                    <img src={info.image} alt="" className="
                         rounded-2xl
                         border-1
                         border-gray-300

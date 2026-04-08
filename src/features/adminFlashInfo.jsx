@@ -2,16 +2,23 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import AddFlashInfo from '../ux/addFlashInfo'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../auth/firebase'
+import Loading from '../components/LoadingPage'
 
 
 const AdminFlashInfos = () => {
-  const [flashInfos, setFlashInfos] = useState([])
+  const [flashInfos, setFlashInfos] = useState()
 
   useEffect(() => {
     const fectData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/flash')
-        setFlashInfos(response.data)
+        const response = await getDocs(collection(db, 'flash-info'))
+        const data = response.docs.map((doc) => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setFlashInfos(data)
       } catch (error) {
         console.log(error);
       }
@@ -48,6 +55,10 @@ const AdminFlashInfos = () => {
     }
   };
 
+  while (!flashInfos) {
+    return <Loading></Loading>
+  }
+
 
   return (
     <div className='page'>
@@ -58,7 +69,7 @@ const AdminFlashInfos = () => {
             <AddFlashInfo></AddFlashInfo>
           </> :
           <>
-            <h1 className='ml-3'>Les infos flash</h1>
+            {/* <h1 className='ml-3'>Les infos flash</h1> */}
             <AddFlashInfo></AddFlashInfo>
             {<table class="table">
               <thead>

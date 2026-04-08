@@ -2,17 +2,24 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { formatDate } from "../features/adminInfos";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../auth/firebase";
+import Loading from "../components/LoadingPage";
 
 
 const DetailsInfo = () => {
-    const [info, setInfo] = useState(null);
+    const [info, setInfo] = useState();
     const { id } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/info");
-                const foundInfo = response.data.find((e) => e._id === id);
+                const response = await getDocs(collection(db, 'infos'))
+                const data = response.docs.map((doc) => ({
+                    _id: doc.id,
+                    ...doc.data()
+                }))
+                const foundInfo = data.find((e) => e._id === id);
                 setInfo(foundInfo || null);
             } catch (error) {
                 console.log(error);
@@ -22,14 +29,7 @@ const DetailsInfo = () => {
         fetchData();
     }, [id]);
 
-    while (!info) {
-        // return <Loading></Loading>
-        return (
-            <div className="page flex justify-center items-center">
-                <h1>Information non retrouvée</h1>
-            </div>
-        )
-    }
+    while (!info) { return <Loading></Loading> }
 
 
     return (

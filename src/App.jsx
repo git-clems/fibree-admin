@@ -24,6 +24,10 @@ import Team from './pages/teamPage'
 import Reports from './pages/reportsPage'
 import Admin from './features/admin'
 import CandSpontPage from './pages/candSpontPage'
+import AdminJoins from './features/adminJoins'
+import BePartner from './pages/bePartner'
+import AdminMember from './features/adminMembers'
+import DetailsFlashInfo from './pages/flashDetailPage'
 
 function App() {
   return (
@@ -36,6 +40,9 @@ function App() {
         <Route path='/*' element={<Page404 />}></Route>
         <Route path='/actualite/:id' element={<DetailInfo></DetailInfo>}></Route>
         <Route path='/actualite' element={<Infos></Infos>}></Route>
+        <Route path='/flash-info/:id' element={<DetailsFlashInfo></DetailsFlashInfo>}></Route>
+        {/* <Route path='/actualite' element={<Infos></Infos>}></Route> */}
+
         <Route path='/mission' element={<Missions></Missions>}></Route>
         <Route path='/rejoindre' element={<Rejoindre></Rejoindre>}></Route>
         <Route path='/projet' element={<Projects></Projects>}></Route>
@@ -46,12 +53,15 @@ function App() {
         <Route path='/equipe' element={<Team></Team>}></Route>
         <Route path='/rapport' element={<Reports></Reports>}></Route>
         <Route path='/rejoindre/spontane' element={<CandSpontPage></CandSpontPage>}></Route>
+        <Route path='/devenir-partenaire' element={<BePartner></BePartner>}></Route>
 
         <Route path='/admin/affiche' element={<AdminAffiches />}></Route>
         <Route path='/admin/mission' element={<AdminMissions />}></Route>
         <Route path='/admin/actualite' element={<AdminInfos />}></Route>
         <Route path='/admin/partenaire' element={<AdminPartenaires />}></Route>
         <Route path='/admin/flash-info' element={<AdminFlashInfos />}></Route>
+        <Route path='/admin/nouveau-membre' element={<AdminJoins />}></Route>
+        <Route path='/admin/membre' element={<AdminMember />}></Route>
         <Route path='/admin' element={<Admin />}></Route>
 
       </Routes>

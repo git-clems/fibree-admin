@@ -7,27 +7,44 @@ import { Link } from "react-router"
 import Partenaires from "../components/partenaires"
 import Chiffres from "../components/chiffres"
 import FlashInfo from "../components/flashInfo"
+import { collection, onSnapshot } from 'firebase/firestore'
+import { db } from "../auth/firebase"
 import Loading from "../components/LoadingPage"
 
 
 const Home = () => {
-    const [infos, setInfos] = useState([])
-    const [partenaires, setPartenaires] = useState([])
+    const [infos, setInfos] = useState()
+    const [flashInfos, setFlashInfos] = useState()
+    const [partenaires, setPartenaires] = useState()
     const [chiffres, setChiffres] = useState([])
-    const [flashInfos, setFlashInfos] = useState([])
     const [about, setAbout] = useState([])
 
+
+
     useEffect(() => {
-        const fectData = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/api/info')
-                setInfos(response.data)
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fectData();
-    }, [])
+        onSnapshot(collection(db, 'flash-info'), snap => {
+            const data = snap.docs.map((doc) => ({
+                _id: doc.id,
+                ...doc.data()
+            }))
+            setFlashInfos(data)
+        })
+
+        onSnapshot(collection(db, 'infos'), snap => {
+            const data = snap.docs.map((doc) => ({
+                _id: doc.id,
+                ...doc.data()
+            }))
+            setInfos(data)
+        })
+        onSnapshot(collection(db, 'partenaire'), snap => {
+            const data = snap.docs.map((doc) => ({
+                _id: doc.id,
+                ...doc.data()
+            }))
+            setPartenaires(data)
+        })
+    })
 
     useEffect(() => {
         const fectData = async () => {
@@ -41,24 +58,12 @@ const Home = () => {
         fectData();
     }, [])
 
-    useEffect(() => {
-        const fectData = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/api/partenaire')
-                setPartenaires(response.data)
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fectData();
-    }, [])
 
     useEffect(() => {
         const dataFect = async () => {
             try {
                 const response = await axios.get('http://localhost:8000/api/partenaire')
                 setChiffres(response.data)
-
             } catch (error) {
                 console.log(error);
             }
@@ -66,25 +71,10 @@ const Home = () => {
         dataFect()
     }, [])
 
-    useEffect(() => {
-        const dataFect = async () => {
-            try {
-                const response = await axios.get('http://localhost:8000/api/flash')
-                setFlashInfos(response.data)
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        dataFect()
-    }, [])
 
-    // while (!infos || !partenaires || !chiffres || flashInfos || !about) {
-    //     return <Loading></Loading>
-    // }
 
-    // while (!about || !missions) {
-    //     return <Loading></Loading>
-    // }
+    while (!infos || !flashInfos || !partenaires) { return <Loading></Loading> }
+
 
     return (
         <div className="page">
@@ -145,7 +135,7 @@ const Home = () => {
             {
                 (chiffres && chiffres.length > 0) &&
                 <section className="max-[800px]:p-0 m-2 p-3 rounded-md mt-5">
-                    <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-center">
                         <h2 className="ml-3">Chiffres clés</h2>
                     </div>
 

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import AddInfo from '../ux/addInfo'
+import { collection, deleteDoc, getDocs, updateDoc } from 'firebase/firestore';
+import { db } from '../auth/firebase';
+import Loading from '../components/LoadingPage';
 
 
 export const formatDate = (date) => {
@@ -15,13 +18,17 @@ export const formatDate = (date) => {
 };
 
 const AdminInfos = () => {
-  const [infos, setInfos] = useState([])
+  const [infos, setInfos] = useState()
 
   useEffect(() => {
     const fectData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/info')
-        setInfos(response.data)
+        const response = await getDocs(collection(db, 'infos'))
+        const data = response.docs.map((doc) => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setInfos(data)
       } catch (error) {
         console.log(error);
       }
@@ -30,10 +37,7 @@ const AdminInfos = () => {
   }, [])
 
   const deleteInfos = async (infoId) => {
-    await axios.delete(`http://localhost:8000/api/info/${infoId}`)
-      .catch((error) => {
-        console.log(error)
-      })
+    await deleteDoc(collection(db,'infos'))
   }
 
   const toggleDisplay = async (infoId, currentValue) => {
@@ -42,6 +46,7 @@ const AdminInfos = () => {
       await axios.put(`http://localhost:8000/api/info/update/${infoId}`, {
         displayed: updatedValue,
       });
+      // await updateDoc(collection(db, `infos/${infoId}`), { displayed: updatedValue })
 
       // Mise à jour du state (UI instantanée)
       setInfos((prevInfos) =>
@@ -54,6 +59,10 @@ const AdminInfos = () => {
       console.log(error);
     }
   };
+
+  while (!infos) {
+    return <Loading></Loading>
+  }
 
 
   return (
@@ -76,13 +85,13 @@ const AdminInfos = () => {
               <tbody>
                 {infos.map((info, index) => (
                   <tr>
+                    {/* <Link to={`/actualite/${info._id}`}> */}
                     <th scope="row">{index + 1}</th>
                     <td>
-                      <h6>{info.title}</h6>
+                      <p className='truncate max-w-[60vw]'>{info.title}</p>
                       <p className='text-gray-500 truncate max-w-[60vw]'>{info.subtitle}</p>
                     </td>
                     <td>
-                      {/* <span>{info.publishDate - Date()}</span> */}
                       <span className='text-gray-500'>{formatDate(info.publishDate)}</span>
                     </td>
                     <td>
@@ -91,7 +100,7 @@ const AdminInfos = () => {
                         onChange={() => toggleDisplay(info._id, info.displayed)} />
                     </td>
                     <td>
-                      <Link style={{ borderRadius: 5 }} to={`/admin/actualite/${info._id}`} className="m-2 h-[40px] w-[40px] p-2 flex justify-center items-center bg-green-400 hover:bg-green-300 rouded-1 ">
+                      <Link style={{ borderRadius: 5 }} to={`/actualite/${info._id}`} className="m-2 h-[40px] w-[40px] p-2 flex justify-center items-center bg-green-400 hover:bg-green-300 rouded-1 ">
                         <i class="fa-solid fa-pencil"></i>
                       </Link>
                     </td>
@@ -100,6 +109,7 @@ const AdminInfos = () => {
                         <i class="fa-solid fa-trash"></i>
                       </button>
                     </td>
+                    {/* </Link> */}
                   </tr>
                 ))}
               </tbody>

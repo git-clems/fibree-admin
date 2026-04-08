@@ -1,16 +1,14 @@
 import React, { useState, } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../auth/firebase';
+import afficheSchema from '../models/afficheModel';
+import Loading from '../components/LoadingPage';
 
 const AddAffiche = () => {
 
-
-    const [affiche, setAffiche] = useState(
-        {
-            title: "",
-            images: []
-        })
-
+    const [affiche, setAffiche] = useState(afficheSchema)
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -18,35 +16,32 @@ const AddAffiche = () => {
         const { name, value } = e.target;
         setAffiche({ ...affiche, [name]: value })
         console.log(name, value);
-
     }
 
     const SubmitForm = async (e) => {
         setLoading(true)
         e.preventDefault()
-        await axios
-            .post('http://localhost:8000/api/affiche/create', affiche)
-            .then((res) => {
-                setMessage('Affichermation enregistré avec succès !')
-                setLoading(false)
-                const modalElement = document.getElementById('staticBackdrop');
-                const modal = window.bootstrap.Modal.getInstance(modalElement);
-                document.body.classList.remove('modal-open');
-                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-                modal.hide();
-            })
-            .catch((e) => {
-                console.log(e);
-                setMessage("Une erreur s'est produite !!")
-            })
+        await addDoc(collection(db, 'carrousel-affiche'), affiche).then((res) => {
+            setMessage('Affiche enregistrée avec succès !')
+            setLoading(false)
+            const modalElement = document.getElementById('staticBackdrop');
+            const modal = window.bootstrap.Modal.getInstance(modalElement);
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            modal.hide();
+        }).catch((e) => {
+            console.log(e);
+            setMessage("Une erreur s'est produite !!")
+        })
     }
+
 
     return (
         <div>
             <div className='flex justify-between p-3'>
                 <h2>Les affiches</h2>
                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <span className = "max-[800px]:hidden">Ajouter une affiche</span> <i class="fa-solid fa-plus"></i>
+                    <span className="max-[800px]:hidden">Ajouter une affiche</span> <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
 
@@ -63,7 +58,7 @@ const AddAffiche = () => {
                                     <label for="exampleFormControlInput1" class="form-label">Titre</label>
                                     <input type="text" onChange={inputHandler} required name='title' class="form-control" id="exampleFormControlInput1" placeholder="Titre de l'affiche" />
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="inputGroupFile02" class="form-label">Images</label>
                                     <input type="file" accept="image/*" title='images' class="form-control" id="inputGroupFile02" placeholder='Choisir une image' />

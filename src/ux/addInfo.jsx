@@ -1,17 +1,14 @@
 import React, { useState, } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../auth/firebase';
+import infoSchema from '../models/infoModel';
 
 const AddInfo = () => {
 
 
-    const [info, setInfo] = useState(
-        {
-            title: "",
-            subtitle: "",
-            description: "",
-            // images: []
-        })
+    const [info, setInfo] = useState(infoSchema)
 
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
@@ -26,21 +23,18 @@ const AddInfo = () => {
     const SubmitForm = async (e) => {
         setLoading(true)
         e.preventDefault()
-        await axios
-            .post('http://localhost:8000/api/info/create', info)
-            .then((res) => {
-                setMessage('Information enregistré avec succès !')
-                setLoading(false)
-                const modalElement = document.getElementById('staticBackdrop');
-                const modal = window.bootstrap.Modal.getInstance(modalElement);
-                document.body.classList.remove('modal-open');
-                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-                modal.hide();
-            })
-            .catch((e) => {
-                console.log(e);
-                setMessage("Une erreur s'est produite !!")
-            })
+        await addDoc(collection(db, 'infos'), info).then((res) => {
+            setMessage('Information enregistré avec succès !')
+            setLoading(false)
+            const modalElement = document.getElementById('staticBackdrop');
+            const modal = window.bootstrap.Modal.getInstance(modalElement);
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            modal.hide();
+        }).catch((e) => {
+            console.log(e);
+            setMessage("Une erreur s'est produite !!")
+        })
     }
 
     return (

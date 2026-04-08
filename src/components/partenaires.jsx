@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
 // import './css/autoplayCarous.scss'
 import axios from 'axios'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../auth/firebase'
 
 const Partenaires = () => {
     const [partenaires, setPartenaires] = useState([])
     useEffect(() => {
         const dataFect = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/partenaire')
-                setPartenaires(response.data)
+                const response = await getDocs(collection(db, 'partenaire'))
+                const data = response.docs.map((e) => ({
+                    _id: e.id,
+                    ...e.data()
+                }))
+                setPartenaires(data)
             } catch (error) {
                 console.log(error);
             }
