@@ -1,35 +1,21 @@
 import React, { useState, useRef } from 'react'
 import ContrySelector from '../components/countrySection'
-import axios from 'axios'
 import Loading from '../components/LoadingPage'
-
+import newPartner from "../models/newPartnerModel"
 import html2pdf from 'html2pdf.js'
+import { onSnapshot, collection } from 'firebase/firestore'
 
 const BePartner = () => {
     const recapRef = useRef()
 
-    const newJoin = {
-        name: "",
-        lname: "",
-        email: "",
-        country: "",
-        city: "",
-        tel: "",
-        profession: "",
-        motivation: "",
-        contribution: "",
-        expectation: "",
-        ugc: false
-    }
-
-    const [join, setJoin] = useState(newJoin)
+    const [partner, setPartner] = useState(newPartner)
     const [loading, setLoading] = useState(false)
     const [send, setSend] = useState(false)
     const [objectCheck, setObjectCheck] = useState(false)
 
     const inputHandler = (e) => {
         const { name, value } = e.target
-        setJoin({ ...join, [name]: value })
+        setPartner({ ...partner, [name]: value })
         console.log(name, value);
 
     }
@@ -37,13 +23,20 @@ const BePartner = () => {
     const HandleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
-        await axios.post('http://localhost:8000/api/join/create', join)
-            .then((res) => {
-                setLoading(false)
-                setSend(true)
-            }).catch((res) => {
-                setSend(false)
-            })
+
+        try {
+            onSnapshot(collection(db, 'new-partner'), snap => setPartner(
+                snap.docs.map(doc => ({
+                    _id: doc.id,
+                    ...doc.data()
+                }))
+            ))
+
+            setLoading(false)
+            setSend(true)
+        } catch (error) {
+            setSend(false)
+        }
     }
 
     const downloadPDF = () => {
@@ -51,7 +44,7 @@ const BePartner = () => {
 
         const opt = {
             margin: 10,
-            filename: `${join.name}_recap_fibree.pdf`,
+            filename: `${partner.name}_recap_fibree.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -86,53 +79,53 @@ const BePartner = () => {
                         <div className="mt-1 space-y-3">
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Nom</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{join.name}</span>
+                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{partner.name}</span>
                             </div>
 
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Prénom(s)</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{join.lname}</span>
+                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{partner.lname}</span>
                             </div>
 
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Email</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{join.email}</span>
+                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{partner.email}</span>
                             </div>
 
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Téléphone</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{join.tel}</span>
+                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{partner.tel}</span>
                             </div>
 
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Adresse</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{join.city}, {join.country}</span>
+                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{partner.city}, {partner.country}</span>
                             </div>
 
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Profession</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{join.profession}</span>
+                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{partner.profession}</span>
                             </div>
                         </div>
 
                         <div className="mt-6">
                             <h5 className="font-semibold mb-2">Motivation</h5>
                             <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
-                                {join.motivation}
+                                {partner.motivation}
                             </div>
                         </div>
 
                         <div className="mt-4">
                             <h5 className="font-semibold mb-2">Ce que vous souhaitez apporter</h5>
                             <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
-                                {join.contribution}
+                                {partner.contribution}
                             </div>
                         </div>
 
                         <div className="mt-4">
                             <h5 className="font-semibold mb-2">Ce que vous espérez recevoir</h5>
                             <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
-                                {join.expectation}
+                                {partner.expectation}
                             </div>
                         </div>
                         <div className="mt-6 flex justify-between">
@@ -147,7 +140,7 @@ const BePartner = () => {
                             <button
                                 type="button"
                                 onClick={() => {
-                                    setJoin(newJoin)
+                                    setPartner(newPartner)
                                     setSend(false)
                                 }}
                                 className="btn btn-primary"
@@ -175,7 +168,7 @@ const BePartner = () => {
                 <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md p-4 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
 
                     <div className="min-w-[300px] m-1 mt-3 flex-1">
-                        <label htmlFor="" className="form-label">Qui ête-vous ?<span className='text-red-500'> * </span>  </label>
+                        <label htmlFor="" className="form-label"><sup>1</sup> Qui ête-vous ?<span className='text-red-500'> * </span>  </label>
                         {
                             objectCheck ?
                                 <input type='text' onChange={inputHandler} className="form-control" id="profession" name='profession' rows="3" placeholder='Dites nous qui vous êtes' required></input> :
@@ -184,6 +177,7 @@ const BePartner = () => {
                                     <option value="Entreprise">Entreprise</option>
                                     <option value="Organisation non gouvernementale">Organisation non gouvernementale</option>
                                     <option value="Structure gouvernementale">Structure gouvernementale</option>
+                                    <option value="Un particulier">Un particulier</option>
                                 </select>
                         }
                         <div className="flex m-1 mt-3 items-start">

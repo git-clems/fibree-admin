@@ -61,7 +61,7 @@ const Missions = () => {
                                 w-[25vw] min-w-[250px] border-1
                                 max-[800px]:w-50 max-[800px]:min-w-50
                                 bg-[white]'>
-                                    <img src={mission.image} alt="" className='border- rounded-t-md' />
+                                    <img src={mission.image} alt="" className='rounded-t-md' />
                                     <p className='font-bold p-2'>{mission.title}</p>
                                 </div>
                             ))}

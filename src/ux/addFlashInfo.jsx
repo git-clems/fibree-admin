@@ -39,7 +39,7 @@ const AddFlashInfo = () => {
     return (
         <div>
             <div className='flex justify-between p-3'>
-                <h2>Ajouter une affiche carrousel</h2>
+                <h2>Les informations à la une</h2>
                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <span className="max-[800px]:hidden">Ajouter une flash info</span> <i class="fa-solid fa-plus"></i>
                 </button>

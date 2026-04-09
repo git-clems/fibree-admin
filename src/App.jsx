@@ -7,12 +7,12 @@ import ScrollToTop from './components/goTop'
 import { Route, Routes } from 'react-router'
 import SmallAppBar from './components/appbarSmall'
 import FootBar from './components/footBar'
-import AdminAffiches from './features/adminAffiches'
-import AdminMissions from './features/adminMission'
-import AdminInfos from './features/adminInfos'
+import AdminAffiches from './features/affichesAdmin'
+import AdminMissions from './features/missionAdmin'
+import AdminInfos from './features/infoAdmin'
 import Infos from './pages/infosPage'
-import AdminPartenaires from './features/adminPartenaires'
-import AdminFlashInfos from './features/adminFlashInfo'
+import AdminPartenaires from './features/partenaireAdmin'
+import AdminFlashInfos from './features/flashInfoAdmin'
 import Missions from './pages/missionsPage'
 import Projects from './pages/projectsPage'
 import Contact from './pages/contactPage'
@@ -24,12 +24,50 @@ import Team from './pages/teamPage'
 import Reports from './pages/reportsPage'
 import Admin from './features/admin'
 import CandSpontPage from './pages/candSpontPage'
-import AdminJoins from './features/adminJoins'
+import AdminJoins from './features/joinAdmin'
 import BePartner from './pages/bePartner'
-import AdminMember from './features/adminMembers'
+import AdminMember from './features/memberAdmin'
+import MemberDetailAdmin from './features/memberDetailAdmin'
 import DetailsFlashInfo from './pages/flashDetailPage'
+import JoinDetailAdmin from './features/joinDetailAdmin'
+import AdminContacts from './features/contactAdmin'
+import ContactDetailAdmin from './features/contactDetailAdmin'
+import data from './data/fibreeDB.missions.json'
+import { addDoc, collection } from 'firebase/firestore'
+import { db } from './auth/firebase'
+import FlashInfos from './pages/flashInfosPage'
+
+
+const getMissions = async () => {
+  try {
+    for (const element of data) {
+      const { _id, publishDate, ...rest } = element
+
+      const cleanElement = { ...rest, contactDate: new Date() }
+
+      // const cleanElement = {
+      //   ...rest,
+      //   publishDate: publishDate?.$date
+      //     ? new Date(publishDate.$date)
+      //     : null,
+      // }
+
+      await addDoc(collection(db, 'contact'), cleanElement)
+    }
+
+    console.log('Import terminé ✅')
+  } catch (error) {
+    console.error("Erreur lors de l'import :", error)
+  }
+}
+
+// console.log(data);
+
+// getMissions()
+
 
 function App() {
+
   return (
     <>
       <AppBar></AppBar>
@@ -40,9 +78,8 @@ function App() {
         <Route path='/*' element={<Page404 />}></Route>
         <Route path='/actualite/:id' element={<DetailInfo></DetailInfo>}></Route>
         <Route path='/actualite' element={<Infos></Infos>}></Route>
+        <Route path='/flash-info' element={<FlashInfos />}></Route>
         <Route path='/flash-info/:id' element={<DetailsFlashInfo></DetailsFlashInfo>}></Route>
-        {/* <Route path='/actualite' element={<Infos></Infos>}></Route> */}
-
         <Route path='/mission' element={<Missions></Missions>}></Route>
         <Route path='/rejoindre' element={<Rejoindre></Rejoindre>}></Route>
         <Route path='/projet' element={<Projects></Projects>}></Route>
@@ -61,7 +98,11 @@ function App() {
         <Route path='/admin/partenaire' element={<AdminPartenaires />}></Route>
         <Route path='/admin/flash-info' element={<AdminFlashInfos />}></Route>
         <Route path='/admin/nouveau-membre' element={<AdminJoins />}></Route>
+        <Route path='/admin/nouveau-membre/:id' element={<JoinDetailAdmin />}></Route>
+        <Route path='/admin/messagerie' element={<AdminContacts />}></Route>
+        <Route path='/admin/messagerie/:id' element={<ContactDetailAdmin />}></Route>
         <Route path='/admin/membre' element={<AdminMember />}></Route>
+        <Route path='/admin/membre/:id' element={<MemberDetailAdmin />}></Route>
         <Route path='/admin' element={<Admin />}></Route>
 
       </Routes>

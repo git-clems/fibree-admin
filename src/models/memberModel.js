@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore'
-const joinSchema = {
+const memberSchema = {
     fname: "",
     lname: "",
     email: "",
@@ -10,9 +10,8 @@ const joinSchema = {
     contribution: "",
     expectation: "",
     ugc: false,
-    joinDate: Timestamp.fromDate(new Date()),
-    opened : false,
-    accepted : false
+    acceptedDate: Timestamp.fromDate(new Date()),
+    opened : false
 }
 
-export default joinSchema
+export default memberSchema

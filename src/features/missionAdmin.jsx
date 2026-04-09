@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AddMission from '../ux/addMission';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../auth/firebase';
 import Loading from '../components/LoadingPage';
 
@@ -13,12 +13,12 @@ const AdminMissions = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getDocs(collection(db, 'mission'))
-        const data = response.docs.map(doc => ({
-          _id: doc.id,
-          ...doc.data()
-        }))
-        setMissions(data);
+        onSnapshot(collection(db, 'mission'), snap => (
+          setMissions(snap.docs.map(doc => ({
+            _id: doc.id,
+            ...doc.data()
+          })))
+        ))
       } catch (error) {
         console.log(error);
       }
@@ -27,17 +27,15 @@ const AdminMissions = () => {
     fetchData();
   }, []);
 
-  const deleteMissions = async (missionId) => {
+  const deleteMission = async (missionId) => {
     try {
       setDeletingIds((prev) => [...prev, missionId]);
 
       setTimeout(async () => {
-        await axios.delete(`http://localhost:8000/api/mission/${missionId}`);
-
+      await deleteDoc(doc(db, 'mission', missionId))
         setMissions((prevMissions) =>
           prevMissions.filter((mission) => mission._id !== missionId)
         );
-
         setDeletingIds((prev) => prev.filter((id) => id !== missionId));
       }, 400);
     } catch (error) {
@@ -50,7 +48,7 @@ const AdminMissions = () => {
     try {
       const updatedValue = !currentValue;
 
-      await axios.put(`http://localhost:8000/api/mission/update/${missionId}`, {
+      await updateDoc(doc(db, 'mission', missionId), {
         displayed: updatedValue,
       });
 
@@ -74,9 +72,9 @@ const AdminMissions = () => {
     <div className="page">
       {missions.length === 0 ? (
         <>
-          <h1 className='ml-3'>Aucune mission disponible</h1>
+          <h2 className='ml-3'>Aucune mission disponible</h2>
           <AddMission />
-          <table className='table'>
+          <table className='table text-sm'>
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -91,9 +89,8 @@ const AdminMissions = () => {
 
       ) : (
         <>
-          {/* <h1 className='ml-3'>Les missions</h1> */}
           <AddMission />
-          <table className="table">
+          <table className="table text-sm">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -146,7 +143,7 @@ const AdminMissions = () => {
 
                     <td>
                       <button
-                        onClick={() => deleteMissions(mission._id)}
+                        onClick={() => deleteMission(mission._id)}
                         className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-white"
                       >
                         <i className="fa-solid fa-trash"></i>

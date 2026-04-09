@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import AddPartenaire from '../ux/addPartenaire'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
 
@@ -27,7 +27,7 @@ const AdminPartenaires = () => {
   }, [])
 
   const deletePartenaires = async (partenaireId) => {
-    await axios.delete(`http://localhost:8000/api/partenaire/${partenaireId}`)
+    await deleteDoc(doc(db, 'partenaire', partenaireId))
       .catch((error) => {
         console.log(error)
       })
@@ -36,7 +36,7 @@ const AdminPartenaires = () => {
   const toggleDisplay = async (partenaireId, currentValue) => {
     try {
       const updatedValue = !currentValue;
-      await axios.put(`http://localhost:8000/api/partenaire/update/${partenaireId}`, {
+      await updateDoc(doc(db, 'partenaire', partenaireId), {
         displayed: updatedValue,
       });
 
@@ -62,7 +62,7 @@ const AdminPartenaires = () => {
         !partenaires ? <h1>Aucun partenaire disponible</h1> :
           <>
             <AddPartenaire></AddPartenaire>
-            {<table class="table">
+            {<table class="table text-sm">
               <thead>
                 <tr>
                   <th scope="col">#</th>

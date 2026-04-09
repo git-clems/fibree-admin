@@ -7,7 +7,7 @@ import { Link } from "react-router"
 import Partenaires from "../components/partenaires"
 import Chiffres from "../components/chiffres"
 import FlashInfo from "../components/flashInfo"
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, getDocs, onSnapshot } from 'firebase/firestore'
 import { db } from "../auth/firebase"
 import Loading from "../components/LoadingPage"
 
@@ -18,7 +18,6 @@ const Home = () => {
     const [partenaires, setPartenaires] = useState()
     const [chiffres, setChiffres] = useState([])
     const [about, setAbout] = useState([])
-
 
 
     useEffect(() => {
@@ -49,8 +48,12 @@ const Home = () => {
     useEffect(() => {
         const fectData = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/about')
-                setAbout(response.data[0])
+                const response = await getDocs(collection(db, 'about'))
+                const data = response.docs.map(e=>({
+                    _id: e.id,
+                    ...e.data()
+                }))
+                setAbout(data[0])
             } catch (error) {
                 console.log(error);
             }
@@ -62,8 +65,12 @@ const Home = () => {
     useEffect(() => {
         const dataFect = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/partenaire')
-                setChiffres(response.data)
+                const response = awaitgetDocs(collection(db, 'statistics'))
+                const data = response.docs.map(e=>({
+                    _id: e.id,
+                    ...e.data()
+                }))
+                setChiffres(data)
             } catch (error) {
                 console.log(error);
             }
@@ -74,16 +81,15 @@ const Home = () => {
 
 
     while (!infos || !flashInfos || !partenaires) { return <Loading></Loading> }
-
+    
 
     return (
         <div className="page">
             <section className="flex flex-wrap items- justify-center p-2 bg-[url(./bg/bg1.png)] bg-cover">
-
                 {
                     flashInfos &&
-                    <div className="flex-1 h-[max-content] max-[600px]:hidden rounded-md m-2 mt-0 p-2 bg-gray-100">
-                        <div className="flex justify-between items-center mb-2">
+                    <div className="flex-1 h-[max-content] max-[600px]:hidden rounded-md m-2 mt-0 bg-gray-100">
+                        <div className="flex justify-between items-center m-2">
                             <h3 className="text-red-500">À la une</h3>
                             <Link to={'/flash-info'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
                                 <span className="text-nowrap">Voir plus<i class="fa-solid fa-arrow-right"></i></span>

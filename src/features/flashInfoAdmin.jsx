@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import AddFlashInfo from '../ux/addFlashInfo'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
 
@@ -13,12 +13,18 @@ const AdminFlashInfos = () => {
   useEffect(() => {
     const fectData = async () => {
       try {
-        const response = await getDocs(collection(db, 'flash-info'))
-        const data = response.docs.map((doc) => ({
-          _id: doc.id,
-          ...doc.data()
-        }))
-        setFlashInfos(data)
+        // const response = await getDocs(collection(db, 'flash-info'))
+        // const data = response.docs.map((doc) => ({
+        //   _id: doc.id,
+        //   ...doc.data()
+        // }))
+        // setFlashInfos(data)
+        onSnapshot(collection(db, 'flash-info'), snap => setFlashInfos(
+          snap.docs.map(doc=>({
+            _id: doc.id,
+            ...doc.data()
+          }))
+        ))
       } catch (error) {
         console.log(error);
       }
@@ -27,10 +33,7 @@ const AdminFlashInfos = () => {
   }, [])
 
   const deleteFlashInfos = async (flashInfoId) => {
-    await axios.delete(`http://localhost:8000/api/flash/${flashInfoId}`)
-      .then((res) => {
-        navigate('/flashInfo')
-      })
+    await deleteDoc(doc(db, 'flash-info', flashInfoId))
       .catch((error) => {
         console.log(error)
       })
@@ -39,7 +42,7 @@ const AdminFlashInfos = () => {
   const toggleDisplay = async (flashInfoId, currentValue) => {
     try {
       const updatedValue = !currentValue;
-      await axios.put(`http://localhost:8000/api/flash/update/${flashInfoId}`, {
+      await updateDoc(doc(db, 'flash-info', flashInfoId), {
         displayed: updatedValue,
       });
 

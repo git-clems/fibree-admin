@@ -2,16 +2,22 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Loading from '../components/LoadingPage'
 import { Link } from 'react-router'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../auth/firebase'
 
 const Mission = () => {
 
-    const [missions, setMissions] = useState([])
+    const [missions, setMissions] = useState()
 
     useEffect(() => {
         const FetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/mission')
-                setMissions(response.data)
+                const querry = await getDocs(collection(db, 'mission'))
+                const data = querry.docs.map(doc=>({
+                    _id : doc.id,
+                    ...doc.data()
+                }))
+                setMissions(data)
             } catch (error) {
                 console.log(error);
             }
@@ -20,7 +26,7 @@ const Mission = () => {
     }, [])
 
 
-    while (!missions || !missions) {
+    while (!missions) {
         return <Loading></Loading>
     }
 

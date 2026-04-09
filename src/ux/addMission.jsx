@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from 'react'
-import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { db } from '../auth/firebase';
 import missionSchema from '../models/missionModel'
@@ -15,7 +14,6 @@ const AddMission = () => {
         const { name, value } = e.target;
         setMission({ ...mission, [name]: value })
         console.log(name, value);
-
     }
 
     const SubmitForm = async (e) => {

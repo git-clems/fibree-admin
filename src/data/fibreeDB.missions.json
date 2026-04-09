@@ -1,0 +1,28 @@
+[{
+  "_id": {
+    "$oid": "69d2e6b52af5d62a1aa8de94"
+  },
+  "fname": "BAMOGO",
+  "lname": "Clément",
+  "email": "clement@gmail.com",
+  "country": "FR",
+  "city": "Metz",
+  "object": "Just un cc",
+  "message": "Mon message",
+  "ugc": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69d2f2ce2af5d62a1aa8de99"
+  },
+  "fname": "BAMOGO",
+  "lname": "Clément",
+  "email": "clement@gmail.com",
+  "country": "BF",
+  "city": "Ouagadougou",
+  "object": "Partenariat",
+  "message": "Depuis 30 ans, l’Afev crée du lien entre campus et quartiers en développant des programmes de solidarité dans lesquels des milliers d’étudiant·es s’engagent auprès des enfants, des jeunes, des habitant·es des quartiers populaires. Tout en s’adaptant sans cesse aux enjeux et mutations sociétales, l’Afev s’appuie sur 4 grands piliers qui fondent sa spécificité et son engagement solidaire.",
+  "ugc": false,
+  "__v": 0
+}]

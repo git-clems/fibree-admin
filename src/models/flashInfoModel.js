@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore"
+
 const flashInfoSchema = {
     title: "",
     subtitle: "",
@@ -6,7 +8,8 @@ const flashInfoSchema = {
     displayed: false,
     image: "",
     comingDate : "",
-    city : ""
+    city : "",
+    publishDate : Timestamp.fromDate(new Date()),
 }
 
 export default flashInfoSchema

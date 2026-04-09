@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { formatDate } from "../features/adminInfos";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
@@ -38,7 +36,7 @@ const DetailsInfo = () => {
                 <div lang="fr" className="ml-5 mr-5 description ">
                     <h4 className="name">{info.title}</h4>
                     <p lang="fr" className="text-gray-500 text-justify [hyphens:auto] break-words">{info.subtitle}</p>
-                    <span className='text-gray-500'>Date de publication : {formatDate(info.publishDate)}</span>
+                    <span className='text-gray-500'>Date de publication : {info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                 </div>
                 <div className="p-4 mt-4 bg-gray-100" style={{ float: 'left' }}>
                     <img src={info.images[0]} alt="" className=" rounded-2xl border border-gray-300 float-right h-[300px] object-cover ml-4 mr-2" />

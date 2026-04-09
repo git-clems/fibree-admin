@@ -52,8 +52,6 @@ const FlashInfo = ({ flashInfoId }) => {
                 <div className="flex-1 ml-2">
                     <div className='truncate max-w-[300px]'>{flashInfo.title}</div>
                     <div className="text-gray-400 truncate max-w-[300px]">{flashInfo.subtitle}</div>
-                    {/* {flashInfo.comingDate && <span>{flashInfo.comingDate}</span>}
-                    {flashInfo.city && <span> {flashInfo.comingDate && <span> - </span>} {flashInfo.city}</span>} */}
                 </div>
             </div>
         </Link>

@@ -11,7 +11,6 @@ const Infos = () => {
     useEffect(() => {
         const fectData = async () => {
             try {
-                // const response = await axios.get('http://localhost:8000/api/info')
                 const response = await getDocs(collection(db,'infos'))
                 const data = response.docs.map((doc)=>({
                     _id : doc.id,

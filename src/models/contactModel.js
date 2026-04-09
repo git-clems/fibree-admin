@@ -1,6 +1,6 @@
-import mongoose from "mongoose"
+import { Timestamp } from "firebase/firestore"
 
-const contactSchema = new mongoose.Schema({
+const contactSchema = {
     fname: "",
     lname: "",
     email: "",
@@ -8,7 +8,9 @@ const contactSchema = new mongoose.Schema({
     city: "",
     object: "",
     message: "",
-    ugc: false
-})
+    ugc: false,
+    contactDate: Timestamp.fromDate(new Date()),
+    opened: false
+}
 
-export default mongoose.model("Contacts", contactSchema)
+export default contactSchema

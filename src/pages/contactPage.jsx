@@ -1,26 +1,16 @@
 import React, { useState, useRef } from 'react'
 import ContrySelector from '../components/countrySection'
-import axios from 'axios'
 import Loading from '../components/LoadingPage'
-
+import contactSchema from '../models/contactModel'
 import html2pdf from 'html2pdf.js'
+import { addDoc, collection, doc } from 'firebase/firestore'
+import { db } from '../auth/firebase'
+import { useNavigate } from 'react-router'
 
 const Contact = () => {
   const recapRef = useRef()
 
-  const newContact = {
-    fname: "",
-    lname: "",
-    email: "",
-    country: "",
-    city: "",
-    tel: "",
-    object: "",
-    message: "",
-    ugc: false
-  }
-
-  const [contact, setContact] = useState(newContact)
+  const [contact, setContact] = useState(contactSchema)
   const [loading, setLoading] = useState(false)
   const [send, setSend] = useState(false)
   const [objectCheck, setObjectCheck] = useState(false)
@@ -28,14 +18,15 @@ const Contact = () => {
   const inputHandler = (e) => {
     const { name, value } = e.target
     setContact({ ...contact, [name]: value })
-    console.log(name, value);
-
+    // console.log(name, value);
   }
+
+  const naviagate = useNavigate()
 
   const HandleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    await axios.post('http://localhost:8000/api/contact/create', contact)
+    await addDoc(collection(db, 'contact'), contact)
       .then((res) => {
         setLoading(false)
         setSend(true)
@@ -60,90 +51,88 @@ const Contact = () => {
 
   const FormRecap = () => {
     return (
-      <div className="page flex justify-center items-center">
-        <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="w-full max-w-[700px] border overflow-hidden mt-5 mb-5">
-          <div style={{ backgroundColor: 'green', color: "white" }} className="p-5 flex justify-between">
-            <div>
-              <h3>Message envoyé</h3>
-              <p className="mt-1 opacity-90">
-                Votre message a bien été transmis.
-              </p>
-            </div>
-            <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-2xl' />
-          </div>
-
-          <div className="p-6">
-            <div className="flex justify-between items-start flex-wrap gap-4 pb-4">
+      <div className="page flex justify-center">
+        <div className="w-full max-w-[700px] mt-5 mb-5">
+          <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="w-full max-w-[700px] border overflow-hidden rounded-md">
+            <div style={{ backgroundColor: 'green', color: "white" }} className="p-3 flex justify-between">
               <div>
-                <h4>Résumé de votre message</h4>
-                <p style={{ color: "rgba(0,0,0,0.4)" }} >Merci pour votre intérêt envers la FIBREE.</p>
+                <h3>Message envoyé</h3>
+                <p className="mt-1 opacity-90">
+                  Votre message a bien été transmis.
+                </p>
               </div>
-              <p style={{ color: "rgba(0,0,0,0.3)" }} ><span className="font-semibold">Statut :</span> Envoyée</p>
+              <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
             </div>
 
-            <div className="mt-1 space-y-3">
-              <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
-                <span className="font-semibold">Nom complet</span>
-                <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{contact.fname} {contact.lname}</span>
+            <div className="p-2">
+              <div className="flex justify-between items-start flex-wrap gap-4 pb-4">
+                <div>
+                  <h4>Résumé de votre message</h4>
+                  <p style={{ color: "rgba(0,0,0,0.4)" }} >Merci pour votre intérêt envers la FIBREE.</p>
+                </div>
+                {/* <p style={{ color: "rgba(0,0,0,0.3)" }} ><span className="font-semibold">Statut :</span> Envoyée</p> */}
               </div>
 
-              <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
-                <span className="font-semibold">Email</span>
-                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.email}</span>
+              <div className="mt-1 space-y-3">
+                <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
+                  <span className="font-semibold">Nom complet</span>
+                  <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{contact.fname} {contact.lname}</span>
+                </div>
+
+                <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
+                  <span className="font-semibold">Email</span>
+                  <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.email}</span>
+                </div>
+
+                <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
+                  <span className="font-semibold">Téléphone</span>
+                  <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.tel}</span>
+                </div>
               </div>
 
-              <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
-                <span className="font-semibold">Téléphone</span>
-                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.tel}</span>
+              <div className="mt-6">
+                <h5 className="font-semibold mb-2">Objet</h5>
+                <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-md p-2  whitespace-pre-line">
+                  {contact.object}
+                </div>
               </div>
 
-              <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
-                <span className="font-semibold">Adresse</span>
-                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.city}, {contact.country}</span>
+              <div className="mt-4">
+                <h5 className="font-semibold mb-2">Votre message</h5>
+                <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-md p-2  whitespace-pre-line">
+                  {contact.message}
+                </div>
               </div>
+
             </div>
+          </div>
+          <div className="mt-6 flex justify-between">
+            <button
+              type="button"
+              onClick={downloadPDF}
+              className="btn btn-secondary m-2"
+            >
+              Télécharger en PDF <i class="fa-solid fa-download"></i>
+            </button>
 
-            <div className="mt-6">
-              <h5 className="font-semibold mb-2">Objet</h5>
-              <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
-                {contact.object}
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <h5 className="font-semibold mb-2">Votre message</h5>
-              <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
-                {contact.message}
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-between">
-              <button
-                type="button"
-                onClick={downloadPDF}
-                className="btn btn-secondary"
-              >
-                Télécharger en PDF <i class="fa-solid fa-download"></i>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setContact(newContact)
-                  setSend(false)
-                }}
-                className="btn btn-primary"
-              >
-                Nouvelle demande
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                // setContact(contactSchema)
+                // setSend(false)
+                // nav
+                naviagate('/')
+              }}
+              className="btn btn-primary m-2"
+            >
+              Revenir à l'accueil
+            </button>
           </div>
         </div>
       </div>
     )
   }
 
-  console.log(objectCheck);
 
   if (send) { return <FormRecap></FormRecap> }
 
@@ -206,7 +195,7 @@ const Contact = () => {
               <input type="text" onChange={inputHandler} className="form-control" id="object" name='object' placeholder="Inserez l'objet de votre message" required />
             }
             <div className="flex m-1 mt-3 items-start">
-              <input className="form-check-input mt-1" type="checkbox" id="checkDefault" onChange={() => setObjectCheck(!objectCheck)}/>
+              <input className="form-check-input mt-1" type="checkbox" id="checkDefault" onChange={() => setObjectCheck(!objectCheck)} />
               <label className="form-check-label ml-2 mr-2" htmlFor="" >Un autre objet de discussion ?  </label>
             </div>
           </div>

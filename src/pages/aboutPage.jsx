@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import Loading from '../components/LoadingPage'
 import Partenaires from '../components/partenaires'
 import { Link } from 'react-router'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../auth/firebase'
 
 const About = () => {
 
@@ -11,21 +13,29 @@ const About = () => {
   useEffect(() => {
     const FetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/about')
-        setAbout(response.data[0])
+        const response = await getDocs(collection(db, 'about'))
+        const data = response.docs.map((doc) => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setAbout(data[0])
       } catch (error) {
         console.log(error);
       }
     }
     FetchData()
   }, [])
-  const [missions, setMissions] = useState([])
+  const [missions, setMissions] = useState()
 
   useEffect(() => {
     const FetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/mission')
-        setMissions(response.data)
+        const response = await getDocs(collection(db, 'mission'))
+        const data = response.docs.map((doc) => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setMissions(data)
       } catch (error) {
         console.log(error);
       }
@@ -42,7 +52,7 @@ const About = () => {
     <div className='page'>
       <h2 className='m-3'>Qui sommes-nous ?</h2>
 
-      <p className='min-[800px]:max-w-[50vw] min-[800px]:m-3 max-[800px]:m-3 text-justify'>{about.about}</p>
+      <p lang='fr' className='min-[800px]:max-w-[50vw] min-[800px]:m-3 max-[800px]:m-3 text-justify text-justify [hyphens:auto]'>{about.about}</p>
 
       <section className='flex-wrap p-2 flex justify-around'>
         <div className='min-w-[300px] p-3 rounded-3'>
@@ -92,7 +102,7 @@ const About = () => {
           </h4>
           <p className='min-[800px]:max-w-[50vw]'>{about.leadership.description}</p>
 
-          <Link to={'/gouvernance'} className="ml-5 bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
+          <Link to={'/gouvernance'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
             <span className="text-nowrap">Connaître mieux notre gouvernance<i class="fa-solid fa-arrow-right"></i></span>
           </Link>
         </div>

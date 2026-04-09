@@ -4,7 +4,7 @@ const infoSchema = {
     description: "",
     displayed: false,
     images: [],
-    publishDate:  Date.now(),
+    publishDate: new Date(),
     location: "",
 }
 
