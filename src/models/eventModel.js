@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore"
 
-const flashInfoSchema = {
+const eventSchema = {
     title: "",
     subtitle: "",
     externalLink: "",
@@ -12,4 +12,4 @@ const flashInfoSchema = {
     publishDate : Timestamp.fromDate(new Date()),
 }
 
-export default flashInfoSchema
+export default eventSchema

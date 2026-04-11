@@ -1,105 +1,64 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
-import AddPartenaire from '../ux/addPartenaire'
-import { collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore'
+import { useEffect, useMemo, useState } from 'react'
+import { collection, onSnapshot } from 'firebase/firestore'
 import { db } from '../auth/firebase'
+import { Link } from 'react-router'
 import Loading from '../components/LoadingPage'
-
+import AddPartenaire from '../ux/addPartenaire'
 
 const AdminPartenaires = () => {
-  const [partenaires, setPartenaires] = useState([])
+  const [partenaires, setPartenaires] = useState()
+  const [search, setSearch] = useState('')
+
 
   useEffect(() => {
-    const fectData = async () => {
-      try {
-        const response = await getDocs(collection(db, 'partenaire'))
-        const data = response.docs.map((doc) => ({
-          _id: doc.id,
-          ...doc.data()
-        }))
-        setPartenaires(data)
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fectData();
+    const fetchData = onSnapshot(collection(db, 'partner'), snap => {
+      const data = snap.docs.map(doc => ({
+        _id: doc.id,
+        ...doc.data()
+      }))
+      setPartenaires(data)
+    })
+    return () => fetchData
   }, [])
 
-  const deletePartenaires = async (partenaireId) => {
-    await deleteDoc(doc(db, 'partenaire', partenaireId))
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-
-  const toggleDisplay = async (partenaireId, currentValue) => {
-    try {
-      const updatedValue = !currentValue;
-      await updateDoc(doc(db, 'partenaire', partenaireId), {
-        displayed: updatedValue,
-      });
-
-      // Mise à jour du state (UI instantanée)
-      setPartenaires((prevPartenaires) =>
-        prevPartenaires.map((partenaire) =>
-          partenaire._id === partenaireId ?
-            { ...partenaire, displayed: updatedValue }
-            : partenaire
-        ));
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const partner = search.trim().toLowerCase()
+  const searchedPartner = useMemo(() => {
+    if (!partner) return partenaires
+    return [...partenaires].filter(e => e.name.trim().toLowerCase().includes(partner))
+  })
 
   while (!partenaires) {
     return <Loading></Loading>
   }
 
   return (
-    <div className='page'>
-      {
-        !partenaires ? <h1>Aucun partenaire disponible</h1> :
-          <>
-            <AddPartenaire></AddPartenaire>
-            {<table class="table text-sm">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Nom</th>
-                  <th scope="col">Afficher</th>
-                  <th scope="col">Editer</th>
-                  <th scope="col">Supprimer</th>
-                </tr>
-              </thead>
-              <tbody>
-                {partenaires.map((partenaire, index) => (
-                  <tr>
-                    <th scope="row" className='bg-red-200'>{index + 1}</th>
-                    <td>{partenaire.name}</td>
-                    <td>
-                      <input type="checkbox" className="m-2"
-                        checked={partenaire.displayed}
-                        onChange={() => toggleDisplay(partenaire._id, partenaire.displayed)} />
-                    </td>
-                    <td>
-                      <Link style={{ borderRadius: 5 }} to={`/admin/partenaire/${partenaire._id}`} className="m-2 h-[40px] w-[40px] p-2 flex justify-center items-center bg-green-400 hover:bg-green-300 rouded-1 ">
-                        <i class="fa-solid fa-pencil"></i>
-                      </Link>
-                    </td>
-                    <td>
-                      <button onClick={() => deletePartenaires(partenaire._id)} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
-                        <i class="fa-solid fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>}
-          </>
-      }
+    <div class="page ">
+      <AddPartenaire></AddPartenaire>
+      <div className=''>
+        <form className="flex flex-1  flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5" onSubmit={(e) => e.preventDefault()}>
+          <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
+            <input type="search" placeholder="Rechercher un partenaire" value={search}
+              onChange={(e) => {
+                e.preventDefault()
+                setSearch(e.target.value)
+              }} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
+            <div className="text-gray-400 pr-5 pl-5 border-gray-300 flex justify-center items-center"><i class="fa-solid fa-magnifying-glass"></i></div>
+          </div>
+        </form>
+
+        <div className='flex flex-wrap m-1'>
+          {
+            searchedPartner.map((partenaire) =>
+            (<Link to={`/admin/partenaire/${partenaire._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col hover:scale-110 hover:shadow-[0_0_15px_rgba(0,0,0,0.2)]  shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
+              <img src={partenaire.image} alt="" className='h-[200px] object-contain' />
+              <p className='p-2 '>{partenaire.name}</p>
+            </Link>))
+          }
+        </div>
+      </div>
     </div>
   )
 }
+
 
 export default AdminPartenaires

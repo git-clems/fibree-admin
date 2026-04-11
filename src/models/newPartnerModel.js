@@ -12,6 +12,7 @@ const newPartner = {
     contribution: "",
     expectation: "",
     ugc: false,
+    accepted : false,
     sendDate : Timestamp.fromDate(new Date())
 }
 

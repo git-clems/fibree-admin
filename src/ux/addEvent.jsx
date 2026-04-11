@@ -3,26 +3,26 @@ import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { db } from '../auth/firebase';
 import { addDoc, collection } from 'firebase/firestore';
-import flashInfoSchema from '../models/flashInfoModel'
+import eventSchema from '../models/eventModel'
 
-const AddFlashInfo = () => {
+const AddEvent = () => {
 
 
-    const [flashInfo, setFlashInfo] = useState(flashInfoSchema)
+    const [event, setEvent] = useState(eventSchema)
 
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
 
     const inputHandler = (e) => {
         const { name, value } = e.target;
-        setFlashInfo({ ...flashInfo, [name]: value })
+        setEvent({ ...event, [name]: value })
         console.log(name, value);
     }
 
     const SubmitForm = async (e) => {
         setLoading(true)
         e.preventDefault()
-        await addDoc(collection(db, 'flash-info'), flashInfo).then((res) => {
+        await addDoc(collection(db, 'event'), event).then((res) => {
             setMessage('Information enregistré avec succès !')
             setLoading(false)
             const modalElement = document.getElementById('staticBackdrop');
@@ -39,9 +39,9 @@ const AddFlashInfo = () => {
     return (
         <div>
             <div className='flex justify-between p-3'>
-                <h2>Les informations à la une</h2>
+                <h2>Evènements</h2>
                 <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <span className="max-[800px]:hidden">Ajouter une flash info</span> <i class="fa-solid fa-plus"></i>
+                    <span className="max-[800px]:hidden">Ajouter une évènement</span> <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
 
@@ -49,8 +49,10 @@ const AddFlashInfo = () => {
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="" onSubmit={SubmitForm}>
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Nouvel évènement</h1>
+
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Nouvelle flash info</h1>
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Nouvel évènement</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body max-h-[70vh] overflow-auto">
@@ -94,4 +96,4 @@ const AddFlashInfo = () => {
     )
 }
 
-export default AddFlashInfo
+export default AddEvent

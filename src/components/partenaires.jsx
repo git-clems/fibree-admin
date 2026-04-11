@@ -9,7 +9,7 @@ const Partenaires = () => {
     useEffect(() => {
         const dataFect = async () => {
             try {
-                const response = await getDocs(collection(db, 'partenaire'))
+                const response = await getDocs(collection(db, 'partner'))
                 const data = response.docs.map((e) => ({
                     _id: e.id,
                     ...e.data()

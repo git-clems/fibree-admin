@@ -17,18 +17,15 @@ const AdminJoins = () => {
   useEffect(() => {
     const fectData = async () => {
       try {
-        // const response = await getDocs(collection(db, 'join'))
-        // const data = response.docs.map(doc => ({
-        //   _id: doc.id,
-        //   ...doc.data()
-        // }))
-        // setJoins(data)
-        await onSnapshot(collection(db, 'join'), snap => (
-          setJoins(snap.docs.map((doc) => ({
+
+        onSnapshot(collection(db, 'join'), snap => {
+          const data = snap.docs.map((doc) => ({
             _id: doc.id,
             ...doc.data()
-          })))
-        ))
+          }))
+          setJoins(data.filter(e => !data.accepted))
+        }
+        )
       } catch (error) {
         console.log(error);
       }
@@ -74,7 +71,7 @@ const AdminJoins = () => {
       {
         <div className='mb-5'>
           <div className='flex flex-wrap items-center justify-between '>
-            <h4 className='m-3'>{joins.filter(e=>!e.accepted).length} demandes d'adhésion en attente</h4>
+            <h4 className='m-3'>{joins.filter(e => !e.accepted).length === 0 && "Acune demande d'adhésion en attente"} {joins.filter(e => !e.accepted).length === 1 && "Une demande d'adhésion en attente"} {joins.filter(e => !e.accepted).length > 1 && <span>{joins.filter(e => !e.accepted).length} demandes d'adhésion en attente</span>}</h4>
             <form className="flex flex-1 flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5" onSubmit={(e) => e.preventDefault()}>
               <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
                 <input type="search" placeholder="Rechercher un nom" value={search} onChange={(e) => setSearch(e.target.value)} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />

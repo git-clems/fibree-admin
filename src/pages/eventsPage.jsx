@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Info from '../components/flashInfo';
+import Info from '../components/event';
 import axios from 'axios';
 import { Link } from 'react-router';
 import { collection, getDocs } from 'firebase/firestore';
@@ -7,11 +7,11 @@ import { db } from '../auth/firebase';
 import Loading from '../components/LoadingPage';
 
 const FlashInfos = () => {
-    const [flashInfos, setFlashInfos] = useState()
+    const [events, setFlashInfos] = useState()
     useEffect(() => {
         const fectData = async () => {
             try {
-                const response = await getDocs(collection(db, 'flash-info'))
+                const response = await getDocs(collection(db, 'event'))
                 const data = response.docs.map((doc) => ({
                     _id: doc.id,
                     ...doc.data()
@@ -24,23 +24,23 @@ const FlashInfos = () => {
         fectData();
     }, [])
 
-    while (!flashInfos) {
+    while (!events) {
         return <Loading></Loading>
     }
 
-    const Flashinfo = ({flashInfoId}) => {
+    const Flashinfo = ({eventId}) => {
 
-        const [flashInfo, setFlashInfo] = useState()
+        const [event, setFlashInfo] = useState()
 
         useEffect(() => {
             const fetchData = async () => {
                 try {
-                    const response = await getDocs(collection(db, 'flash-info'))
+                    const response = await getDocs(collection(db, 'event'))
                     const data = response.docs.map((doc) => ({
                         _id: doc.id,
                         ...doc.data()
                     }))
-                    const foundInfo = data.find((e) => e._id === flashInfoId)
+                    const foundInfo = data.find((e) => e._id === eventId)
                     setFlashInfo(foundInfo || null);
                 } catch (error) {
                     console.log(error);
@@ -48,10 +48,10 @@ const FlashInfos = () => {
             };
 
             fetchData();
-        }, [flashInfoId]);
+        }, [eventId]);
 
 
-        while (!flashInfo) {
+        while (!event) {
             return (
                 <div class="card m-3 h-[450px] w-[300px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden" aria-hidden="true">
                     <div class="card-body">
@@ -72,15 +72,15 @@ const FlashInfos = () => {
 
         return (
             <>
-                {flashInfo.displayed &&
-                    <Link to={`/flash-info/${flashInfoId}`} className='m-3 max-h-[450px] w-[25vw] min-w-[300px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden'>
+                {event.displayed &&
+                    <Link to={`/event/${eventId}`} className='m-3 max-h-[450px] w-[25vw] min-w-[300px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden'>
                         <div>
-                            <img src={flashInfo.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover' />
-                            <span className='text-sky-50 position-relative top-[-40px] bg-green-500 pl-2 pr-2 pt-1 pb-1 rounded-r-full'>Publié le {flashInfo.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                            <img src={event.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover' />
+                            <span className='text-sky-50 position-relative top-[-40px] bg-green-500 pl-2 pr-2 pt-1 pb-1 rounded-r-full'>Publié le {event.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                         </div>
                         <div className='m-2 mt-0'>
-                            <span className='font-bold b-4'>{flashInfo.title}</span>
-                            <p className='text-sm text-[gray]'> {flashInfo.subtitle} </p>
+                            <span className='font-bold b-4'>{event.title}</span>
+                            <p className='text-sm text-[gray]'> {event.subtitle} </p>
                         </div>
                     </Link>
                 }
@@ -95,7 +95,7 @@ const FlashInfos = () => {
             <div className="m-2">
                 <h2 className='ml-2'>À venir</h2>
                 <div className="flex-1 flex flex-wrap justify-center">
-                    {flashInfos.map((flashInfo) => (flashInfo.displayed && (<Flashinfo flashInfoId={flashInfo._id}></Flashinfo>)))}
+                    {events.map((event) => (event.displayed && (<Flashinfo eventId={event._id}></Flashinfo>)))}
                 </div>
             </div>
         </div>

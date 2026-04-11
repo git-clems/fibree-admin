@@ -5,28 +5,28 @@ import axios from 'axios'
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
 import Partenaires from "../components/partenaires"
-import Chiffres from "../components/chiffres"
-import FlashInfo from "../components/flashInfo"
+import Event from "../components/event"
 import { collection, getDocs, onSnapshot } from 'firebase/firestore'
 import { db } from "../auth/firebase"
 import Loading from "../components/LoadingPage"
+import Statistic from '../components/statistics'
 
 
 const Home = () => {
     const [infos, setInfos] = useState()
-    const [flashInfos, setFlashInfos] = useState()
+    const [events, setEvents] = useState()
     const [partenaires, setPartenaires] = useState()
-    const [chiffres, setChiffres] = useState([])
-    const [about, setAbout] = useState([])
+    const [statistics, setStatistics] = useState([])
+    const [about, setAbout] = useState()
 
 
     useEffect(() => {
-        onSnapshot(collection(db, 'flash-info'), snap => {
+        onSnapshot(collection(db, 'event'), snap => {
             const data = snap.docs.map((doc) => ({
                 _id: doc.id,
                 ...doc.data()
             }))
-            setFlashInfos(data)
+            setEvents(data)
         })
 
         onSnapshot(collection(db, 'infos'), snap => {
@@ -36,7 +36,7 @@ const Home = () => {
             }))
             setInfos(data)
         })
-        onSnapshot(collection(db, 'partenaire'), snap => {
+        onSnapshot(collection(db, 'partner'), snap => {
             const data = snap.docs.map((doc) => ({
                 _id: doc.id,
                 ...doc.data()
@@ -49,7 +49,7 @@ const Home = () => {
         const fectData = async () => {
             try {
                 const response = await getDocs(collection(db, 'about'))
-                const data = response.docs.map(e=>({
+                const data = response.docs.map(e => ({
                     _id: e.id,
                     ...e.data()
                 }))
@@ -65,12 +65,12 @@ const Home = () => {
     useEffect(() => {
         const dataFect = async () => {
             try {
-                const response = awaitgetDocs(collection(db, 'statistics'))
-                const data = response.docs.map(e=>({
+                const response = await getDocs(collection(db, 'statistic'))
+                const data = response.docs.map(e => ({
                     _id: e.id,
                     ...e.data()
                 }))
-                setChiffres(data)
+                setStatistics(data)
             } catch (error) {
                 console.log(error);
             }
@@ -80,22 +80,24 @@ const Home = () => {
 
 
 
-    while (!infos || !flashInfos || !partenaires) { return <Loading></Loading> }
-    
+    while (!infos || !events || !partenaires || !about || !statistics) {
+        return <Loading></Loading>
+    }
+
 
     return (
         <div className="page">
             <section className="flex flex-wrap items- justify-center p-2 bg-[url(./bg/bg1.png)] bg-cover">
                 {
-                    flashInfos &&
+                    events &&
                     <div className="flex-1 h-[max-content] max-[600px]:hidden rounded-md m-2 mt-0 bg-gray-100">
                         <div className="flex justify-between items-center m-2">
                             <h3 className="text-red-500">À la une</h3>
-                            <Link to={'/flash-info'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
+                            <Link to={'/event'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
                                 <span className="text-nowrap">Voir plus<i class="fa-solid fa-arrow-right"></i></span>
                             </Link>
                         </div>
-                        {flashInfos.slice(0, 3).map((flashInfo) => (<FlashInfo flashInfoId={flashInfo._id} />))}
+                        {events.slice(0, 3).map((event) => (<Event eventId={event._id} />))}
                     </div>
                 }
                 <div className='overflow-hidden rounded-md w-[60%] max-[800px]:w-[100%]'>
@@ -129,7 +131,7 @@ const Home = () => {
                 </section>
             }
             {
-                (partenaires && partenaires.length > 0) &&
+                partenaires.filter(e => e.displayed).length > 0 &&
                 <section className="max-[800px]:p-0 m-2 mt-5">
                     <div className="flex items-center">
                         <h2 className="ml-3">Nos partenaires</h2>
@@ -139,19 +141,19 @@ const Home = () => {
             }
 
             {
-                (chiffres && chiffres.length > 0) &&
+                statistics.filter.length > 0 &&
                 <section className="max-[800px]:p-0 m-2 p-3 rounded-md mt-5">
                     <div className="flex items-center justify-center">
-                        <h2 className="ml-3">Chiffres clés</h2>
+                        <h2 className="ml-3">Nos chiffres clés</h2>
                     </div>
 
                     <div className="flex max-[800px]:hidden flex-wrap justify-center">
-                        {chiffres.map((chiffre) => (<Chiffres chiffreId={chiffre._id}></Chiffres>))}
+                        {statistics.map((statistic) => (<Statistic statisticId={statistic._id}></Statistic>))}
                     </div>
                     <div className="flex min-[800px]:hidden flex-wrap justify-center">
-                        {chiffres.slice(0, 4).map((chiffre) => (<Chiffres chiffreId={chiffre._id}></Chiffres>))}
+                        {statistics.slice(0, 4).map((statistic) => (<Statistic statisticId={statistic._id}></Statistic>))}
 
-                        <Link to={'/chiffre'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
+                        <Link to={'/statistic'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
                             <span className="text-nowrap">Voir tous nos statistiques <i class="fa-solid fa-arrow-right"></i></span>
                         </Link>
                     </div>

@@ -11,7 +11,6 @@ const memberSchema = {
     expectation: "",
     ugc: false,
     acceptedDate: Timestamp.fromDate(new Date()),
-    opened : false
 }
 
 export default memberSchema

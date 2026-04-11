@@ -53,7 +53,7 @@ const ContactDetailAdmin = () => {
                 <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="border overflow-hidden mt-5 mb-5 rounded-md">
                     <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
-                            <h4>{contact.object}</h4>
+                            <h5>{contact.object}</h5>
                             <span>De : {contact.fname} {contact.lname} {`<${contact.email}>`}</span> <br />
                             <span>Date : {contact.contactDate?.toDate().toLocaleString('fr-FR')}</span>
                         </div>
@@ -62,7 +62,6 @@ const ContactDetailAdmin = () => {
                     <div className="p-2">
 
                         <div className="mt-1 space-y-3">
-
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Tél</span>
                                 <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.tel}</span>
@@ -72,11 +71,6 @@ const ContactDetailAdmin = () => {
                                 <span className="font-semibold">Adresse</span>
                                 <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.city}, {contact.country}</span>
                             </div>
-
-                            {/* <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
-                            <span className="font-semibold">Objet</span>
-                            <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{contact.object}</span>
-                        </div> */}
                         </div>
 
                         <div className="mt-6">

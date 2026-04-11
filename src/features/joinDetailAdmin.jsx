@@ -4,7 +4,6 @@ import { addDoc, collection, doc, getDoc, getDocs, Timestamp, updateDoc } from "
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
-import memberSchema from '../models/memberModel'
 
 
 const JoinDetailAdmin = () => {
@@ -22,10 +21,12 @@ const JoinDetailAdmin = () => {
                 ...doc.data()
             }))
             const joinFound = data.find(e => e._id === joinId)
-            const { joinDate, _id, ...rest } = joinFound
-            const member = { ...rest, joinId: _id, acceptedDate: Timestamp.fromDate(new Date()) }
-            addDoc(collection(db, 'member'), member)
-            updateDoc(doc(db, 'join', joinId), { accepted: true, ...joinFound })
+            const { _id, ...rest } = joinFound
+            const member = { ...rest, acceptedDate: Timestamp.fromDate(new Date()) }
+            updateDoc(doc(db, 'join', joinId), { accepted: true })
+                .then(() =>
+                    addDoc(collection(db, 'member'), member)
+                )
             // console.log(data);
 
         } catch (error) {
@@ -77,7 +78,7 @@ const JoinDetailAdmin = () => {
                 <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="border overflow-hidden rounded-md">
                     <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
-                            <i class="fa-solid fa-circle-user"></i><span className="ml-2">{join.fname} {join.lname.toUpperCase()}</span> <br />
+                            <i class="fa-solid fa-circle-user"></i><span className="ml-2">{join.gender === 'male' ? <span>M. </span> : <span>Mme. </span>} {join.fname} {join.lname.toUpperCase()}</span> <br />
                             {join.tel && <div><i class="fa-solid fa-phone"></i><span className="ml-2">{join.tel}</span> <br /></div>}
                             Adresse : <span>{join.city}, {join.country}</span>
                         </div>

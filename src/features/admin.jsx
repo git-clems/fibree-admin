@@ -1,28 +1,43 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import LayoutAdmin from '../components/layoutAdmin'
-import { Link } from 'react-router'
 import { collection, onSnapshot } from 'firebase/firestore'
 import { db } from '../auth/firebase'
-import Loading from '../components/LoadingPage'
 
 const Admin = () => {
     const [search, setSearch] = useState('')
     const [messageNotOpend, setMessageNotOpend] = useState()
-    const [joinNotOpend, setJoinNotOpend] = useState()
+    const [suspended, setSuspended] = useState()
+    const [joinNotAccepted, setJoinNotAccepted] = useState()
+    const [partnerNotAccepted, setPartnerNotAccepted] = useState()
+
+    const audioRef = useRef(null)
+    const previousCountRef = useRef(null)
 
     useEffect(() => {
-        try {
-            onSnapshot(collection(db, 'contact'), snap => {
-                const data = snap.docs.map(e => ({
-                    _id: e.id,
-                    ...e.data()
-                }))
-                const dataFilered = data.filter(e => !e.opened)
-                setMessageNotOpend(dataFilered.length)
-            })
-        } catch (error) {
-            console.log(error);
-        }
+        audioRef.current = new Audio('/sounds/message_received.mp3')
+    }, [])
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(collection(db, 'contact'), (snap) => {
+            const data = snap.docs.map((e) => ({
+                _id: e.id,
+                ...e.data()
+            }))
+
+            const dataFiltered = data.filter((e) => !e.opened)
+            const newCount = dataFiltered.length
+
+            if (previousCountRef.current !== null && newCount > previousCountRef.current) {
+                audioRef.current?.play().catch((error) => {
+                    console.log('Lecture audio bloquée :', error)
+                })
+            }
+
+            previousCountRef.current = newCount
+            setMessageNotOpend(newCount)
+        })
+
+        return () => unsubscribe()
     }, [])
 
     useEffect(() => {
@@ -32,8 +47,37 @@ const Admin = () => {
                     _id: e.id,
                     ...e.data()
                 }))
-                const dataFilered = data.filter(e => !e.opened)
-                setJoinNotOpend(dataFilered.length)
+                const dataFilered = data.filter(e => !e.accepted)
+                setJoinNotAccepted(dataFilered.length)
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }, [])
+
+    useEffect(() => {
+        try {
+            onSnapshot(collection(db, 'new-partner'), snap => {
+                const data = snap.docs.map(e => ({
+                    _id: e.id,
+                    ...e.data()
+                }))
+                const dataFilered = data.filter(e => !e.accepted)
+                setPartnerNotAccepted(dataFilered.length)
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }, [])
+
+    useEffect(() => {
+        try {
+            onSnapshot(collection(db, 'member'), snap => {
+                const data = snap.docs.map(e => ({
+                    _id: e.id,
+                    ...e.data()
+                }))
+                setSuspended(data.filter(e => e.suspended).length)
             })
         } catch (error) {
             console.log(error);
@@ -42,15 +86,19 @@ const Admin = () => {
 
     const blocks = [
         { link: '/admin/affiche', name: 'Affiches en carrousel', bg_color: 'rgb(0, 0, 0)', text_color: 'white' },
-        { link: '/admin/flash-info', name: 'Flash infos', bg_color: 'rgba(255,0,0,0.6)', text_color: 'white' },
-        { link: '/admin/actualite', name: 'Actualités', bg_color: 'rgba(255, 217, 0, 0.95)' },
+        { link: '/admin/evenement', name: 'Evènements', bg_color: 'rgba(255,0,0,0.6)', text_color: 'white' },
+        { link: '/admin/actualite', name: 'Actualités', bg_color: 'rgba(233, 209, 70, 0.95)' },
         { link: '/admin/mission', name: 'Missions', bg_color: 'rgba(0, 64, 255, 0.6)', text_color: 'white' },
-        { link: '/admin/partenaire', name: 'Partenaires', bg_color: 'rgb(121, 173, 203)', text_color: 'white' },
-        { link: '/admin/chiffre', name: 'Chiffres' },
+        { link: '/admin/chiffre', name: 'Statistiques' },
+        { link: '/admin/nouveau-membre', name: "Demandes d'adhésion", bg_color: "rgba(78, 249, 255, 0.89)", badge: joinNotAccepted },
         { link: '/admin/membre', name: 'Membres', bg_color: "rgba(255, 220, 78, 0.89)" },
-        { link: '/admin/nouveau-membre', name: "Demandes d'adhésions", bg_color: "rgba(78, 249, 255, 0.89)", badge: joinNotOpend },
-        { link: '/admin/nouveau-partenaire', name: 'Demandes de partenariat', text_color: 'white', bg_color: "rgba(255, 153, 0, 0.89)" },
-        { link: '/admin/messagerie', name: 'Messageries', bg_color: "rgba(0, 255, 17, 0.89)", badge: messageNotOpend },
+        { link: '/admin/suspendu', name: 'Membres suspendus', bg_color: "rgb(165, 138, 195)", text_color: 'white', badge: suspended },
+        { link: '/admin/nouveau-partenaire', name: 'Demandes de partenariat', text_color: 'white', bg_color: "rgba(237, 169, 67, 0.89)", badge: partnerNotAccepted },
+        { link: '/admin/partenaire', name: 'Partenaires', bg_color: 'rgb(121, 173, 203)', text_color: 'white' },
+        { link: '/admin/messagerie', name: 'Messageries', bg_color: "rgb(164, 199, 246)", badge: messageNotOpend },
+        { link: '/admin/a-propos', name: 'A propos', bg_color: "rgba(40, 152, 217, 0.76)", text_color: 'white' },
+        { link: '/admin/equipe', name: 'Equipe', bg_color: "rgba(187, 40, 217, 0.76)", text_color: 'white' },
+        { link: '/admin/projet', name: 'Projets à venir', bg_color: "rgba(182, 217, 40, 0.76)" },
     ]
 
     const normalizedSearch = search.trim().toLowerCase()
@@ -73,9 +121,6 @@ const Admin = () => {
             })
     }, [search, blocks])
 
-    while (!messageNotOpend || !joinNotOpend) {
-        return <Loading></Loading>
-    }
     return (
         <div className="page">
             <form className="flex flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5" onSubmit={(e) => e.preventDefault()}>

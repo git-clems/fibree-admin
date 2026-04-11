@@ -6,14 +6,6 @@ const FootBar = () => {
     const currentDate = new Date().getFullYear()
     return (
         <div className='w-full' id='footBar'>
-            {/* <form className='flex flex-wrap bg-gray-100 items-center justify-center max-[800px]:p-2 p-5'>
-                <span className='mr-5'>Enrégistrez votre couriel pour recevoir les actualités de la FIBREE </span>
-                <div className='flex flex-1'>
-                    <div className='bg-green-400 pl-5 pr-5 border-2 border-gray-300 flex justify-center items-center rounded-l-[10px]'>@</div>
-                    <input type="email" placeholder='example@gmail.com' required name="" id="" className='outline-none border-l-none h-[40px] pl-2 flex-1 border-2 border-gray-300' />
-                    <button style={{borderStartEndRadius : '10px', borderEndEndRadius : "10px"}} type="submit" className='hover:bg-green-300 bg-green-400 border-2 border-gray-300 flex justify-center items-center pl-5 pr-5'>Envoyer</button>
-                </div>
-            </form> */}
             <div className='border-t-3 bg-gray-50 border-gray-200 w-full flex flex-wrap max-[800px]:flex-col p-3'>
                 <div className='flex-1 flex-wrap p-2 max-[800px]:items-center flex-col items-start flex'>
                     <Link to="/" className="">
@@ -51,7 +43,7 @@ const FootBar = () => {
                     </div>
                     <div className='hover:underline w-[max-content] m-2 mt-3'>
                         <Link className=""
-                            to="/contact">Nos projets
+                            to="">Nos projets
                         </Link>
                     </div>
                     <div className='hover:underline w-[max-content] m-2 mt-3'>

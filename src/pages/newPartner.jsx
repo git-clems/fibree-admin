@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import ContrySelector from '../components/countrySection'
 import Loading from '../components/LoadingPage'
 import newPartner from "../models/newPartnerModel"
 import html2pdf from 'html2pdf.js'
-import { onSnapshot, collection } from 'firebase/firestore'
+import { addDoc, collection } from 'firebase/firestore'
+import { db } from '../auth/firebase'
 
 const BePartner = () => {
     const recapRef = useRef()
@@ -25,17 +26,12 @@ const BePartner = () => {
         setLoading(true)
 
         try {
-            onSnapshot(collection(db, 'new-partner'), snap => setPartner(
-                snap.docs.map(doc => ({
-                    _id: doc.id,
-                    ...doc.data()
-                }))
-            ))
-
+            addDoc(collection(db, 'new-partner'), partner)
             setLoading(false)
             setSend(true)
         } catch (error) {
             setSend(false)
+            console.log(error);
         }
     }
 
@@ -44,7 +40,7 @@ const BePartner = () => {
 
         const opt = {
             margin: 10,
-            filename: `${partner.name}_recap_fibree.pdf`,
+            filename: `recap_fibree.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -172,7 +168,7 @@ const BePartner = () => {
                         {
                             objectCheck ?
                                 <input type='text' onChange={inputHandler} className="form-control" id="profession" name='profession' rows="3" placeholder='Dites nous qui vous êtes' required></input> :
-                                <select class="form-select" autocomplete="country" id="country" onChange={inputHandler} required name="country">
+                                <select class="form-select" autocomplete="profession" id="profession" onChange={inputHandler} required name="profession">
                                     <option value="">Choisir</option>
                                     <option value="Entreprise">Entreprise</option>
                                     <option value="Organisation non gouvernementale">Organisation non gouvernementale</option>
@@ -181,7 +177,7 @@ const BePartner = () => {
                                 </select>
                         }
                         <div className="flex m-1 mt-3 items-start">
-                            <input className="form-check-input mt-1" type="checkbox" id="checkDefault" onChange={() => setObjectCheck(!objectCheck)} required />
+                            <input className="form-check-input mt-1" type="checkbox" id="checkDefault" name='profession' onChange={() => setObjectCheck(!objectCheck)} />
                             <label className="form-check-label ml-2 mr-2" htmlFor="">Personnaliser votre choix <span className='text-red-500'> * </span>  </label>
                         </div>
                     </div>

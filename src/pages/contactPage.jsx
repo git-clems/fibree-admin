@@ -76,7 +76,7 @@ const Contact = () => {
               <div className="mt-1 space-y-3">
                 <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                   <span className="font-semibold">Nom complet</span>
-                  <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{contact.fname} {contact.lname}</span>
+                  <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{contact.fname} {contact.lname.toUpperCase()}</span>
                 </div>
 
                 <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
@@ -148,12 +148,12 @@ const Contact = () => {
           <div className="flex mb-3 justify-between flex-wrap">
             <div className="min-w-[300px] m-1 mt-3 flex-1">
               <label htmlFor="" className="form-label">Nom <span className='text-red-500'> * </span>  </label>
-              <input type="text" onChange={inputHandler} className="form-control" name='fname' required id="nom" />
+              <input type="text" onChange={inputHandler} className="form-control" name='lname' required id="nom" />
             </div>
 
             <div className="min-w-[300px] m-1 mt-3 flex-1">
               <label htmlFor="" className="form-label">Prénom(s) <span className='text-red-500'> * </span>  </label>
-              <input type="text" onChange={inputHandler} className="form-control" name='lname' required id="prenom" />
+              <input type="text" onChange={inputHandler} className="form-control" name='fname' required id="prenom" />
             </div>
           </div>
 

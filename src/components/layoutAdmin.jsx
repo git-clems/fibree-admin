@@ -8,7 +8,7 @@ const LayoutAdmin = ({ link, name, bg_color, text_color, badge }) => {
                 <h4 className='text-center'>{name}</h4>
                 {badge > 0 ?
                     <div>
-                        {badge > 10 ?
+                        {badge > 99 ?
                             <div className='text-sky-50 position-relative top-[-80px] bg-red-500 h-[30px] w-[30px] flex justify-center items-center rounded-full'>+10</div> :
                             <div className='text-sky-50 position-relative top-[-80px] bg-red-500 h-[30px] w-[30px] flex justify-center items-center rounded-full'>{badge}</div>
                         }

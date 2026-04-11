@@ -3,28 +3,28 @@ import { Link } from 'react-router';
 import { db } from '../auth/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 
-const FlashInfo = ({ flashInfoId }) => {
+const Event = ({ eventId }) => {
 
-    const [flashInfo, setInfo] = useState()
+    const [event, setInfo] = useState()
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'flash-info'))
+                const response = await getDocs(collection(db, 'event'))
                 const data = response.docs.map((doc) => ({
                     _id: doc.id,
                     ...doc.data()
                 }))
-                setInfo(data.find((e) => e._id === flashInfoId));
+                setInfo(data.find((e) => e._id === eventId));
             } catch (error) {
                 console.log(error);
             }
         };
 
         fetchData();
-    }, [flashInfoId]);
+    }, [eventId]);
 
-    while (!flashInfo) {
+    while (!event) {
         return (
             <div class="card" aria-hidden="true">
                 <div class="card-body">
@@ -43,19 +43,19 @@ const FlashInfo = ({ flashInfoId }) => {
 
 
     return (
-        flashInfo.displayed &&
-        <Link to={`/flash-info/${flashInfo._id}`} className="">
+        event.displayed &&
+        <Link to={`/event/${event._id}`} className="">
             <div className='hover:bg-gray-200 flex flew-wrap border-t-1 overflow-hidden border-gray-300 flex-1 p-2'>
                 <div className='w-[100px] h-[100px'>
-                    <img src={flashInfo.image} alt="" className={`${flashInfo.image ? 'object-contain border-1 border-gray-300 rounded-md' : ''}`} />
+                    <img src={event.image} alt="" className={`${event.image ? 'object-contain border-1 border-gray-300 rounded-md' : ''}`} />
                 </div>
                 <div className="flex-1 ml-2">
-                    <div className='truncate max-w-[300px]'>{flashInfo.title}</div>
-                    <div className="text-gray-400 truncate max-w-[300px]">{flashInfo.subtitle}</div>
+                    <div className='truncate max-w-[300px]'>{event.title}</div>
+                    <div className="text-gray-400 truncate max-w-[300px]">{event.subtitle}</div>
                 </div>
             </div>
         </Link>
     )
 }
 
-export default FlashInfo
+export default Event

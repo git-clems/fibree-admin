@@ -13,7 +13,7 @@ const DetailsFlashInfo = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'flash-info'));
+                const response = await getDocs(collection(db, 'envent'));
                 const data = response.docs.map((doc) => ({
                     _id: doc.id,
                     ...doc.data()

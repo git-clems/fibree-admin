@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { useNavigate, useParams } from "react-router-dom";
+import { addDoc, collection, doc, getDocs, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
@@ -11,7 +11,7 @@ const MemberDetailAdmin = () => {
     const { id } = useParams();
     const recapRef = useRef()
 
-    const AcceptMember = async (memberId) => {
+    const SuspendMember = async (memberId) => {
         try {
             const response = await getDocs(collection(db, 'member'))
             const data = response.docs.map(doc => ({
@@ -19,11 +19,12 @@ const MemberDetailAdmin = () => {
                 ...doc.data()
             }))
             const memberFound = data.find(e => e._id === memberId)
-            const { memberDate, ...rest } = memberFound
-            const member = {...rest, acceptDate : new Date()}
-            addDoc(collection(db, 'member'), memberFound)
-            // console.log(data);
-            
+            const { memberDate, _id, ...rest } = memberFound
+            const suspendedMember = { ...rest, suspended: !memberFound.suspended, suspendedtDate: new Date() }
+            addDoc(collection(db, 'suspended'), suspendedMember)
+            updateDoc(doc(db, 'member', memberId), suspendedMember)
+                .then(() => {
+                })
         } catch (error) {
             console.log(error);
         }
@@ -35,18 +36,19 @@ const MemberDetailAdmin = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'member'))
-                const data = response.docs.map((doc) => ({
-                    _id: doc.id,
-                    ...doc.data()
-                }))
-                const foundMember = data.find((e) => e._id === id);
-                setMember(foundMember || null);
+                onSnapshot(
+                    collection(db, 'member'), snap => {
+                        const data = snap.docs.map((doc) => ({
+                            _id: doc.id,
+                            ...doc.data()
+                        }))
+                        const foundMember = data.find((e) => e._id === id);
+                        setMember(foundMember || null);
+                    })
             } catch (error) {
                 console.log(error);
             }
         };
-
         fetchData();
     }, [id]);
 
@@ -70,12 +72,22 @@ const MemberDetailAdmin = () => {
     return (
         <div className="page flex justify-center">
             <div className="w-full max-w-[700px] mt-5 mb-5 p-2">
+                <div className="flex justify-between items-center">
+                    <h5>{member.suspended && <span className="text-red-500"> {member.gender === 'male' ? <span>Suspendu</span> : <span>Suspendue</span>}</span>}</h5>
+                    <button
+                        type="button"
+                        onClick={downloadPDF}
+                        className="btn btn-primary"
+                    >
+                        Télécharger en PDF <i class="fa-solid fa-download"></i>
+                    </button>
+                </div>
                 <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="border overflow-hidden rounded-md">
                     <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
-                            <i class="fa-solid fa-circle-user"></i><span className="ml-2">{member.fname} {member.lname.toUpperCase()}</span> <br />
+                            <i class="fa-solid fa-circle-user"></i><span className="ml-2">{member.gender === 'male' ? <span>M. </span> : <span>Mme. </span>} {member.fname} {member.lname.toUpperCase()}</span> <br />
                             {member.tel && <div><i class="fa-solid fa-phone"></i><span className="ml-2">{member.tel}</span> <br /></div>}
-                            Adresse : <span>{member.city}, {member.country}</span>
+                            <i className="fa-solid fa-location-dot"></i> : <span>{member.city}, {member.country}</span>
                         </div>
                         <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
                     </div>
@@ -90,11 +102,6 @@ const MemberDetailAdmin = () => {
                             </div>
 
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
-                                <span className="font-semibold">Adresse</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{member.city}, {member.country}</span>
-                            </div>
-
-                            <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Profession</span>
                                 <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{member.profession}</span>
                             </div>
@@ -102,23 +109,12 @@ const MemberDetailAdmin = () => {
 
                     </div>
                 </div>
-                <div className="mt-6 flex justify-between">
-                    <button
-                        type="button"
-                        onClick={downloadPDF}
-                        className="btn btn-secondary"
-                    >
-                        Télécharger en PDF <i class="fa-solid fa-download"></i>
-                    </button>
 
-                    <button
-                        type="button"
-                        onClick={() => AcceptMember(member._id)}
-                        className="btn btn-primary"
-                    >
-                        Accepter
-                    </button>
+                <div class="form-check form-switch mt-6">
+                    <input checked={member.suspended} onChange={() => SuspendMember(member._id)} class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" />
+                    <label class="form-check-label" for="switchCheckDefault">Suspendre</label>
                 </div>
+
             </div>
         </div>
     )

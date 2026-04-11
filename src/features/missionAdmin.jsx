@@ -115,9 +115,9 @@ const AdminMissions = () => {
                   >
                     <th scope="row">{index + 1}</th>
 
-                    <td>
+                    <td className='truncate max-w-[40vw]'>
                       <h6>{mission.title}</h6>
-                      <p className="text-gray-500 truncate max-w-[40vw]">{mission.description}</p>
+                      <p className="text-gray-500 ">{mission.description}</p>
                     </td>
 
                     <td>

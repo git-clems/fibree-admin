@@ -18,7 +18,6 @@ const CandSpontPage = () => {
     const inputHandler = (e) => {
         const { name, value } = e.target
         setJoin({ ...join, [name]: value })
-        console.log(name, value);
     }
 
     const HandleSubmit = async (e) => {
@@ -74,12 +73,12 @@ const CandSpontPage = () => {
                             <div className="mt-1 space-y-3">
                                 <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                     <span className="font-semibold">Nom</span>
-                                    <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{join.fname}</span>
+                                    <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{join.lname}</span>
                                 </div>
 
                                 <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                     <span className="font-semibold">Prénom(s)</span>
-                                    <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{join.lname}</span>
+                                    <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{join.fname}</span>
                                 </div>
 
                                 <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
@@ -174,7 +173,7 @@ const CandSpontPage = () => {
 
     return (
         <div className="page flex justify-center">
-            <div className="max-w-[800px] mb-5 mt-5">
+            <div className="max-w-[800px] mb-5 mt-1">
                 <h5 className="ml-3 mr-3">Vous souhaitez faire une demande d'adhésion à la FIBREE spontanément.</h5>
 
                 <p className='ml-3 mb-3'>Les champs marqué par <span className='text-red-500'> * </span> sont obligatoires.</p>
@@ -201,6 +200,16 @@ const CandSpontPage = () => {
                             <label htmlFor="" className="form-label">Numéro de téléphone <span className='text-red-500'> * </span>  </label>
                             <input type="tel" onChange={inputHandler} className="form-control" id="telephone" name='tel' placeholder="+123 11 22 33 44" required />
                         </div>
+                    </div>
+
+
+                    <div className="min-w-[300px] m-1 mt-3 flex-1">
+                        <label htmlFor="" className="form-label">Genre <span className='text-red-500'> * </span>  </label>
+                        <select class="form-select" autocomplete="gender" id="gender" onChange={inputHandler} required name="gender">
+                            <option value="">Choisir</option>
+                            <option value="male">Homme</option>
+                            <option value="female">Femme</option>
+                        </select>
                     </div>
 
                     <div className="flex mb-3 justify-between flex-wrap">
