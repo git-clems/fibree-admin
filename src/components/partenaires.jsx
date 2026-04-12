@@ -5,7 +5,7 @@ import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 
 const Partenaires = () => {
-    const [partenaires, setPartenaires] = useState([])
+    const [partenaires, setPartenaires] = useState()
     useEffect(() => {
         const dataFect = async () => {
             try {
@@ -21,13 +21,16 @@ const Partenaires = () => {
         };
         dataFect()
     }, [])
+    while (!partenaires) {
+        return null
+    }
     return (
         <>
-            {(partenaires && partenaires.length > 0) &&
+            {partenaires.length > 0 &&
                 <div class="flex min-[800px]:flex-wrap overflow-x-auto overflow-y-hidden duration-200 ">
                     {partenaires.map((partenaire) => (
                         partenaire.displayed &&
-                        <div className='slide m-2 flex items-center flex-col'>
+                        <div key={partenaire._id} className='slide m-2 flex items-center flex-col'>
                             <img src={partenaire.image} alt="" className='h-[200px] w-[200px] object-contain border-2 border-gray-200 rounded-md' />
                             <p className='w-[200px] p-2 text-center'>{partenaire.name}</p>
                         </div>

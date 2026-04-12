@@ -1,27 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addDoc, collection, doc, getDoc, getDocs, Timestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
+import Page404 from "../pages/404";
+import memberSchema from '../models/memberModel'
 
 
 const JoinDetailAdmin = () => {
     const [join, setJoin] = useState();
-    // const [member, setMember] = useState(memberSchema)
+    const [loading, setLoading] = useState(memberSchema)
     const { id } = useParams();
     const recapRef = useRef()
     const navigate = useNavigate()
 
     const AcceptMember = async (joinId) => {
         try {
-            const response = await getDocs(collection(db, 'join'))
-            const data = response.docs.map(doc => ({
-                _id: doc.id,
-                ...doc.data()
-            }))
-            const joinFound = data.find(e => e._id === joinId)
-            const { _id, ...rest } = joinFound
+            const data = await getDoc(doc(db, 'join', id))
+            const foundJoin = { _id: data.id, ...data.data() }
+            const { _id, ...rest } = foundJoin
             const member = { ...rest, acceptedDate: Timestamp.fromDate(new Date()) }
             updateDoc(doc(db, 'join', joinId), { accepted: true })
                 .then(() =>
@@ -40,15 +38,15 @@ const JoinDetailAdmin = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'join'))
-                const data = response.docs.map((doc) => ({
-                    _id: doc.id,
-                    ...doc.data()
-                }))
-                const foundJoin = data.find((e) => e._id === id);
+                setLoading(true)
+                const data = await getDoc(doc(db, 'join', id))
+                const foundJoin = { _id: data.id, ...data.data() }
                 setJoin(foundJoin || null);
             } catch (error) {
                 console.log(error);
+                setJoin(null)
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -69,7 +67,8 @@ const JoinDetailAdmin = () => {
         html2pdf().set(opt).from(element).save()
     }
 
-    while (!join) { return <Loading></Loading> }
+    if (loading) { return <Loading /> }
+    if (!join) { return <Page404 message={'Demandeur non retrouvé'} prev={'Revenir aux demandeurs'} prevLink={'/admin/nouveau-membre'} /> }
 
 
     return (
@@ -78,9 +77,9 @@ const JoinDetailAdmin = () => {
                 <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="border overflow-hidden rounded-md">
                     <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
-                            <i class="fa-solid fa-circle-user"></i><span className="ml-2">{join.gender === 'male' ? <span>M. </span> : <span>Mme. </span>} {join.fname} {join.lname.toUpperCase()}</span> <br />
-                            {join.tel && <div><i class="fa-solid fa-phone"></i><span className="ml-2">{join.tel}</span> <br /></div>}
-                            Adresse : <span>{join.city}, {join.country}</span>
+                            <i class="fa-solid fa-circle-user"></i> : <span>{join.gender} {join.fname} {join.lname.toUpperCase()}</span> <br />
+                            <i class="fa-solid fa-phone"></i> : <span>{join.tel}</span> <br />
+                            <i className="fa-solid fa-location-dot"></i> : <span>{join.city}, {join.country}</span>
                         </div>
                         <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
                     </div>
@@ -143,7 +142,7 @@ const JoinDetailAdmin = () => {
                             navigate('/admin/nouveau-membre')
                         }}
                         className="btn btn-primary"
-                    // disabled = {join.accepted}
+                        disabled={join.accepted}
                     >
                         {`${join.accepted ? "Déjà accepté" : "Accepter"}`}
                     </button>

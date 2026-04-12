@@ -85,7 +85,7 @@ const AdminContacts = () => {
                   sortByName === null ?
                     setSortByName(false) :
                     setSortByName(!sortByName)
-                }}>De {sortByName === true && <i class="fa-solid fa-sort-down"></i>}{sortByName === false && <i class="fa-solid fa-sort-up"></i>}</button>
+                }}>Expéditeur {sortByName === true && <i class="fa-solid fa-sort-down"></i>}{sortByName === false && <i class="fa-solid fa-sort-up"></i>}</button>
                 </th>
                 <th className='max-[800px]:hidden'>Objet</th>
                 <th scope="col" className="p-2">

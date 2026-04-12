@@ -1,55 +1,48 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { addDoc, collection, doc, getDocs, onSnapshot, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
+import Page404 from "../pages/404";
 
 
 const MemberDetailAdmin = () => {
     const [member, setMember] = useState();
     const { id } = useParams();
     const recapRef = useRef()
+    const [loading, setLoading] = useState(true)
 
     const SuspendMember = async (memberId) => {
         try {
-            const response = await getDocs(collection(db, 'member'))
-            const data = response.docs.map(doc => ({
-                _id: doc.id,
-                ...doc.data()
-            }))
-            const memberFound = data.find(e => e._id === memberId)
-            const { memberDate, _id, ...rest } = memberFound
-            const suspendedMember = { ...rest, suspended: !memberFound.suspended, suspendedtDate: new Date() }
+            const snapDoc = await getDoc(doc(db, 'member', id))
+            const memberFound = {...snapDoc.data(), _id: snapDoc.id }
+
+            const { _id, ...rest } = memberFound
+            const suspendedMember = { ...rest, suspended: !memberFound.suspended, suspendedtDate: Timestamp.fromDate(new Date()) }
             addDoc(collection(db, 'suspended'), suspendedMember)
             updateDoc(doc(db, 'member', memberId), suspendedMember)
-                .then(() => {
-                })
+
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     }
 
-    // console.log(member);
-
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                onSnapshot(
-                    collection(db, 'member'), snap => {
-                        const data = snap.docs.map((doc) => ({
-                            _id: doc.id,
-                            ...doc.data()
-                        }))
-                        const foundMember = data.find((e) => e._id === id);
-                        setMember(foundMember || null);
-                    })
-            } catch (error) {
-                console.log(error);
+        const fetchData = onSnapshot(doc(db, 'member', id), snap => {
+            if (snap.exists()) {
+                setMember({ _id: snap.id, ...snap.data() });
+            } else {
+                setMember(null)
             }
-        };
-        fetchData();
+            setLoading(false)
+        },
+            error => {
+                setMember(null)
+                setLoading(false)
+            })
+        return () => fetchData();
     }, [id]);
 
     const downloadPDF = () => {
@@ -66,7 +59,8 @@ const MemberDetailAdmin = () => {
         html2pdf().set(opt).from(element).save()
     }
 
-    while (!member) { return <Loading></Loading> }
+    if (loading) { return <Loading /> }
+    if (!member) { return <Page404 message={'Membre non trouvée'} prev={'Revenir aux membres'} prevLink={'/admin/membre'} /> }
 
 
     return (

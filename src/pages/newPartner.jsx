@@ -52,35 +52,27 @@ const BePartner = () => {
     const FormRecap = () => {
         return (
             <div className="page flex justify-center items-center">
-                <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="w-full max-w-[700px] border overflow-hidden mt-5 mb-5">
-                    <div style={{ backgroundColor: 'green', color: "white" }} className="p-5 flex justify-between">
+                <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="w-full max-w-[700px] border overflow-hidden mt-5 mb-5 rounded-md">
+                    <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
                             <h3>Demande envoyée</h3>
                             <p className="mt-1 opacity-90">
-                                Votre demande d'adhésion a bien été transmise.
+                                Votre demande de partenariat a bien été transmise.
                             </p>
                         </div>
-                        <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-2xl' />
+                        <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
                     </div>
 
-                    <div className="p-6">
-                        <div className="flex justify-between items-start flex-wrap gap-4 pb-4">
-                            <div>
-                                <h4>Résumé de votre candidature</h4>
-                                <p style={{ color: "rgba(0,0,0,0.4)" }} >Merci pour votre intérêt envers la FIBREE.</p>
-                            </div>
-                            <p style={{ color: "rgba(0,0,0,0.3)" }} ><span className="font-semibold">Statut :</span> Envoyée</p>
+                    <div className="p-6 max-[800px]:p-3">
+                        <div className="flex justify-between items-start flex-wrap gap-2 pb-2">
+                            <p style={{ color: "rgba(0,0,0,0.4)" }} >Merci pour votre intérêt envers la FIBREE.</p>
+                            <h4>Résumé de votre requète</h4>
                         </div>
 
                         <div className="mt-1 space-y-3">
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Nom</span>
                                 <span style={{ color: "rgba(0, 0, 0, 0.56)" }} >{partner.name}</span>
-                            </div>
-
-                            <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
-                                <span className="font-semibold">Prénom(s)</span>
-                                <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{partner.lname}</span>
                             </div>
 
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
@@ -106,21 +98,21 @@ const BePartner = () => {
 
                         <div className="mt-6">
                             <h5 className="font-semibold mb-2">Motivation</h5>
-                            <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
+                            <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-md p-2  whitespace-pre-line">
                                 {partner.motivation}
                             </div>
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-6">
                             <h5 className="font-semibold mb-2">Ce que vous souhaitez apporter</h5>
-                            <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
+                            <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-md p-2  whitespace-pre-line">
                                 {partner.contribution}
                             </div>
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-6">
                             <h5 className="font-semibold mb-2">Ce que vous espérez recevoir</h5>
-                            <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-2xl p-4  whitespace-pre-line">
+                            <div style={{ backgroundColor: "rgba(0, 0, 0, 0.01)", color: 'gray' }} className="border rounded-md p-2  whitespace-pre-line">
                                 {partner.expectation}
                             </div>
                         </div>
@@ -128,7 +120,7 @@ const BePartner = () => {
                             <button
                                 type="button"
                                 onClick={downloadPDF}
-                                className="btn btn-secondary"
+                                className="btn btn-secondary m-2"
                             >
                                 Télécharger en PDF <i class="fa-solid fa-download"></i>
                             </button>
@@ -139,7 +131,7 @@ const BePartner = () => {
                                     setPartner(newPartner)
                                     setSend(false)
                                 }}
-                                className="btn btn-primary"
+                                className="btn btn-primary m-2"
                             >
                                 Nouvelle demande
                             </button>
@@ -161,7 +153,7 @@ const BePartner = () => {
                 <h5 className="ml-3 mr-3">Vous souhaitez relever les défis d'ordre entreprenarial avec la FIBREE, devenez partenaire.</h5>
 
                 <p className='ml-3 mb-3'>Les champs marqué par <span className='text-red-500'> * </span> sont obligatoires.</p>
-                <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md p-4 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
+                <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md p-2 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
 
                     <div className="min-w-[300px] m-1 mt-3 flex-1">
                         <label htmlFor="" className="form-label"><sup>1</sup> Qui ête-vous ?<span className='text-red-500'> * </span>  </label>

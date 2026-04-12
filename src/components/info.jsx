@@ -48,15 +48,11 @@ const Info = ({ infoId }) => {
     return (
         <>
             {info.displayed &&
-                <Link to={`/actualite/${infoId}`} className='m-3 max-h-[450px] w-[25vw] min-w-[300px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden'>
-                    <div>
-                        <img src={info.images[0]} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover' />
-                        <span className='text-sky-50 position-relative top-[-40px] bg-green-500 pl-2 pr-2 pt-1 pb-1 rounded-r-full'>Publié le {info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                    </div>
-                    <div className='m-2 mt-0'>
-                        <span className='font-bold b-4'>{info.title}</span>
-                        <p className='text-sm text-[gray]'> {info.subtitle} </p>
-                    </div>
+                <Link to={`/actualite/${infoId}`} className='max-w-[350px] m-2 max-h-[350px] min-w-[250px] min-h-[250px] w-[25vw] max-[600px]:w-full bg-white m-2 border border-gray-500 rounded-md hover:shadow-[0_0_10px_rgba(0,0,0,0.5)] duration-200'>
+                    <img src={info.images[0]} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover rounded-t-md' />
+                    <span className='text-sky-50 position-relative top-[-40px] bg-green-700 pl-2 pr-2 pt-1 pb-1 rounded-r'>Publié le {info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    <div className='font-bold pl-2 pr-2 truncate w-[100%]'>{info.title}</div>
+                    <div className='pl-2 pr-2 text-gray-500 truncate w-[100%]'>{info.subtitle}</div>
                 </Link>
             }
         </>

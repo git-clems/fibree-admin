@@ -4,23 +4,21 @@ import { addDoc, collection, doc, getDoc, getDocs, Timestamp, updateDoc } from "
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
+import Page404 from "../pages/404";
 
 
 const newPartnerDetailAdmin = () => {
   const [newPartner, setnewPartner] = useState();
-  // const [member, setMember] = useState(memberSchema)
+  const [loading, setLoading] = useState(false)
   const { id } = useParams();
   const recapRef = useRef()
   const navigate = useNavigate()
 
-  const AcceptMember = async (newPartnerId) => {
+  const AcceptPartner = async (newPartnerId) => {
     try {
-      const response = await getDocs(collection(db, 'new-partner'))
-      const data = response.docs.map(doc => ({
-        _id: doc.id,
-        ...doc.data()
-      }))
-      const newPartnerFound = data.find(e => e._id === newPartnerId)
+      setLoading(true)
+      const data = await getDoc(doc(db, 'new-partner', newPartnerId))
+      const newPartnerFound = { _di: data.id, ...data.data() }
       const { _id, ...rest } = newPartnerFound
       const member = { ...rest, acceptedDate: Timestamp.fromDate(new Date()) }
       updateDoc(doc(db, 'new-partner', newPartnerId), { accepted: true })
@@ -30,6 +28,9 @@ const newPartnerDetailAdmin = () => {
 
     } catch (error) {
       console.log(error);
+      setnewPartner(null)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -39,15 +40,17 @@ const newPartnerDetailAdmin = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getDocs(collection(db, 'new-partner'))
-        const data = response.docs.map((doc) => ({
-          _id: doc.id,
-          ...doc.data()
-        }))
-        const foundnewPartner = data.find((e) => e._id === id);
-        setnewPartner(foundnewPartner || null);
+        setLoading(true)
+        const data = await getDoc(doc(db, 'new-partner', id))
+        if (data.exists()) {
+          setnewPartner({ _id: data.id, ...data.data() } || null);
+        } else {
+          setnewPartner(null)
+        }
       } catch (error) {
-        console.log(error);
+        setnewPartner(null)
+      } finally {
+        setLoading(false)
       }
     };
 
@@ -68,7 +71,8 @@ const newPartnerDetailAdmin = () => {
     html2pdf().set(opt).from(element).save()
   }
 
-  while (!newPartner) { return <Loading></Loading> }
+  if (loading) { return <Loading></Loading> }
+  if (!newPartner) { return <Page404 message={'Demande de partenariat non trouvée'} prev={'Revenir aux demande de partenariats'} prevLink={'/admin/nouveau-partenaire'} /> }
 
 
   return (
@@ -133,11 +137,11 @@ const newPartnerDetailAdmin = () => {
           <button
             type="button"
             onClick={() => {
-              AcceptMember(newPartner._id)
+              AcceptPartner(newPartner._id)
               navigate('/admin/nouveau-partenaire')
             }}
             className="btn btn-primary"
-          // disabled = {newPartner.accepted}
+            disabled={newPartner.accepted}
           >
             {`${newPartner.accepted ? "Déjà accepté" : "Accepter"}`}
           </button>

@@ -1,33 +1,38 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
+import Page404 from '../pages/404'
 
 
 const DetailsInfo = () => {
     const [info, setInfo] = useState();
+    const [loading, setLoading] = useState(false)
     const { id } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'infos'))
-                const data = response.docs.map((doc) => ({
-                    _id: doc.id,
-                    ...doc.data()
-                }))
-                const foundInfo = data.find((e) => e._id === id);
-                setInfo(foundInfo || null);
+                setLoading(true)
+                const snapDoc = await getDoc(doc(db, 'infos', id))
+                if (snapDoc.exists()) {
+                    setInfo({ _id: snapDoc.id, ...snapDoc.data() })
+                } else {
+                    setInfo(null)
+                }
             } catch (error) {
                 console.log(error);
+                setInfo(null)
+            } finally {
+                setLoading(false)
             }
         };
-
         fetchData();
     }, [id]);
 
-    while (!info) { return <Loading></Loading> }
+    if (loading) { return <Loading></Loading> }
+    if (!info) { return <Page404 prev={'Revenir aux actualités'} prevLink={'/actualite'} message={'Actualité non retrouvée'}></Page404> }
 
 
     return (

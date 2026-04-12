@@ -4,33 +4,37 @@ import axios from "axios";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
-// import Loading from "../components/loadingPage"
+import Page404 from "./404";
 
-const DetailsFlashInfo = () => {
-    const [info, setFlashInfo] = useState();
+const DetailsEvent = () => {
+    const [info, setEvent] = useState();
     const { id } = useParams();
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'envent'));
+                setLoading(true)
+                const response = await getDocs(collection(db, 'event'));
                 const data = response.docs.map((doc) => ({
                     _id: doc.id,
                     ...doc.data()
                 }))
-                const foundFlashInfo = data.find((e) => e._id === id);
+                const foundEvent = data.find((e) => e._id === id);
                 console.log(response.data);
-                setFlashInfo(foundFlashInfo || null);
+                setEvent(foundEvent || null);
             } catch (error) {
                 console.log(error);
+                setEvent(null)
+            } finally {
+                setLoading(false)
             }
         };
         fetchData();
     }, [id]);
 
-    while (!info) {
-        return <Loading />
-    }
+    if (loading) return <Loading></Loading>
+    if (!info) { return <Page404 title={"Evènement non retrouvé"}/> }
 
     return (
         <div className="page details-page">
@@ -58,4 +62,4 @@ const DetailsFlashInfo = () => {
     );
 };
 
-export default DetailsFlashInfo;
+export default DetailsEvent;

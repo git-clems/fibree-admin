@@ -207,8 +207,9 @@ const CandSpontPage = () => {
                         <label htmlFor="" className="form-label">Genre <span className='text-red-500'> * </span>  </label>
                         <select class="form-select" autocomplete="gender" id="gender" onChange={inputHandler} required name="gender">
                             <option value="">Choisir</option>
-                            <option value="male">Homme</option>
-                            <option value="female">Femme</option>
+                            <option value="M.">M.</option>
+                            <option value="Mme.">Mme.</option>
+                            <option value="Mlle.">Mlle.</option>
                         </select>
                     </div>
 

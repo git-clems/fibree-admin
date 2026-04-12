@@ -11,27 +11,30 @@ const AdminSuspended = () => {
   const [sortByName, setSortByName] = useState(null)
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
   // const
 
   useEffect(() => {
-    const fectData = async () => {
-      try {
-        onSnapshot(collection(db, 'member'), snap => 
-        {
-          const data = snap.docs.map((doc) => ({
-            _id: doc.id,
-            ...doc.data()
-          }))
-          setSuspended(data.filter(e=>e.suspended))
-        }
-        )
-      } catch (error) {
-        console.log(error);
+    const fectData = onSnapshot(collection(db, 'member'), snap => {
+      if (snap) {
+        const data = snap.docs.map((doc) => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setSuspended(data.filter(e => e.suspended))
+      } else {
+        setSuspended(null)
       }
-    };
-    fectData();
+      setLoading(false)
+    },
+      err => {
+        setSuspended(null)
+        setLoading(false)
+      })
+
+    return () => fectData();
   }, [])
-  
+
 
   const normalizedSearch = search.trim().toLowerCase()
 
@@ -42,9 +45,7 @@ const AdminSuspended = () => {
     ))
   })
 
-  while (!suspendeds) {
-    return <Loading></Loading>
-  }
+  if (loading) return <Loading></Loading>
 
   return (
     <div className='page'>
@@ -77,7 +78,7 @@ const AdminSuspended = () => {
                     sortByDate === null ?
                       setSortByDate(false) :
                       setSortByDate(!sortByDate)
-                  }}>Suspend le {sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
+                  }}>Suspendu le {sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
                 </th>
               </tr>
             </thead>

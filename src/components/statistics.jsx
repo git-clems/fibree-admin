@@ -19,7 +19,7 @@ const Statistic = ({ statisticId }) => {
         };
         dataFetch()
     }, [])
-    
+
 
     if (!statistic) {
         return null
@@ -28,12 +28,10 @@ const Statistic = ({ statisticId }) => {
         <>
             {
                 statistic.displayed &&
-                <div className='slide m-2 bg-white border-1 border-gray-300 rounded-3 flex items-center flex-col'>
-                    <div className='mt-2 min-[800px]:m-2'>
-                        <img src={statistic.image} alt="" className='w-[20vw] h-[20vw] max-h-[150px] max-w-[150px] max-[800px]:w-[100px] max-[800px]:h-[100px] object-contain' />
-                    </div>
-                    <h1 className='text-red-300 mt-2'>{statistic.value}</h1>
-                    <p className='w-[150px] text-center rounded-3 mt-'>{statistic.description}</p>
+                <div className='max-w-[350px] m-2 min-w-[250px] w-[25vw] max-[600px]:w-100 bg-white m-2 border border-gray-500 rounded-md flex flex-col items-center p-2'>
+                    <img src={statistic.image} alt="" className='w-50' />
+                    <h2 className='font-bold pl-2 pr-2 w-[100%] text-center'>{statistic.value}</h2>
+                    <div className='pl-2 pr-2 text-gray-500 w-[100%] text-center'>{statistic.description}</div>
                 </div>
             }
         </>

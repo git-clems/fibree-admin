@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import "./css/appBar.scss"
 
+
+const logo = "/logo/logo-nom.png"
+
 const AppBar = () => {
     const [showAppBar, setShowAppBar] = useState(true);
     const [hasShadow, setHasShadow] = useState(false);
@@ -45,7 +48,7 @@ const AppBar = () => {
         ${hasShadow ? 'shadow-md' : ''}
       `}>
             <Link to="/" className="logo min-w-[50px] w-[10vw] ml-1 mr-1">
-                <img src="./logo/logo-nom.png" alt="Logo" />
+                <img src={logo} alt="Logo" />
             </Link>
 
             <div className="flex items-center border-l-2 border-r-2 border-gray-300">

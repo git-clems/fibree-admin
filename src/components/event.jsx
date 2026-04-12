@@ -44,7 +44,7 @@ const Event = ({ eventId }) => {
 
     return (
         event.displayed &&
-        <Link to={`/event/${event._id}`} className="">
+        <Link to={`/evenement/${event._id}`} className="">
             <div className='hover:bg-gray-200 flex flew-wrap border-t-1 overflow-hidden border-gray-300 flex-1 p-2'>
                 <div className='w-[100px] h-[100px'>
                     <img src={event.image} alt="" className={`${event.image ? 'object-contain border-1 border-gray-300 rounded-md' : ''}`} />

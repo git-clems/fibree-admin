@@ -87,7 +87,7 @@ const Home = () => {
 
     return (
         <div className="page">
-            <section className="flex flex-wrap items- justify-center p-2 bg-[url(./bg/bg1.png)] bg-cover">
+            <section className="flex flex-wrap items- justify-center p-2 bg-[url(/bg/bg1.png)] bg-cover">
                 {
                     events &&
                     <div className="flex-1 h-[max-content] max-[600px]:hidden rounded-md m-2 mt-0 bg-gray-100">
@@ -122,7 +122,7 @@ const Home = () => {
                         <h2 className="max-[800px]:ml-3 ml-5"> Nos dernières actualités</h2>
                     </div>
                     <div className="flex-1 flex flex-wrap justify-center">
-                        {infos.slice(0, 3).map((info) => ((<Info infoId={info._id}></Info>)))}
+                        {infos.slice(0, 4).map(info => <Info infoId={info._id}></Info>)}
                     </div>
 
                     <Link to={'/actualite'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
@@ -141,21 +141,11 @@ const Home = () => {
             }
 
             {
-                statistics.filter.length > 0 &&
-                <section className="max-[800px]:p-0 m-2 p-3 rounded-md mt-5">
-                    <div className="flex items-center justify-center">
-                        <h2 className="ml-3">Nos chiffres clés</h2>
-                    </div>
-
-                    <div className="flex max-[800px]:hidden flex-wrap justify-center">
-                        {statistics.map((statistic) => (<Statistic statisticId={statistic._id}></Statistic>))}
-                    </div>
-                    <div className="flex min-[800px]:hidden flex-wrap justify-center">
-                        {statistics.slice(0, 4).map((statistic) => (<Statistic statisticId={statistic._id}></Statistic>))}
-
-                        <Link to={'/statistic'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
-                            <span className="text-nowrap">Voir tous nos statistiques <i class="fa-solid fa-arrow-right"></i></span>
-                        </Link>
+                statistics.length > 0 &&
+                <section className="mt-5 bg-blue-50 flex flex-col justify-center items-center pt-3 pb-3">
+                    <h2 className="text-center">Nos chiffres clés</h2>
+                    <div className="flex flex-wrap rounded-md p-2 m-2">
+                        {statistics.map(statistic => <Statistic statisticId={statistic._id}></Statistic>)}
                     </div>
                 </section>
             }

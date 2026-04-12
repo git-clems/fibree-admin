@@ -131,8 +131,8 @@ const Admin = () => {
             </form>
 
             <div className="flex flex-wrap max-[800px]:justify-center">
-                {filteredBlocks.length > 0 ?
-                    (
+                {
+                    filteredBlocks.length > 0 ?
                         filteredBlocks.map((block) => (
                             <LayoutAdmin
                                 key={block.link}
@@ -142,7 +142,7 @@ const Admin = () => {
                                 text_color={block.text_color}
                                 badge={block.badge}
                             />))
-                    ) : (<p className="m-5 text-gray-500">Aucun bloc trouvé.</p>)}
+                        :<p className="m-5 text-gray-500">Aucun bloc trouvé.</p>}
             </div>
         </div>
     )

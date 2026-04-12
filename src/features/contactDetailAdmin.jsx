@@ -1,28 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
+import Page404 from "../pages/404";
 
 
 const ContactDetailAdmin = () => {
     const [contact, setContact] = useState();
     const { id } = useParams();
     const recapRef = useRef()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'contact'))
-                const data = response.docs.map((doc) => ({
-                    _id: doc.id,
-                    ...doc.data()
-                }))
-                const foundContact = data.find((e) => e._id === id);
-                setContact(foundContact || null);
+                setLoading(true)
+                const docSanp = await getDoc(doc(db, 'contact', id))
+                if (docSanp.exists()) {
+                    setContact({ _id: docSanp.id, ...docSanp.data() } || null);
+                } else {
+                    setContact(null)
+                }
             } catch (error) {
-                console.log(error);
+                setContact(null)
+            } finally {
+                setLoading(false)
             }
         };
 
@@ -43,7 +47,8 @@ const ContactDetailAdmin = () => {
         html2pdf().set(opt).from(element).save()
     }
 
-    while (!contact) { return <Loading></Loading> }
+    if (loading) return <Loading />
+    if (!contact) return <Page404 message={'Message non retrouvé'} prev={"Revenir aux messageries"} prevLink={'/admin/messagerie'} />
 
 
     return (
@@ -54,8 +59,8 @@ const ContactDetailAdmin = () => {
                     <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
                             <h5>{contact.object}</h5>
-                            <span>De : {contact.fname} {contact.lname} {`<${contact.email}>`}</span> <br />
-                            <span>Date : {contact.contactDate?.toDate().toLocaleString('fr-FR')}</span>
+                            <span className="text-sky-100">Expéditeur : {contact.fname} {contact.lname} {`<${contact.email}>`}</span> <br />
+                            <span className="text-sky-100">Date : {contact.contactDate?.toDate().toLocaleString('fr-FR')}</span>
                         </div>
                     </div>
 

@@ -72,35 +72,35 @@ const AdminMembers = () => {
 
   return (
     <div className='page'>
-      {
-        <div className='mb-5'>
-          <div className='flex flex-wrap items-center justify-between '>
-            <div className='m-3'>
-              <div className=''>
-                <h4 className=''>{members.length} membres</h4>
-                <select class="form-select" autocomplete="suspended" id="suspended" required name="suspended" onChange={(e) => setFilter(e.target.value)}>
-                  <option value="">Tous</option>
-                  <option value="suspended">Suspendus</option>
-                </select>
-              </div>
+      <div className='mb-5'>
+        <div className='flex flex-wrap items-center justify-between '>
+          <div className='m-3'>
+            <div className=''>
+              <h4 className=''>{members.length} membres</h4>
               {
                 members.filter(e => e.suspended).length > 0 &&
-                <div className='flex items-center'><div className='bg-red-500 h-[10px] w-[10px] rounded-full mr-2'></div> <span> {members.filter(e => e.suspended).length} membres suspendus</span></div>
+                <div className='flex items-center'> <span> {members.filter(e => e.suspended).length} membres suspendus</span> <div className='bg-red-500 h-[10px] w-[10px] rounded-full ml-2'></div> </div>
               }
+              <select class="form-select" autocomplete="suspended" id="suspended" required name="suspended" onChange={(e) => setFilter(e.target.value)}>
+                <option value="">Tous</option>
+                <option value="suspended">Suspendus</option>
+              </select>
             </div>
-            <form className="flex flex-1 flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5" onSubmit={(e) => e.preventDefault()}>
-              <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
-                <input type="search" placeholder="Rechercher un nom" value={search}
-                  onChange={(e) => {
-                    e.preventDefault()
-                    setSearch(e.target.value)
-                  }} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
-                <div className="text-gray-400 pr-5 pl-5 border-gray-300 flex justify-center items-center"><i class="fa-solid fa-magnifying-glass"></i></div>
-              </div>
-            </form>
           </div>
+          <form className="flex flex-1 flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5" onSubmit={(e) => e.preventDefault()}>
+            <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
+              <input type="search" placeholder="Rechercher un nom" value={search}
+                onChange={(e) => {
+                  e.preventDefault()
+                  setSearch(e.target.value)
+                }} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
+              <div className="text-gray-400 pr-5 pl-5 border-gray-300 flex justify-center items-center"><i class="fa-solid fa-magnifying-glass"></i></div>
+            </div>
+          </form>
+        </div>
 
-          {<table class="flex-1 w-full text-sm">
+        {
+          <table class="flex-1 w-full text-sm">
             <thead className='bg-gray-600 text-white'>
               <tr>
                 <th scope="col" className="p-2">#</th>
@@ -121,41 +121,47 @@ const AdminMembers = () => {
                 </th>
               </tr>
             </thead>
-            <tbody>
-              {
-                searchedMember.sort((a, b) => {
-                  if (sortByDate === false) {
-                    return b.acceptedDate - a.acceptedDate
+            {
+              searchedMember.length > 0 ?
+                // }
+                <tbody>
+                  {
+                    searchedMember.sort((a, b) => {
+                      if (sortByDate === false) {
+                        return b.acceptedDate - a.acceptedDate
+                      }
+                      else if (sortByDate === true) {
+                        return a.acceptedDate - b.acceptedDate
+                      }
+                      else if (sortByName === false) {
+                        return a.lname.localeCompare(b.lname, 'fr')
+                      }
+                      else {
+                        return b.lname.localeCompare(a.lname, 'fr')
+                      }
+                    }).map((member, index) => (
+                      <tr key={member._id}
+                        onClick={() => {
+                          navigate(`/admin/membre/${member._id}`)
+                          ToogleOppened(member._id)
+                        }}
+                        className="cursor-pointer hover:bg-gray-100 transition border bg-gray-100">
+                        <th scope="row" className='p-2'>{index + 1}</th>
+                        <td className='p-2 flex items-center'>
+                          <span>{member.lname.toUpperCase()} {member.fname}</span> {member.suspended && <div className='ml-2 h-[10px] w-[10px] bg-red-500 rounded-full'></div>}
+                        </td>
+                        <td className='p-2'>
+                          {member.acceptedDate?.toDate().toLocaleString('fr-FR')}
+                        </td>
+                      </tr>
+                    ))
                   }
-                  else if (sortByDate === true) {
-                    return a.acceptedDate - b.acceptedDate
-                  }
-                  else if (sortByName === false) {
-                    return a.lname.localeCompare(b.lname, 'fr')
-                  }
-                  else {
-                    return b.lname.localeCompare(a.lname, 'fr')
-                  }
-                }).map((member, index) => (
-                  <tr key={member._id}
-                    onClick={() => {
-                      navigate(`/admin/membre/${member._id}`)
-                      ToogleOppened(member._id)
-                    }}
-                    className="cursor-pointer hover:bg-gray-100 transition border bg-gray-100">
-                    <th scope="row" className='p-2'>{index + 1}</th>
-                    <td className='p-2 flex items-center'>
-                      <span>{member.lname.toUpperCase()} {member.fname}</span> {member.suspended && <div className='ml-2 h-[10px] w-[10px] bg-red-500 rounded-full'></div>}
-                    </td>
-                    <td className='p-2'>
-                      {member.acceptedDate?.toDate().toLocaleString('fr-FR')}
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>}
-        </div>
-      }
+                </tbody>
+                : <h5 className='mt-5 text-center'>Aucun membre trouvé</h5>
+            }
+          </table>
+        }
+      </div>
     </div>
   )
 }

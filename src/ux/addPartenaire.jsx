@@ -1,4 +1,4 @@
-import React, { useState, } from 'react'
+import React, { useEffect, useState, } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { db } from '../auth/firebase';
@@ -8,11 +8,22 @@ import partenaireSchema from '../models/partenaireModel'
 const AddPartenaire = () => {
 
     const [open, setOpen] = useState(false)
-
     const [partenaire, setPartenaire] = useState(partenaireSchema)
-
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
+
+
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+            setMessage('')
+            setPartenaire()
+        }
+
+        return () => document.body.style.overflow = "auto";
+    }, [open]);
 
     const inputHandler = (e) => {
         const { name, value } = e.target;
@@ -22,16 +33,19 @@ const AddPartenaire = () => {
     const SubmitForm = async (e) => {
         setLoading(true)
         e.preventDefault()
-        await addDoc(collection(db, 'partner'), partenaire).then((res) => {
-            setMessage('Information enregistré avec succès !')
-            setLoading(false)
-            setOpen(false)
-            setPartenaire()
+        try {
+            await addDoc(collection(db, 'partner'), partenaire).then((res) => {
+                setMessage('Information enregistré avec succès !')
+                setOpen(false)
+                setPartenaire()
+            })
 
-        }).catch((e) => {
+        } catch (error) {
             console.log(e);
             setMessage("Une erreur s'est produite !!")
-        })
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (

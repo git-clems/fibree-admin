@@ -4,19 +4,27 @@ import { db } from '../auth/firebase'
 import { Link } from 'react-router'
 import Loading from '../components/LoadingPage'
 import AddPartenaire from '../ux/addPartenaire'
+import Page404 from '../pages/404'
 
 const AdminPartenaires = () => {
   const [partenaires, setPartenaires] = useState()
   const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
 
 
   useEffect(() => {
     const fetchData = onSnapshot(collection(db, 'partner'), snap => {
-      const data = snap.docs.map(doc => ({
-        _id: doc.id,
-        ...doc.data()
-      }))
-      setPartenaires(data)
+      if (snap) {
+        const data = snap.docs.map(doc => ({
+          _id: doc.id,
+          ...doc.data()
+        }))
+        setPartenaires(data)
+      } else {
+        setPartenaires(null)
+        setLoading(false)
+      }
+      setLoading(false)
     })
     return () => fetchData
   }, [])
@@ -27,10 +35,8 @@ const AdminPartenaires = () => {
     return [...partenaires].filter(e => e.name.trim().toLowerCase().includes(partner))
   })
 
-  while (!partenaires) {
-    return <Loading></Loading>
-  }
-
+  if (loading) return <Loading></Loading>
+  if (!partenaires) return <Page404 prev={"Rafraichir la page"} prevLink={'/admin/partenaire'}></Page404>
   return (
     <div class="page ">
       <AddPartenaire></AddPartenaire>
@@ -48,11 +54,11 @@ const AdminPartenaires = () => {
 
         <div className='flex flex-wrap m-1'>
           {
-            searchedPartner.map((partenaire) =>
-            (<Link to={`/admin/partenaire/${partenaire._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col hover:scale-110 hover:shadow-[0_0_15px_rgba(0,0,0,0.2)]  shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
-              <img src={partenaire.image} alt="" className='h-[200px] object-contain' />
-              <p className='p-2 '>{partenaire.name}</p>
-            </Link>))
+            searchedPartner.map((partenaire) => (
+              <Link key={partenaire._id} to={`/admin/partenaire/${partenaire._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col hover:scale-110 hover:shadow-[0_0_15px_rgba(0,0,0,0.2)]  shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
+                <img src={partenaire.image} alt="" className='h-[200px] object-contain' />
+                <p className='p-2 '>{partenaire.name}</p>
+              </Link>))
           }
         </div>
       </div>
