@@ -43,7 +43,7 @@ const newPartnerDetailAdmin = () => {
         setLoading(true)
         const data = await getDoc(doc(db, 'new-partner', id))
         if (data.exists()) {
-          setnewPartner({ _id: data.id, ...data.data() } || null);
+          setnewPartner({ _id: data.id, ...data.data() });
         } else {
           setnewPartner(null)
         }

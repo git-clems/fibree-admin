@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
+import Page404 from '../pages/404'
 
 
 const AdminContacts = () => {
@@ -12,17 +13,19 @@ const AdminContacts = () => {
   const [sortByName, setSortByName] = useState(null)
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
+  const [deleting, setDeleting] = useState(false)
   // const
 
   useEffect(() => {
     const fectData = async () => {
       try {
-        onSnapshot(collection(db, 'contact'), snap => (
-          setContacts(snap.docs.map((doc) => ({
+        onSnapshot(collection(db, 'contact'), snap => {
+          const data = snap.docs.map((doc) => ({
             _id: doc.id,
             ...doc.data()
-          })))
-        ))
+          }))
+          setContacts(data.filter(e => !e.removed))
+        })
       } catch (error) {
         console.log(error);
       }
@@ -31,16 +34,18 @@ const AdminContacts = () => {
   }, [])
 
   const deleteContact = async (contactId) => {
-    await deleteDoc(doc(db, 'contact', contactId))
+    setDeleting(true)
+    try {
+      await updateDoc(doc(db, 'contact', contactId), { removed: true })
+    } catch (error) {
+      return <Page404 message={'Une erreur est survenue'}></Page404>
+    } finally {
+      setDeleting(false)
+    }
   }
 
   const ToogleOppened = async (contactId) => {
     try {
-      setContacts((prev) =>
-        prev.map(contact => (
-          contact._id === contactId ? { ...contact, opened: true } : contact
-        ))
-      )
       await updateDoc(doc(db, 'contact', contactId), { opened: true })
 
     } catch (error) {
@@ -67,7 +72,14 @@ const AdminContacts = () => {
       {
         <div className='mb-5'>
           <div className='flex flex-wrap items-center justify-between '>
-            <span className='m-3'>{contacts.filter(e => !e.opened).length} messages non lues</span>
+            {contacts.filter(e => !e.opened).length > 0 &&
+              <span className='m-3'>
+                {
+                  contacts.filter(e => !e.opened).length > 1 ? `${contacts.filter(e => !e.opened).length} messages non lus` :
+                    "1 message non lu"
+                }
+              </span>
+            }
             <form className="flex flex-1 flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5" onSubmit={(e) => e.preventDefault()}>
               <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
                 <input type="search" placeholder="Rechercher un nom" value={search} onChange={(e) => setSearch(e.target.value)} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
@@ -94,7 +106,7 @@ const AdminContacts = () => {
                     sortByDate === null ?
                       setSortByDate(false) :
                       setSortByDate(!sortByDate)
-                  }}>Date {sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
+                  }}>Reçu le {sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
                 </th>
                 <th>Supprimer</th>
               </tr>
@@ -109,10 +121,10 @@ const AdminContacts = () => {
                     return b.contactDate - a.contactDate
                   }
                   else if (sortByName === true) {
-                    return a.fname.localeCompare(b.fname, 'fr')
+                    return a.lname.localeCompare(b.lname, 'fr')
                   }
                   else {
-                    return b.fname.localeCompare(a.fname, 'fr')
+                    return b.lname.localeCompare(a.lname, 'fr')
                   }
                 }).map((contact, index) => (
                   <tr key={contact._id}
@@ -120,8 +132,8 @@ const AdminContacts = () => {
                       navigate(`/admin/messagerie/${contact._id}`)
                       ToogleOppened(contact._id)
                     }}
-                    
-                    className={`cursor-pointer hover:bg-gray-100 transition border ${contact.opened && 'bg-sky-50'}`}
+
+                    className={`cursor-pointer hover:bg-blue-100 transition border ${contact.opened && 'bg-gray-200'}`}
                   >
                     <th scope="row" className='p-2'>{index + 1}</th>
                     <td className='p-2 bg-red-00'>

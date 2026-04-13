@@ -8,7 +8,7 @@ import Page404 from "../pages/404";
 
 
 const ContactDetailAdmin = () => {
-    const [contact, setContact] = useState();
+    const [contact, setContact] = useState(true);
     const { id } = useParams();
     const recapRef = useRef()
     const [loading, setLoading] = useState(false)

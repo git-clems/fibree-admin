@@ -13,15 +13,20 @@ const Missions = () => {
                     _id: doc.id,
                     ...doc.data()
                 }))
-                setMissions(data)
+                if (data) {
+                    setMissions(data)
+                } else {
+                    setMissions(null)
+                }
             } catch (error) {
                 console.log(error);
+                setMissions(null)
             }
         };
         dataFect()
     }, [])
 
-    while (!missions) {
+    if (!missions) {
         return (
             <div className='slide-track flex'>
                 <div class="card w-55 min-h-50 m-2" aria-hidden="true">

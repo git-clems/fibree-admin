@@ -9,7 +9,7 @@ const FootBar = () => {
             <div className='border-t-3 bg-gray-50 border-gray-200 w-full flex flex-wrap max-[800px]:flex-col p-3'>
                 <div className='flex-1 flex-wrap p-2 max-[800px]:items-center flex-col items-start flex'>
                     <Link to="/" className="">
-                        <img src="./logo/logo.png" alt="Logo" className='h-[70px] w-[70px] border-3 border-gray-500  rounded-full' />
+                        <img src="/logo/logo.png" alt="Logo" className='h-[70px] w-[70px] border-3 border-gray-500  rounded-full' />
                     </Link>
                     <div className='text-nowrap mt-2'>Ouagadougou, Burkina Faso</div>                    <div className='hover:underline mt-3'>
                         <a className='underline-none' href="https://wa.me/0033614413987" target="_blank" rel="noopener noreferrer">(+33) 0 614 413-987</a>

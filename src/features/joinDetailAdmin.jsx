@@ -41,7 +41,11 @@ const JoinDetailAdmin = () => {
                 setLoading(true)
                 const data = await getDoc(doc(db, 'join', id))
                 const foundJoin = { _id: data.id, ...data.data() }
-                setJoin(foundJoin || null);
+                if (foundJoin) {
+                    setJoin(foundJoin);
+                } else {
+                    setJoin(null)
+                }
             } catch (error) {
                 console.log(error);
                 setJoin(null)

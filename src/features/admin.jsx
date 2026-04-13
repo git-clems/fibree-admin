@@ -24,7 +24,7 @@ const Admin = () => {
                 ...e.data()
             }))
 
-            const dataFiltered = data.filter((e) => !e.opened)
+            const dataFiltered = data.filter((e) => (!e.opened && !e.removed))
             const newCount = dataFiltered.length
 
             if (previousCountRef.current !== null && newCount > previousCountRef.current) {
@@ -35,11 +35,14 @@ const Admin = () => {
 
             previousCountRef.current = newCount
             setMessageNotOpend(newCount)
-        })
 
+            
+        })
+        
         return () => unsubscribe()
     }, [])
-
+    
+    // console.log(messageNotOpend);
     useEffect(() => {
         try {
             onSnapshot(collection(db, 'join'), snap => {
