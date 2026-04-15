@@ -61,16 +61,16 @@ const SmallAppBar = () => {
                                 <h6>À propos de nous</h6>
                             </NavLink>
 
-                            <NavLink
+                            {/* <NavLink
                                 className="hover:bg-[var(--primary-green)] p-2"
                                 to="/action">
                                 <h6>Nos actions</h6>
-                            </NavLink>
+                            </NavLink> */}
 
                             <NavLink
                                 className="hover:bg-[var(--primary-green)] p-2"
                                 to="/mission">
-                                <h6>Notre mission</h6>
+                                <h6>Nos missions</h6>
                             </NavLink>
 
                             <NavLink

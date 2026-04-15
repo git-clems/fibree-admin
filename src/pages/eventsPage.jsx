@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Info from '../components/event';
-import axios from 'axios';
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../auth/firebase';
 import Loading from '../components/LoadingPage';
 
-const FlashInfos = () => {
-    const [events, setFlashInfos] = useState()
+const Events = () => {
+    const [events, setEvents] = useState()
     useEffect(() => {
         const fectData = async () => {
             try {
@@ -16,7 +14,7 @@ const FlashInfos = () => {
                     _id: doc.id,
                     ...doc.data()
                 }))
-                setFlashInfos(data)
+                setEvents(data)
             } catch (error) {
                 console.log(error);
             }
@@ -24,11 +22,9 @@ const FlashInfos = () => {
         fectData();
     }, [])
 
-    while (!events) {
-        return <Loading></Loading>
-    }
+    while (!events) return <Loading></Loading>
 
-    const Flashinfo = ({eventId}) => {
+    const Event = ({ eventId }) => {
 
         const [event, setFlashInfo] = useState()
 
@@ -53,7 +49,7 @@ const FlashInfos = () => {
 
         while (!event) {
             return (
-                <div class="card m-3 h-[450px] w-[300px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden" aria-hidden="true">
+                <div class="card m-3 w-[300px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden" aria-hidden="true">
                     <div class="card-body">
                         <h5 class="card-title placeholder-glow">
                             <span class="placeholder col-6"></span>
@@ -73,17 +69,19 @@ const FlashInfos = () => {
         return (
             <>
                 {event.displayed &&
-                    <Link to={`/event/${eventId}`} className='m-3 max-h-[450px] w-[25vw] min-w-[300px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden'>
-                        <div>
-                            <img src={event.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover' />
-                            <span className='text-sky-50 position-relative top-[-40px] bg-green-500 pl-2 pr-2 pt-1 pb-1 rounded-r-full'>Publié le {event.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    <Link to={`/evenement/${eventId}`} className='m-2 max-[600px]:w-full w-[20vw] min-w-[200px] border-1 border-gray-300 rounded-md bg-[white] hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden'>
+                        {
+                            event.image ?
+                                <img src={event.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover' /> :
+                                <img src={'/bg/event-bg.jpg'} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover' />
+                        }
+                        <div className='m-2 mt-3'>
+                            <div className='flex justify-center items-center pl-3 pr-3 rounded-full bg-green-400'>{event.type}</div>
+                            {event.publishDate && <div className='mt-2 text-xs truncate'> <i className='fa-solid fa-calendar'></i> {event.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} </div>}
+                            {event.adress && <div className='mt-2 text-xs truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
+                            <div className='mt-2 text-gray-400'>{event.title}</div>
                         </div>
-                        <div className='m-2 mt-0'>
-                            <span className='font-bold b-4'>{event.title}</span>
-                            <p className='text-sm text-[gray]'> {event.subtitle} </p>
-                        </div>
-                    </Link>
-                }
+                    </Link>}
             </>
         )
     }
@@ -93,13 +91,13 @@ const FlashInfos = () => {
     return (
         <div className='page'>
             <div className="m-2">
-                <h2 className='ml-2'>À venir</h2>
+                <h2 className='ml-2'>Evènements</h2>
                 <div className="flex-1 flex flex-wrap justify-center">
-                    {events.map((event) => (event.displayed && (<Flashinfo eventId={event._id}></Flashinfo>)))}
+                    {events.map((event) => (event.displayed && (<Event eventId={event._id}></Event>)))}
                 </div>
             </div>
         </div>
     )
 }
 
-export default FlashInfos
+export default Events

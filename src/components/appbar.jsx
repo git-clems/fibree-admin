@@ -57,20 +57,20 @@ const AppBar = () => {
                     Qui sommes-nous ?
                 </NavLink>
 
-                <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 pl-3 pr-3 rounded-full pt-1 pb-1"
+                {/* <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 pl-3 pr-3 rounded-full pt-1 pb-1"
                     to="/action">
                     Nos actions
-                </NavLink>
+                </NavLink> */}
 
                 <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 pl-3 pr-3 rounded-full pt-1 pb-1"
                     to="/mission">
-                    Notre mission
+                    Nos missions
                 </NavLink>
 
-                <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 pl-3 pr-3 rounded-full pt-1 pb-1"
+                {/* <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 pl-3 pr-3 rounded-full pt-1 pb-1"
                     to="/projet">
                     Nos projets
-                </NavLink>
+                </NavLink> */}
 
                 <NavLink className="hover:bg-[var(--primary-green)] ml-1 mr-1 rounded-full pl-3 pr-3 pt-1 pb-1"
                     to="/soutenir">

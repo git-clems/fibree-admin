@@ -41,11 +41,11 @@ const FootBar = () => {
                             to="/a-propos">À propos de nous
                         </Link>
                     </div>
-                    <div className='hover:underline w-[max-content] m-2 mt-3'>
+                    {/* <div className='hover:underline w-[max-content] m-2 mt-3'>
                         <Link className=""
                             to="">Nos projets
                         </Link>
-                    </div>
+                    </div> */}
                     <div className='hover:underline w-[max-content] m-2 mt-3'>
                         <Link className=""
                             to="/devenir-partenaire">Devenir partenaire
@@ -53,11 +53,11 @@ const FootBar = () => {
                     </div>
                 </div>
                 <div className='flex-1 flex-wrap p-2 max-[800px]:items-center flex-col items-start flex'>
-                    <div className='hover:underline w-[max-content] m-2 mt-3'>
+                    {/* <div className='hover:underline w-[max-content] m-2 mt-3'>
                         <Link className=""
                             to="/equipe">Notre équipe
                         </Link>
-                    </div>
+                    </div> */}
                     <div className='hover:underline w-[max-content] m-2 mt-3'>
                         <Link className=""
                             to="/contact">Nous contacter

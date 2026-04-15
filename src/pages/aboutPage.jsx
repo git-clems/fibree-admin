@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Loading from '../components/LoadingPage'
-import Partenaires from '../components/partenaires'
+import Partenaires from '../components/partners'
 import { Link } from 'react-router'
 import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../auth/firebase'

@@ -174,7 +174,7 @@ const CandSpontPage = () => {
     return (
         <div className="page flex justify-center">
             <div className="max-w-[800px] mb-5 mt-1">
-                <h5 className="ml-3 mr-3">Vous souhaitez faire une demande d'adhésion à la FIBREE spontanément.</h5>
+                <h5 className="ml-3 mr-3">Vous souhaitez faire partie de la fédération ? Vous avez des idées à développer ? Veuillez remplir ce formulaire.</h5>
 
                 <p className='ml-3 mb-3'>Les champs marqué par <span className='text-red-500'> * </span> sont obligatoires.</p>
                 <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md p-2 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
@@ -239,18 +239,18 @@ const CandSpontPage = () => {
                     </div>
 
                     <div className="min-w-[300px] m-1 mt-3 flex-1">
-                        <label htmlFor="" className="form-label">Que comptez-vous apporter à la FIBREE ? <span className='text-red-500'> * </span>  </label>
+                        <label htmlFor="" className="form-label">Vos éventuelles contribution <span className='text-red-500'> * </span>  </label>
                         <textarea onChange={inputHandler} className="form-control" id="add" rows="3" name='contribution' placeholder='' required></textarea>
                     </div>
 
                     <div className="min-w-[300px] m-1 mt-3 flex-1">
-                        <label htmlFor="" className="form-label">Qu'espérez vous avoir avec la FIBREE ? <span className='text-red-500'> * </span>  </label>
+                        <label htmlFor="" className="form-label">Qu'espérez vous apprendre avec la FIBREE ? <span className='text-red-500'> * </span>  </label>
                         <textarea onChange={inputHandler} className="form-control" id="add" rows="3" name='expectation' placeholder='' required></textarea>
                     </div>
 
                     <div className="flex m-1 mt-3 items-start">
                         <input className="form-check-input mt-1" type="checkbox" id="checkDefault" required />
-                        <label className="form-check-label ml-2 mr-2" htmlFor="" name='ugc' onChange={AcceptConditions}>En cochant cette case, je suis d'accord avec les conditions d'utilisation de la FIBREE <span className='text-red-500'> * </span>  </label>
+                        <label className="form-check-label ml-2 mr-2" htmlFor="" name='ugc' onChange={AcceptConditions}> Je ne suis pas un robot <span className='text-red-500'> * </span>  </label>
                     </div>
                     <div className='flex justify-center m-1 mt-3'>
                         <button type="submit" class="btn btn-primary" >{"Soumettre sa candidature"}</button>

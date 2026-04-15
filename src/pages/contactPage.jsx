@@ -26,10 +26,11 @@ const Contact = () => {
   const HandleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+
     await addDoc(collection(db, 'contact'), contact)
       .then((res) => {
-        setLoading(false)
         setSend(true)
+        setLoading(false)
       }).catch((res) => {
         setSend(false)
       })
@@ -144,7 +145,7 @@ const Contact = () => {
         <h5 className="ml-3 mr-3">Vous souhaitez nous contacter ?</h5>
 
         <p className='ml-3 mb-3'>Les champs marqué par <span className='text-red-500'> * </span> sont obligatoires.</p>
-        <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md p-4 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
+        <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md min-[600px]:p-4 max-[600px]:p-2 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
           <div className="flex mb-3 justify-between flex-wrap">
             <div className="min-w-[300px] m-1 mt-3 flex-1">
               <label htmlFor="" className="form-label">Nom <span className='text-red-500'> * </span>  </label>
@@ -208,10 +209,21 @@ const Contact = () => {
 
           <div className="flex m-1 mt-3 items-start">
             <input className="form-check-input mt-1" type="checkbox" id="checkDefault" required />
-            <label className="form-check-label ml-2 mr-2" htmlFor="" name='ugc' onChange={inputHandler}>En cochant cette case, je suis d'accord avec les conditions d'utilisation de la FIBREE <span className='text-red-500'> * </span>  </label>
+            <label className="form-check-label ml-2 mr-2" htmlFor="" name='ugc' onChange={inputHandler}>Je ne suis pas un robot <span className='text-red-500'> * </span>  </label>
           </div>
           <div className='flex justify-center m-1 mt-3'>
-            <button type="submit" class="btn btn-primary" >{"Envoyer"}</button>
+            <button type="submit" class="w-30 h-12 p-2 rounded bg-blue-500 text-white" >
+              {
+                send ?
+                  <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                  </div> :
+                  "Envoyer"
+              }
+              <i className={`${send ? "hidden" : "ml-2 fa-solid fa-paper-plane"}`}></i>
+            </button>
           </div>
         </form>
       </div>

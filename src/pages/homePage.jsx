@@ -4,9 +4,9 @@ import Info from "../components/info"
 import axios from 'axios'
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
-import Partenaires from "../components/partenaires"
+import Partenaires from "../components/partners"
 import Event from "../components/event"
-import { collection, getDocs, onSnapshot } from 'firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from "../auth/firebase"
 import Loading from "../components/LoadingPage"
 import Statistic from '../components/statistics'
@@ -15,74 +15,52 @@ import Statistic from '../components/statistics'
 const Home = () => {
     const [infos, setInfos] = useState()
     const [events, setEvents] = useState()
-    const [partenaires, setPartenaires] = useState()
-    const [statistics, setStatistics] = useState([])
+    const [partners, setPartners] = useState()
+    const [statistics, setStatistics] = useState()
     const [about, setAbout] = useState()
+    const [carousel, setCarousel] = useState()
+    const [loading, setLoading] = useState(false)
 
 
     useEffect(() => {
-        onSnapshot(collection(db, 'event'), snap => {
-            const data = snap.docs.map((doc) => ({
-                _id: doc.id,
-                ...doc.data()
-            }))
-            setEvents(data)
-        })
 
-        onSnapshot(collection(db, 'infos'), snap => {
-            const data = snap.docs.map((doc) => ({
-                _id: doc.id,
-                ...doc.data()
-            }))
-            setInfos(data)
-        })
-        onSnapshot(collection(db, 'partner'), snap => {
-            const data = snap.docs.map((doc) => ({
-                _id: doc.id,
-                ...doc.data()
-            }))
-            setPartenaires(data)
-        })
-    })
-
-    useEffect(() => {
-        const fectData = async () => {
+        const fetchData = async () => {
             try {
-                const response = await getDocs(collection(db, 'about'))
-                const data = response.docs.map(e => ({
-                    _id: e.id,
-                    ...e.data()
-                }))
-                setAbout(data[0])
+                setLoading(true)
+
+                const [eventFetch, infoFetch, partnerFetch, aboutFetch, statisticFetch, carouselFetch] = await Promise.all([
+                    getDocs(collection(db, 'event')),
+                    getDocs(collection(db, 'infos')),
+                    getDocs(collection(db, 'partner')),
+                    getDocs(collection(db, 'about')),
+                    getDocs(collection(db, 'statistic')),
+                    getDocs(collection(db, 'affiche-carousel')),
+                ])
+
+                setEvents(eventFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
+                setInfos(infoFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
+                setPartners(partnerFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
+                const aboutData = aboutFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() }))
+                setAbout(aboutData[0] || null)
+                setStatistics(statisticFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
+                setCarousel(carouselFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
+
             } catch (error) {
                 console.log(error);
+            } finally {
+                setLoading(false)
             }
-        };
-        fectData();
+        }
+
+        fetchData()
     }, [])
 
+    // if (loading) return <Loading />
 
-    useEffect(() => {
-        const dataFect = async () => {
-            try {
-                const response = await getDocs(collection(db, 'statistic'))
-                const data = response.docs.map(e => ({
-                    _id: e.id,
-                    ...e.data()
-                }))
-                setStatistics(data)
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        dataFect()
-    }, [])
-
-
-
-    while (!infos || !events || !partenaires || !about || !statistics) {
+    if (!infos || !events || !partners || !about || !statistics || !carousel) {
         return <Loading></Loading>
     }
+    
 
 
     return (
@@ -93,7 +71,7 @@ const Home = () => {
                     <div className="flex-1 h-[max-content] max-[600px]:hidden rounded-md m-2 mt-0 bg-gray-100">
                         <div className="flex justify-between items-center m-2">
                             <h3 className="text-red-500">À la une</h3>
-                            <Link to={'/event'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
+                            <Link to={'/evenement'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
                                 <span className="text-nowrap">Voir plus<i class="fa-solid fa-arrow-right"></i></span>
                             </Link>
                         </div>
@@ -108,7 +86,7 @@ const Home = () => {
             <section className="mt-  rounded-2xl flex justify-evenly flex-wrap m-2">
                 <div className="flex-1 pl-2 pr-2 pb-2 max-w-120">
                     <h2>Qu'est-ce que la FIBREE ?</h2>
-                    <p className="text-justify">{about.about}</p>
+                    <p className="text-justify">{about?.about}</p>
                     <Link to={'/a-propos'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
                         <span className="text-nowrap">En savoir plus sur la FIBREE <i class="fa-solid fa-arrow-right"></i></span>
                     </Link>
@@ -131,10 +109,10 @@ const Home = () => {
                 </section>
             }
             {
-                partenaires.filter(e => e.displayed).length > 0 &&
+                partners.filter(e => e.displayed).length > 0 &&
                 <section className="max-[800px]:p-0 m-2 mt-5">
                     <div className="flex items-center">
-                        <h2 className="ml-3">Nos partenaires</h2>
+                        <h2 className="ml-3">Nos partners</h2>
                     </div>
                     <Partenaires></Partenaires>
                 </section>

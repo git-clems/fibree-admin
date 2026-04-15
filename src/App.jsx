@@ -28,7 +28,7 @@ import AdminJoins from './features/joinAdmin'
 import BePartner from './pages/newPartner'
 import AdminMember from './features/memberAdmin'
 import MemberDetailAdmin from './features/memberDetailAdmin'
-import DetailsFlashInfo from './pages/eventDetailPage'
+import DetailsEvent from './pages/eventDetailPage'
 import JoinDetailAdmin from './features/joinDetailAdmin'
 import AdminContacts from './features/contactAdmin'
 import ContactDetailAdmin from './features/contactDetailAdmin'
@@ -83,17 +83,17 @@ function App() {
         <Route path='/actualite/:id' element={<DetailInfo></DetailInfo>}></Route>
         <Route path='/actualite' element={<Infos></Infos>}></Route>
         <Route path='/evenement' element={<Events />}></Route>
-        <Route path='/evenement/:id' element={<DetailsFlashInfo></DetailsFlashInfo>}></Route>
+        <Route path='/evenement/:id' element={<DetailsEvent></DetailsEvent>}></Route>
         <Route path='/mission' element={<Missions></Missions>}></Route>
-        <Route path='/rejoindre' element={<Rejoindre></Rejoindre>}></Route>
-        <Route path='/projet' element={<Projects></Projects>}></Route>
+        {/* <Route path='/rejoindre' element={<Rejoindre></Rejoindre>}></Route> */}
+        {/* <Route path='/projet' element={<Projects></Projects>}></Route> */}
         <Route path='/contact' element={<Contact></Contact>}></Route>
         <Route path='/a-propos' element={<About></About>}></Route>
         <Route path='/soutenir' element={<Soutien></Soutien>}></Route>
-        <Route path='/action' element={<Actions></Actions>}></Route>
-        <Route path='/equipe' element={<Team></Team>}></Route>
+        {/* <Route path='/action' element={<Actions></Actions>}></Route> */}
+        {/* <Route path='/equipe' element={<Team></Team>}></Route> */}
         <Route path='/rapport' element={<Reports></Reports>}></Route>
-        <Route path='/rejoindre/spontane' element={<CandSpontPage></CandSpontPage>}></Route>
+        <Route path='/rejoindre' element={<CandSpontPage></CandSpontPage>}></Route>
         <Route path='/devenir-partenaire' element={<BePartner></BePartner>}></Route>
 
         <Route path='/admin/affiche' element={<AdminAffiches />}></Route>
