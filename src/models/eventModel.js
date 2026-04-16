@@ -9,6 +9,7 @@ const eventSchema = {
     image: "",
     comingDate : "",
     city : "",
+    online : false,
     publishDate : Timestamp.fromDate(new Date()),
 }
 

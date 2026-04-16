@@ -11,7 +11,7 @@ const MyCarousel = () => {
   useEffect(() => {
     const dataFect = async () => {
       try {
-        const response = await getDocs(collection(db, 'carrousel-affiche'))
+        const response = await getDocs(collection(db, 'carousel'))
         const data = response.docs.map((doc) => ({
           _id: doc.id,
           ...doc.data()

@@ -12,12 +12,12 @@ const DetailsEvent = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true)
             try {
-                setLoading(true)
                 const snapDoc = await getDoc(doc(db, 'event', id))
                 if (snapDoc.exists()) {
                     setEvent({ _id: snapDoc.id, ...snapDoc.data() });
-                }else {
+                } else {
                     setEvent(null)
                 }
             } catch (error) {
@@ -31,7 +31,7 @@ const DetailsEvent = () => {
     }, [id]);
 
     if (loading) return <Loading></Loading>
-    if (!event) { return <Page404 message={"Evènement non trouvé"} prev={"Revenir aux évènemts"} prevLink={'/evenement'}/> }
+    if (!event) { return <Page404 message={"Evènement non trouvé"} prev={"Revenir aux évènemts"} prevLink={'/evenement'} /> }
 
     return (
         <div className="page details-page">
@@ -39,12 +39,12 @@ const DetailsEvent = () => {
                 <div className="ml-5 description">
                     <h4 className="name">{event.title}</h4>
                     <p className="text-gray-500">{event.subtitle}</p>
-                    {event.comingDate && <span>Date: {event.comingDate} <br /></span>}
-                    {event.city && <span className="text-green-600"><i class="fa-solid fa-location-dot"></i>: {event.city}</span>}
+                    {event.comingDate && <div><i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>}
+                    {event.online && <div className={`text-white mt-2 ${event.comingDate && "ml-2"} text-xs bg-red-500 p-1 rounded w-[max-content]`}> Online</div>}
                 </div>
 
                 <div className="p-4 mt-4 bg-gray-100" style={{ float: 'left' }}>
-                    <img src={event.image} alt="" className="
+                    <img src={event.image ? event.image : '/bg/event-bg.jpg'} alt="" className="
                         rounded-2xl
                         border-1
                         border-gray-300

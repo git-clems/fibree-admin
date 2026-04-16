@@ -7,7 +7,7 @@ import ScrollToTop from './components/goTop'
 import { Route, Routes } from 'react-router'
 import SmallAppBar from './components/appbarSmall'
 import FootBar from './components/footBar'
-import AdminAffiches from './features/affichesAdmin'
+import AdminCarousels from './features/carouselsAdmin'
 import AdminMissions from './features/missionAdmin'
 import AdminInfos from './features/infoAdmin'
 import Infos from './pages/infosPage'
@@ -40,6 +40,7 @@ import AdminSuspended from './features/suspendedAdmin'
 import AdminDetailNewPartner from './features/newPartenaireDetailAdmin'
 import AdminNewPartners from './features/newPartenaireAdmin'
 import AdminDetailPartner from './features/partenaireDetailAdmin'
+import AdminStatistics from './features/statisticsAdmin'
 
 
 const getMissions = async () => {
@@ -96,7 +97,8 @@ function App() {
         <Route path='/rejoindre' element={<CandSpontPage></CandSpontPage>}></Route>
         <Route path='/devenir-partenaire' element={<BePartner></BePartner>}></Route>
 
-        <Route path='/admin/affiche' element={<AdminAffiches />}></Route>
+        <Route path='/admin/affiche' element={<AdminCarousels />}></Route>
+        <Route path='/admin/statistique' element={<AdminStatistics />}></Route>
         <Route path='/admin/mission' element={<AdminMissions />}></Route>
         <Route path='/admin/actualite' element={<AdminInfos />}></Route>
         <Route path='/admin/partenaire' element={<AdminPartenaires />}></Route>

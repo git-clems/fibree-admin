@@ -44,17 +44,23 @@ const Event = ({ eventId }) => {
 
     return (
         event.displayed &&
-        <Link to={`/evenement/${event._id}`} className="">
-            <div className='hover:bg-gray-200 flex flew-wrap border-t-1 overflow-hidden border-gray-300 flex-1 p-2'>
-                {
-                    event.image ?
-                        <img src={event.image} alt="" className={`w-[100px] h-[100px] ${event.image && 'object-cover border-1 border-gray-300 rounded-md'}`} /> :
-                        <img src={'/bg/event-bg.jpg'} alt="" className={`w-[100px] h-[100px] ${event.image && 'object-cover border-1 border-gray-300 rounded-md'}`} />
-                }
-                <div className="flex-1 ml-2">
-                    <div className='truncate max-w-[300px]'>{event.title}</div>
-                    <div className="text-gray-400 truncate max-w-[300px]">{event.subtitle}</div>
+        <Link to={`/evenement/${event._id}`} className="hover:bg-gray-200 flex flew-wrap border-t-1 overflow-hidden border-gray-300 flex-1 p-2">
+            {
+                event.image ?
+                    <img src={event.image} alt="" className={`w-[100px] h-[100px] object-cover border border-gray-300 rounded-md`} /> :
+                    <img src={'/bg/event-bg.jpg'} alt="" className={`w-[100px] h-[100px] object-cover border border-gray-300 rounded-md`} />
+            }
+            <div className="flex-1 ml-2">
+                <div className='truncate max-w-[300px]'>{event.title}</div>
+                <div className="text-gray-400 truncate max-w-[300px]">{event.subtitle}</div>
+
+                <div className='flex justify-between mt-1'>
+                    {event.online && <div className={`text-white font-bold bg-red-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> Online</div>}
+                    {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime}`}</div>}
                 </div>
+
+                {event.adress && <div className='text-gray-500 mt-2 text-xs truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
+
             </div>
         </Link>
     )

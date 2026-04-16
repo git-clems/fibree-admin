@@ -92,7 +92,7 @@ const Admin = () => {
         { link: '/admin/evenement', name: 'Evènements', bg_color: 'rgba(255,0,0,0.6)', text_color: 'white' },
         { link: '/admin/actualite', name: 'Actualités', bg_color: 'rgba(233, 209, 70, 0.95)' },
         { link: '/admin/mission', name: 'Missions', bg_color: 'rgba(0, 64, 255, 0.6)', text_color: 'white' },
-        { link: '/admin/chiffre', name: 'Statistiques' },
+        { link: '/admin/statistique', name: 'Statistiques' },
         { link: '/admin/nouveau-membre', name: "Demandes d'adhésion", bg_color: "rgba(78, 249, 255, 0.89)", badge: joinNotAccepted },
         { link: '/admin/membre', name: 'Membres', bg_color: "rgba(255, 220, 78, 0.89)" },
         { link: '/admin/suspendu', name: 'Membres suspendus', bg_color: "rgb(165, 138, 195)", text_color: 'white', badge: suspended },

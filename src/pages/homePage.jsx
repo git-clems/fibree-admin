@@ -25,8 +25,8 @@ const Home = () => {
     useEffect(() => {
 
         const fetchData = async () => {
+            setLoading(true)
             try {
-                setLoading(true)
 
                 const [eventFetch, infoFetch, partnerFetch, aboutFetch, statisticFetch, carouselFetch] = await Promise.all([
                     getDocs(collection(db, 'event')),
@@ -34,7 +34,7 @@ const Home = () => {
                     getDocs(collection(db, 'partner')),
                     getDocs(collection(db, 'about')),
                     getDocs(collection(db, 'statistic')),
-                    getDocs(collection(db, 'affiche-carousel')),
+                    getDocs(collection(db, 'carrousel-affiche')),
                 ])
 
                 setEvents(eventFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
@@ -68,7 +68,7 @@ const Home = () => {
             <section className="flex flex-wrap items- justify-center p-2 bg-[url(/bg/bg1.png)] bg-cover">
                 {
                     events &&
-                    <div className="flex-1 h-[max-content] max-[600px]:hidden rounded-md m-2 mt-0 bg-gray-100">
+                    <div className="flex-1 max-[600px]:hidden rounded pb-2 m-2 mt-0 bg-gray-100 bg-white h-[max-content]">
                         <div className="flex justify-between items-center m-2">
                             <h3 className="text-red-500">À la une</h3>
                             <Link to={'/evenement'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">

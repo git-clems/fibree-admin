@@ -6,7 +6,7 @@ import { db } from '../auth/firebase';
 import afficheSchema from '../models/afficheModel';
 import Loading from '../components/LoadingPage';
 
-const AddAffiche = () => {
+const AddCarousel = () => {
 
     const [affiche, setAffiche] = useState(afficheSchema)
     const [message, setMessage] = useState('')
@@ -21,7 +21,7 @@ const AddAffiche = () => {
     const SubmitForm = async (e) => {
         setLoading(true)
         e.preventDefault()
-        await addDoc(collection(db, 'carrousel-affiche'), affiche).then((res) => {
+        await addDoc(collection(db, 'carousel'), affiche).then((res) => {
             setMessage('Affiche enregistrée avec succès !')
             setLoading(false)
             const modalElement = document.getElementById('staticBackdrop');
@@ -79,4 +79,4 @@ const AddAffiche = () => {
     )
 }
 
-export default AddAffiche
+export default AddCarousel

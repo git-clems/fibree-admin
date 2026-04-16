@@ -58,8 +58,8 @@ const AdminDetailPartner = () => {
           </div>
           <button className='btn btn-danger' onClick={() => DeletePartner(partner._id)}><i className='fa-solid fa-trash'></i></button>
         </div>
-        <div className='flex p-3'>
-          <img src={partner.image} alt="" className='h-[200px] max-w-[200px] object-contain rounded-md' />
+        <div className=' p-3'>
+          <img src={partner.image} alt="" className='h-[200px] max-w-[200px] object-contain border rounded bg-white' />
           <p className='p-2'>{partner.name}</p>
           <p className='p-2'>{partner.datePartner}</p>
         </div>

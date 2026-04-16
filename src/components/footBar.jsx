@@ -24,7 +24,7 @@ const FootBar = () => {
                             ><i class="fa-brands fa-facebook-f"></i>
                             </a>
                         </div>
-                        <div className='hover:underlined hover:bg-green-400 bg-[white] m-2 rounded-full w-[max-content] border-3 border-gray-400'>
+                        {/* <div className='hover:underlined hover:bg-green-400 bg-[white] m-2 rounded-full w-[max-content] border-3 border-gray-400'>
                             <a target='_blanked'
                                 className='
                                 h-[40px] w-[40px] 
@@ -32,7 +32,7 @@ const FootBar = () => {
                                 href="mailto:clement2bamogo@gmail.com"
                             ><i class="fa-regular fa-envelope"></i>
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className='flex-1 flex-wrap p-2 max-[800px]:items-center flex-col items-start flex'>
@@ -71,7 +71,7 @@ const FootBar = () => {
 
                 </div>
             </div>
-            <div className='bg-gray-500 flex-wrap p-2 pb-3 max-[800px]:flex-col items-center justify-center flex'>
+            {/* <div className='bg-gray-500 flex-wrap p-2 pb-3 max-[800px]:flex-col items-center justify-center flex'>
                 <span className='text-nowrap m-3 text-white'><i class="fa-regular fa-copyright"></i> {currentDate} FIBREE</span>
                 <div className='flex max-[800px]:flex-col items-center'>
                     <div className='hover:underline '>
@@ -81,7 +81,7 @@ const FootBar = () => {
                         <Link className='m-3 text-nowrap min-[800px]:border-l-1 min-[800px]:pl-3 text-white'>Condition d'utilisation</Link>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }
