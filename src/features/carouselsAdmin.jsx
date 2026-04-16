@@ -75,7 +75,7 @@ const AdminCarousels = () => {
             <div className='border  duration-100 m-1 rounded p-2 w-[300px] max-[600px]:w-full bg-white flex flex-col'>
               {
                 carousel.image ?
-                  <img src={carousel.image} alt="" className={`h-[200px] bg-black rounded border object-contain hover:object-cover duration-100 p-2`} /> :
+                  <img src={carousel.image} alt="" className={`h-[200px] bg-black rounded border object-contain duration-100 p-2`} /> :
                   <img src={"/bg/carousel-bg.jpg"} alt="" className='h-[200px] rounded border object-contain' />
               }
               <div className='flex justify-between items-center mt-2 mb-2'>

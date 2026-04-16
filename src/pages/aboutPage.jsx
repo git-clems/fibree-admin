@@ -1,5 +1,4 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Loading from '../components/LoadingPage'
 import Partenaires from '../components/partners'
 import { Link } from 'react-router'
@@ -17,18 +16,19 @@ const About = () => {
     const FetchData = async () => {
       setLoading(true)
       try {
-        const responseAbout = await getDocs(collection(db, 'about'))
-        const dataAbout = responseAbout.docs.map((doc) => ({
+        const [aboutSnap, missionSnap] = await Promise.all([
+          getDocs(collection(db, 'about')),
+          getDocs(collection(db, 'mission'))
+        ])
+
+        setAbout(aboutSnap.docs.map(doc => ({
           _id: doc.id,
           ...doc.data()
-        }))
-        const responseMission = await getDocs(collection(db, 'mission'))
-        const dataMission = responseMission.docs.map((doc) => ({
+        }))[0])
+        setMissions(missionSnap.docs.map(doc => ({
           _id: doc.id,
           ...doc.data()
-        }))
-        setAbout(dataAbout[0])
-        setMissions(dataMission)
+        })))
       } catch (error) {
         setAbout(null)
         setMissions(null)
@@ -40,7 +40,7 @@ const About = () => {
   }, [])
 
   if (loading) return <Loading></Loading>
-  if (!about) return <Page404></Page404>
+  if (!about || !missions) return <Page404></Page404>
 
   return (
     <div className='page'>

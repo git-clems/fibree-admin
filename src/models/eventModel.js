@@ -3,7 +3,8 @@ import { Timestamp } from "firebase/firestore"
 const eventSchema = {
     title: "",
     subtitle: "",
-    externalLink: "",
+    link: "",
+    linkMessage : "",
     description: "",
     displayed: false,
     image: "",

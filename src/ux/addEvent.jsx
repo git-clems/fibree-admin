@@ -103,7 +103,7 @@ const AddEvent = () => {
 
                                 <div className="min-w-[300px] m-1 mt-3 flex-1">
                                     <label htmlFor="" className="form-label"> Adresse de l'évènement </label>
-                                    <input type='text' onChange={inputHandler} className={`form-control`} id="adress" name='adress' rows="3" placeholder='Adresse' disabled={event.online}></input>
+                                    <input type='text' onChange={inputHandler} className={`form-control`} id="adress" name='adress' rows="3" placeholder='Adresse' ></input>
                                     <div className="flex m-1 mt-3 items-start">
                                         <input className="form-check-input mt-1" type="checkbox" id="" name='online' onChange={inputHandler} />
                                         <label className="form-check-label ml-2 mr-2" htmlFor="" >Evènement en ligne  </label>
@@ -112,7 +112,11 @@ const AddEvent = () => {
 
                                 <div class="mb-3 mt-3">
                                     <label for="" class="form-label">Lien de l'info</label>
-                                    <input type="url" onChange={inputHandler} name='externalLink' class="form-control" id="" placeholder="Lien de l'info" />
+                                    <input type="url" onChange={inputHandler} name='link' class="form-control" id="" placeholder="Lien de l'info" />
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label for="" class="form-label">Message associé au lien de l'évènement</label>
+                                    <input type="text" onChange={inputHandler} name='linkMessage' class="form-control" id="" placeholder="Message associé au lien de l'évènement..." />
                                 </div>
 
 
@@ -124,7 +128,7 @@ const AddEvent = () => {
 
 
                                 <div class="mb-3">
-                                    <label for="inputGroupFile02" class="form-label">Image</label>
+                                    <label for="inputGroupFile02" class="form-label">Image d'illustration</label>
                                     <input type="file" accept="image/*" title='image' class="form-control" id="inputGroupFile02" placeholder='Choisir une image' />
                                 </div>
                             </div>

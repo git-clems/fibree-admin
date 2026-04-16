@@ -4,7 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../auth/firebase';
 
 const MyCarousel = () => {
-  const interval = 1000;
+  const interval = 5000;
 
   const [affiches, setAffiche] = useState()
 

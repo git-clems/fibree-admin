@@ -32,7 +32,7 @@ const Infos = () => {
                 (infos && infos.length > 0) &&
                 <div className="m-2">
                     <h2 className='text-center'>Nos actualités</h2>
-                    <div className="flex-1 flex flex-wrap justify-center">
+                    <div className="flex-1 flex flex-wrap">
                         {infos.map((info) => (info.displayed && (<Info infoId={info._id}></Info>)))}
                     </div>
                 </div>

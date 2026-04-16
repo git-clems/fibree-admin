@@ -23,7 +23,7 @@ import Rejoindre from './pages/joinPage'
 import Team from './pages/teamPage'
 import Reports from './pages/reportsPage'
 import Admin from './features/admin'
-import CandSpontPage from './pages/candSpontPage'
+import JoinUs from './pages/JoinUsPage'
 import AdminJoins from './features/joinAdmin'
 import BePartner from './pages/newPartner'
 import AdminMember from './features/memberAdmin'
@@ -94,7 +94,7 @@ function App() {
         {/* <Route path='/action' element={<Actions></Actions>}></Route> */}
         {/* <Route path='/equipe' element={<Team></Team>}></Route> */}
         <Route path='/rapport' element={<Reports></Reports>}></Route>
-        <Route path='/rejoindre' element={<CandSpontPage></CandSpontPage>}></Route>
+        <Route path='/rejoindre' element={<JoinUs></JoinUs>}></Route>
         <Route path='/devenir-partenaire' element={<BePartner></BePartner>}></Route>
 
         <Route path='/admin/affiche' element={<AdminCarousels />}></Route>

@@ -72,14 +72,14 @@ const Events = () => {
                     <Link to={`/evenement/${eventId}`} className='m-2 max-[600px]:w-full w-[20vw] min-w-[200px] border-1 border-gray-300 rounded-md bg-white hover:shadow-[0_0_15px_rgba(0,0,25,0.9)] transition-shadow duration-200 overflow-hidden'>
                         {
                             event.image ?
-                                <img src={event.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-contain bg-black p-2' /> :
+                                <img src={event.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover bg-black' /> :
                                 <img src={'/bg/event-bg.jpg'} alt="" className='rounded-t-md h-[200px] w-[100%] object-contain' />
                         }
-                        <div className='m-2 mt-3'>
-                            <div className='flex justify-center font-bold items-center pl-3 pr-3 rounded bg-green-400'>{event.type}</div>
+                        <div className='flex justify-center font-bold items-center pl-3 pr-3 bg-green-500 text-white'>{event.type}</div>
+                        <div className='m-2 mt-0'>
                             <div className='mb-2'>{event.title}</div>
                             <div className='flex justify-between'>
-                                {event.online && <div className={`text-white font-bold bg-red-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> Online</div>}
+                                {event.online && <div className={`text-white font-bold bg-red-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> En ligne</div>}
                                 {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime}`}</div>}
                             </div>
                             {event.adress && <div className='mt-2 text-xs text-gray-500 truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}

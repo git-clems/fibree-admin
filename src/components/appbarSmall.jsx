@@ -44,7 +44,7 @@ const SmallAppBar = () => {
       `}>
 
             <Link to="/" className="logo w-[10vw] min-w-[100px] ml-5 mr-1 transition-all duration-300">
-                <img src="./logo/logo-nom.png" alt="Logo" />
+                <img src="/logo/logo-nom.png" alt="Logo" />
             </Link>
 
             <div onClick={() => isOpen(!open)} className='cursor-pointer mr-5'>

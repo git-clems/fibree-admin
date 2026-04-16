@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
@@ -36,23 +36,34 @@ const DetailsEvent = () => {
     return (
         <div className="page details-page">
             <div className="flex flex-wrap">
-                <div className="ml-5 description">
-                    <h4 className="name">{event.title}</h4>
+                <div className="m-3 w-full bg-gray-200 rounded p-3 max-[600px]:w-full">
+                    <p className="name text-xl font-bold"><span className="text-orange-500">{event.type}</span> : {event.title}</p>
                     <p className="text-gray-500">{event.subtitle}</p>
-                    {event.comingDate && <div><i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>}
-                    {event.online && <div className={`text-white mt-2 ${event.comingDate && "ml-2"} text-xs bg-red-500 p-1 rounded w-[max-content]`}> Online</div>}
+                    <div className='flex justify-between'>
+                        {event.online && <div className={`text-white font-bold bg-red-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> En ligne</div>}
+                        {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime}`}</div>}
+                    </div>
+                    {
+                        event.link &&
+                        <Link to={event.link} className='' target="_blank"><span className="pl-1 pr-1 bg-yellow-500 underline hover:text-blue-500">{event.linkMessage}</span></Link>
+                    }
                 </div>
 
-                <div className="p-4 mt-4 bg-gray-100" style={{ float: 'left' }}>
+                <div className="m-3 max-[600px]:w-full bg-gray-200 p-2 rounded" style={{ float: 'left' }}>
                     <img src={event.image ? event.image : '/bg/event-bg.jpg'} alt="" className="
-                        rounded-2xl
+                        rounded
                         border-1
                         border-gray-300
                         float-right
-                        h-[300px]
+                        w-[300px]
                         object-cover
-                        ml-4 mr-2"/>
-                    <p className="ml-2 mr-4 text-justify">{event.description}</p>
+                        max-[600px]:w-full
+                        min-[600px]:ml-4 min-[600px]:mr-4"/>
+                    <div>
+                        {event.description.split('\n').map(paragraph => (
+                            <p className="ml-2 mr-4 text- first-letter:ml-5">{paragraph}</p>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

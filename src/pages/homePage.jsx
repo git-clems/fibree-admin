@@ -34,7 +34,7 @@ const Home = () => {
                     getDocs(collection(db, 'partner')),
                     getDocs(collection(db, 'about')),
                     getDocs(collection(db, 'statistic')),
-                    getDocs(collection(db, 'carrousel-affiche')),
+                    getDocs(collection(db, 'carousel')),
                 ])
 
                 setEvents(eventFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
@@ -60,17 +60,17 @@ const Home = () => {
     if (!infos || !events || !partners || !about || !statistics || !carousel) {
         return <Loading></Loading>
     }
-    
+
 
 
     return (
         <div className="page">
             <section className="flex flex-wrap items- justify-center p-2 bg-[url(/bg/bg1.png)] bg-cover">
                 {
-                    events &&
+                    events.filter(e => e.displayed).length > 0 &&
                     <div className="flex-1 max-[600px]:hidden rounded pb-2 m-2 mt-0 bg-gray-100 bg-white h-[max-content]">
                         <div className="flex justify-between items-center m-2">
-                            <h3 className="text-red-500">À la une</h3>
+                            <h3 className="text-red-500">Evènements</h3>
                             <Link to={'/evenement'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
                                 <span className="text-nowrap">Voir plus<i class="fa-solid fa-arrow-right"></i></span>
                             </Link>
@@ -78,11 +78,14 @@ const Home = () => {
                         {events.slice(0, 3).map((event) => (<Event eventId={event._id} />))}
                     </div>
                 }
-                <div className='overflow-hidden rounded-md w-[60%] max-[800px]:w-[100%]'>
-                    <MyCarousel />
-                </div>
+                {
+                    carousel.filter(e => e.displayed).length > 0 &&
+                    < div className='overflow-hidden rounded-md w-[60%] max-[800px]:w-[100%]'>
+                        <MyCarousel />
+                    </div>
+                }
 
-            </section>
+            </section >
             <section className="mt-  rounded-2xl flex justify-evenly flex-wrap m-2">
                 <div className="flex-1 pl-2 pr-2 pb-2 max-w-120">
                     <h2>Qu'est-ce que la FIBREE ?</h2>
@@ -94,7 +97,8 @@ const Home = () => {
                 <Missions></Missions>
 
             </section>
-            {(infos && infos.length > 0) &&
+            {
+                (infos && infos.length > 0) &&
                 <section className="bg-gray-100 pt-3 pb-3 max-[800px]:p-0 mt-5 flex flex-col items-center">
                     <div className="flex items-center">
                         <h2 className="max-[800px]:ml-3 ml-5"> Nos dernières actualités</h2>
@@ -127,7 +131,7 @@ const Home = () => {
                     </div>
                 </section>
             }
-        </div>
+        </div >
     )
 }
 

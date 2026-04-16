@@ -8,7 +8,7 @@ import joinSchema from '../models/joinModel'
 import { addDoc, collection } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 
-const CandSpontPage = () => {
+const JoinUs = () => {
     const recapRef = useRef()
 
     const [join, setJoin] = useState(joinSchema)
@@ -261,4 +261,4 @@ const CandSpontPage = () => {
     )
 }
 
-export default CandSpontPage
+export default JoinUs

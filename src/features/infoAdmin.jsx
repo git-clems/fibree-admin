@@ -2,37 +2,30 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import AddInfo from '../ux/addInfo'
-import { collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
-import { db } from '../auth/firebase';
-import Loading from '../components/LoadingPage';
-
+import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
+import { db } from '../auth/firebase'
+import Loading from '../components/LoadingPage'
 
 
 const AdminInfos = () => {
   const [infos, setInfos] = useState()
-  const [sortByDate, setSortByDate] = useState(false)
-  const [sortByName, setSortByName] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const fectData = async () => {
-      try {
-        const response = await getDocs(collection(db, 'infos'))
-        const data = response.docs.map((doc) => ({
-          _id: doc.id,
-          ...doc.data()
-        }))
-        setInfos(data)
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fectData();
+    const fetchData = onSnapshot(collection(db, 'infos'), snap => setInfos(
+      snap.docs.map(doc => ({
+        _id: doc.id,
+        ...doc.data()
+      }))
+    ))
+    return () => fetchData
   }, [])
 
-  const deleteInfos = async (infoId) => {
-    await deleteDoc(doc(db, 'infos', infoId)).catch((err) => {
-      console.log(err);
-    })
+  const deleteInfo = async (infoId) => {
+    await deleteDoc(doc(db, 'infos', infoId))
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   const toggleDisplay = async (infoId, currentValue) => {
@@ -41,6 +34,8 @@ const AdminInfos = () => {
       await updateDoc(doc(db, 'infos', infoId), {
         displayed: updatedValue,
       });
+
+      // Mise à jour du state (UI instantanée)
       setInfos((prevInfos) =>
         prevInfos.map((info) =>
           info._id === infoId ?
@@ -59,71 +54,45 @@ const AdminInfos = () => {
 
   return (
     <div className='page'>
-      {
-        infos.length === 0 ?
-          <>
-            <div className='ml-3'><span className='text-red-500'>Aucune information disponible</span></div>
-            <AddInfo></AddInfo>
-            <table className='table'>
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Titre</th>
-                  <th scope="col">Date de création</th>
-                  <th scope="col">Afficher</th>
-                  <th scope="col">Editer</th>
-                  <th scope="col">Supprimer</th>
-                </tr>
-              </thead>
-            </table>
-          </>
-          :
-          <>
-            <AddInfo></AddInfo>
-            {<table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Titre</th>
-                  <th scope="col"><button onClick={() => setSortByDate(!sortByDate)}>Date de publication {sortByDate ? <i class="fa-solid fa-sort-down"></i> : <i class="fa-solid fa-sort-up"></i>}</button></th>
-                  <th scope="col">Afficher</th>
-                  <th scope="col">Editer</th>
-                  <th scope="col">Supprimer</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  infos.sort((a, b) => (sortByDate ? a.publishDate - b.publishDate : b.publishDate - a.publishDate )).map((info, index) => (
-                    <tr>
-                      <th scope="row">{index + 1}</th>
-                      <td>
-                        <p className='truncate max-w-[60vw]'>{info.title}</p>
-                        <p className='text-gray-500 truncate max-w-[60vw]'>{info.subtitle}</p>
-                      </td>
-                      <td>
-                        <span className='text-gray-500'>{info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-                      </td>
-                      <td>
-                        <input type="checkbox" className="m-2"
-                          checked={info.displayed}
-                          onChange={() => toggleDisplay(info._id, info.displayed)} />
-                      </td>
-                      <td>
-                        <Link style={{ borderRadius: 5 }} to={`/actualite/${info._id}`} className="m-2 h-[40px] w-[40px] p-2 flex justify-center items-center bg-green-400 hover:bg-green-300 rouded-1 ">
-                          <i class="fa-solid fa-pencil"></i>
-                        </Link>
-                      </td>
-                      <td>
-                        <button onClick={() => deleteInfos(info._id)} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>}
-          </>
-      }
+      <AddInfo></AddInfo>
+      <div className='flex justify-center flex-wrap'>
+        {
+          infos.map(info => (
+            <div key={info._id} to={`/actualite/${info._id}`} className='border  duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
+              {
+                info.images.length > 0 ?
+                  <img src={info.images[0]} alt="" className={`h-[200px] bg-black rounded-t-md object-contain duration-100 p-2`} /> :
+                  <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-contain' />
+              }
+              <div className='p-2 border-t border-gray-200'>
+                <div className='flex justify-between items-center mt-2 mb-2'>
+                  <button className='btn btn-danger' onClick={(e) => {
+                    e.stopPropagation()
+                    deleteInfo(info._id)
+                  }}>
+                    <i className='fa-solid fa-trash'></i>
+                  </button>
+
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
+                      toggleDisplay(info._id, info.displayed)
+                    }}
+                      checked={info.displayed} />
+                  </div>
+
+                  <button className='btn btn-primary' onClick={() => {
+                    navigate(`/actualite/${info._id}`)
+                  }}>
+                    Voir
+                  </button>
+
+                </div>
+                <div className='truncate'>{info.title}</div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
     </div>
   )
 }
