@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import AddStatistic from '../ux/addStatistic'
+import AddStatistic from '../Controllers/addStatistic'
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'

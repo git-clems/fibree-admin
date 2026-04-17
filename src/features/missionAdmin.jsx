@@ -5,7 +5,7 @@ import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'fire
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
 import Page404 from '../pages/404'
-import AddMission from '../ux/addMission'
+import AddMission from '../Controllers/addMission'
 
 const AdminMissions = () => {
   const [missions, setMissions] = useState()

@@ -3,7 +3,7 @@ import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/fire
 import { db } from '../auth/firebase'
 import { Link } from 'react-router'
 import Loading from '../components/LoadingPage'
-import AddPartenaire from '../ux/addPartenaire'
+import AddPartenaire from '../Controllers/addPartenaire'
 import Page404 from '../pages/404'
 
 const AdminPartenaires = () => {
