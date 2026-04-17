@@ -39,7 +39,7 @@ const DetailsEvent = () => {
     return (
         <div className="page details-page">
             <div className="flex flex-wrap">
-                <div className="m-3 w-full bg-gray-200 rounded p-3 max-[600px]:w-full">
+                <div className="m-2 w-full bg-gray-200 rounded p-3 max-[600px]:w-full">
                     <p className="name text-xl font-bold"><span className="text-orange-500">{event.type}</span> : {event.title}</p>
                     <p className="text-gray-500">{event.subtitle}</p>
                     <div className='flex'>
@@ -49,12 +49,10 @@ const DetailsEvent = () => {
                     {event.adress && <div className='text-gray-500 mt-2 text-xs truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
                     {event.link && <Link to={event.link} className='' target="_blank"><span className="pl-1 pr-1 bg-yellow-500 underline hover:text-blue-500">{event.linkMessage}</span></Link>}
 
-                    <div className="mt-3 text-xs">
-                        Publié le {event.publishDate.toDate().toLocaleString()}
-                    </div>
+                    <div className="mt-3 text-xs">Publié le {event.publishDate.toDate().toLocaleString()}</div>
                 </div>
 
-                <div className="m-3 w-full bg-gray-200 p-2 rounded" style={{ float: 'left' }}>
+                <div className="m-2 w-full bg-gray-200 p-2 rounded" style={{ float: 'left' }}>
                     <img src={event.image ? event.image : '/bg/event-bg.jpg'} alt="" className="
                         rounded
                         border-1
@@ -72,8 +70,8 @@ const DetailsEvent = () => {
                 </div>
                 {
                     event.backUp?.length > 0 &&
-                    <div className="border border-gray-200 rounded m-2">
-                        <h4 className="text-center mt-3">Retourn en images</h4>
+                    <div className="border-t border-gray-200 w-full m-2">
+                        <h4 className="ml-3 mt-3">Images associées</h4>
                         <div className="flex flex-wrap">
                             {
                                 event.backUp?.map(image => (

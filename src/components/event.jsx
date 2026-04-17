@@ -47,8 +47,8 @@ const Event = ({ eventId }) => {
         <Link to={`/evenement/${event._id}`} className="hover:bg-gray-200 flex flew-wrap border-t-1 overflow-hidden border-gray-300 flex-1 p-2">
             {
                 event.image ?
-                    <img src={event.image} alt="" className={`w-[90px] h-[98px] object-cover border border-gray-300 rounded-md`} /> :
-                    <img src={'/bg/event-bg.jpg'} alt="" className={`w-[90px] h-[98px] object-cover border border-gray-300 rounded-md`} />
+                    <img src={event.image} alt="" className={`w-[98px] h-[98px] object-cover border border-gray-300 rounded-md`} /> :
+                    <img src={'/bg/event-bg.jpg'} alt="" className={`w-[98px] h-[98px] object-cover border border-gray-300 rounded-md`} />
             }
             <div className="flex-1 ml-2">
                 <span className='font-bold text-orange-500'>{event.type}</span>

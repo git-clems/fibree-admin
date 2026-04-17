@@ -36,11 +36,11 @@ const DetailsInfo = () => {
     return (
         <div className="page details-page">
             <div className="flex flex-wrap">
-                <div className="m-3 w-full bg-gray-200 rounded p-3 max-[600px]:w-full">
+                <div className="m-2 w-full bg-gray-200 rounded p-2 max-[600px]:w-full">
                     <p className="name text-xl font-bold">{info.title}</p>
                     <p className="text-gray-500">{info.subtitle}</p>
                     <div className='flex justify-between'>
-                        {info.publishDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '>Publié le {info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {info.comingTime && `à ${info.comingTime}`}</div>}
+                        {info.publishDate && <div className='text-sm truncate rounded '>Publié le {info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {info.comingTime && `à ${info.comingTime}`}</div>}
                     </div>
                     {
                         info.link &&
@@ -48,7 +48,7 @@ const DetailsInfo = () => {
                     }
                 </div>
 
-                <div className="m-3 max-[600px]:w-full bg-gray-200 p-2 rounded" style={{ float: 'left' }}>
+                <div className="m-2 max-[600px]:w-full bg-gray-200 p-2 w-full rounded" style={{ float: 'left' }}>
                     <img src={info.images[0] || '/bg/info-bg.jpg'} alt="" className="
                         rounded
                         border-1
@@ -64,6 +64,20 @@ const DetailsInfo = () => {
                         ))}
                     </div>
                 </div>
+
+                {
+                    info.images.slice(1,)?.length > 0 &&
+                    <div className="border-t border-gray-200 m-2 w-full">
+                        <h4 className="ml-3 mt-3">Images associées</h4>
+                        <div className="flex flex-wrap">
+                            {
+                                info.images.slice(1,)?.map(image => (
+                                    <img src={image} alt="" className="max-h-[300px] rounded m-1" />
+                                ))
+                            }
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     );

@@ -116,7 +116,7 @@ const Home = () => {
                 partners.filter(e => e.displayed).length > 0 &&
                 <section className="max-[800px]:p-0 m-2 mt-5">
                     <div className="flex items-center">
-                        <h2 className="ml-3">Nos partners</h2>
+                        <h2 className="ml-3">Nos partenaires</h2>
                     </div>
                     <Partenaires></Partenaires>
                 </section>

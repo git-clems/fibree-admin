@@ -46,7 +46,7 @@ const About = () => {
     <div className='page'>
       <h2 className='m-3'>Qui sommes-nous ?</h2>
 
-      <p lang='fr' className='min-[800px]:max-w-[50vw] min-[800px]:m-3 max-[800px]:m-3 text-justify text-justify [hyphens:auto]'>{about.about}</p>
+      <p className='min-[800px]:max-w-[50vw] min-[800px]:m-3 max-[800px]:m-3 '>{about.about}</p>
 
       <section className='flex-wrap p-2 flex justify-around'>
         <div className='min-w-[300px] p-3 rounded-3'>
