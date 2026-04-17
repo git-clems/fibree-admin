@@ -46,7 +46,7 @@ const AdminStatistics = () => {
         displayed: updatedValue,
       });
 
-      // Mise à jour du state (UI instantanée)
+
       setStatistics((prevStatistics) =>
         prevStatistics.map((statistic) =>
           statistic._id === statisticId ?
@@ -58,9 +58,6 @@ const AdminStatistics = () => {
     }
   };
 
-  // while (!statistics) {
-  //   return <Loading></Loading>
-  // }
 
   if (loading) return <Loading></Loading>
   if (!statistics) return <Page404></Page404>
@@ -95,10 +92,8 @@ const AdminStatistics = () => {
                     checked={statistic.displayed} />
                 </div>
 
-                <button className='btn btn-primary' onClick={() => {
-                  navigate(`/affiche-statistic/${statistic._id}`)
-                }}>
-                  Voir
+                <button className='btn btn-primary' onClick={() => { }}>
+                  <i className='fa-solid fa-pen'></i>
                 </button>
 
               </div>

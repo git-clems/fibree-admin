@@ -123,7 +123,6 @@ const AdminMembers = () => {
             </thead>
             {
               searchedMember.length > 0 ?
-                // }
                 <tbody>
                   {
                     searchedMember.sort((a, b) => {
@@ -145,7 +144,7 @@ const AdminMembers = () => {
                           navigate(`/admin/membre/${member._id}`)
                           ToogleOppened(member._id)
                         }}
-                        className="cursor-pointer hover:bg-gray-100 transition border bg-gray-100">
+                        className="cursor-pointer hover:bg-gray-200 transition border bg-[white]">
                         <th scope="row" className='p-2'>{index + 1}</th>
                         <td className='p-2 flex items-center'>
                           <span>{member.lname.toUpperCase()} {member.fname}</span> {member.suspended && <div className='ml-2 h-[10px] w-[10px] bg-red-500 rounded-full'></div>}

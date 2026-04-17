@@ -50,7 +50,7 @@ const AdminDetailPartner = () => {
 
   return (
     <div class="page">
-      <div className='m-2 p-2 rounded-md border-1 border-gray-400 bg-gray-100 -w-[300px] flex flex-col justify-center itmes-center'>
+      <div className='m-2 p-2 rounded-md border-1 border-gray-400 bg-gray-100 flex flex-col justify-center itmes-center'>
         <div className='flex justify-between border-b p-2 border-gray-400'>
           <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" checked={partner.displayed} onChange={ToogleDisplay} />

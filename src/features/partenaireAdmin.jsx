@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import { Link } from 'react-router'
 import Loading from '../components/LoadingPage'
@@ -10,6 +10,7 @@ const AdminPartenaires = () => {
   const [partenaires, setPartenaires] = useState()
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+
 
 
   useEffect(() => {
@@ -29,6 +30,34 @@ const AdminPartenaires = () => {
     return () => fetchData
   }, [])
 
+
+
+  const deleteAddPartner = async (partnerId) => {
+    await deleteDoc(doc(db, 'partner', partnerId))
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  const toggleDisplay = async (partnerId, currentValue) => {
+    try {
+      const updatedValue = !currentValue;
+      await updateDoc(doc(db, 'partner', partnerId), {
+        displayed: updatedValue,
+      });
+
+
+      setPartenaires((prevPartners) =>
+        prevPartners.map((partner) =>
+          partner._id === partnerId ?
+            { ...partner, displayed: updatedValue }
+            : partner
+        ));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const partner = search.trim().toLowerCase()
   const searchedPartner = useMemo(() => {
     if (!partner) return partenaires
@@ -37,6 +66,7 @@ const AdminPartenaires = () => {
 
   if (loading) return <Loading></Loading>
   if (!partenaires) return <Page404 prev={"Rafraichir la page"} prevLink={'/admin/partenaire'}></Page404>
+
   return (
     <div class="page ">
       <AddPartenaire></AddPartenaire>
@@ -54,11 +84,32 @@ const AdminPartenaires = () => {
 
         <div className='flex flex-wrap m-1'>
           {
-            searchedPartner.map((partenaire) => (
-              <Link key={partenaire._id} to={`/admin/partenaire/${partenaire._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col hover:scale-110 hover:shadow-[0_0_15px_rgba(0,0,0,0.2)]  shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
-                <img src={partenaire.image} alt="" className='h-[200px] object-contain' />
-                <p className='p-2 '>{partenaire.name}</p>
-              </Link>))
+            searchedPartner.length > 0 ?
+              searchedPartner.map((partner) => (
+                <div key={partner._id} to={`/admin/partenaire/${partner._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
+                  <img src={partner.image} alt="" className='h-[200px] object-contain' />
+                  <div className='flex justify-between items-center w-full mt-2 mb-2 p-2 border-t border-gray-200'>
+                    <button className='btn btn-danger'
+                      onClick={() => { deleteAddPartner(partner._id) }}>
+                      <i className='fa-solid fa-trash'></i>
+                    </button>
+
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"
+                        onChange={() => { toggleDisplay(partner._id, partner.displayed) }}
+                        checked={partner.displayed} />
+                    </div>
+
+                    <button className='btn btn-primary' onClick={() => { }}>
+                      <i className='fa-solid fa-pen'></i>
+                    </button>
+
+                  </div>
+                  <p className='p-2'>{partner.name}</p>
+
+                </div>
+              )) :
+              <p className='text-center ml-5'>Aucun partenaire de ce nom !</p>
           }
         </div>
       </div>

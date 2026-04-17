@@ -1,163 +1,148 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import AddMission from '../ux/addMission';
-import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
-import { db } from '../auth/firebase';
-import Loading from '../components/LoadingPage';
+import React, { useEffect, useMemo, useState } from 'react'
+import axios from 'axios'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore'
+import { db } from '../auth/firebase'
+import Loading from '../components/LoadingPage'
+import Page404 from '../pages/404'
+import AddMission from '../ux/addMission'
 
 const AdminMissions = () => {
-  const [missions, setMissions] = useState();
-  const [deletingIds, setDeletingIds] = useState([]);
+  const [missions, setMissions] = useState()
+  const [sortByDate, setSortByDate] = useState(false)
+  const [sortByName, setSortByTitle] = useState(null)
+  const [search, setSearch] = useState('')
+  const navigate = useNavigate()
+  const [deleting, setDeleting] = useState(false)
+  // const
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fectData = async () => {
       try {
-        onSnapshot(collection(db, 'mission'), snap => (
-          setMissions(snap.docs.map(doc => ({
+        onSnapshot(collection(db, 'mission'), snap => {
+          const data = snap.docs.map((doc) => ({
             _id: doc.id,
             ...doc.data()
-          })))
-        ))
+          }))
+          setMissions(data.filter(e => !e.removed))
+        })
       } catch (error) {
         console.log(error);
       }
     };
-
-    fetchData();
-  }, []);
+    fectData();
+  }, [])
 
   const deleteMission = async (missionId) => {
+    setDeleting(true)
     try {
-      setDeletingIds((prev) => [...prev, missionId]);
-
-      setTimeout(async () => {
-      await deleteDoc(doc(db, 'mission', missionId))
-        setMissions((prevMissions) =>
-          prevMissions.filter((mission) => mission._id !== missionId)
-        );
-        setDeletingIds((prev) => prev.filter((id) => id !== missionId));
-      }, 400);
+      await updateDoc(doc(db, 'mission', missionId), { removed: true })
     } catch (error) {
-      console.log(error);
-      setDeletingIds((prev) => prev.filter((id) => id !== missionId));
+      return <Page404 message={'Une erreur est survenue'}></Page404>
+    } finally {
+      setDeleting(false)
     }
-  };
-
-  const toggleDisplay = async (missionId, currentValue) => {
-    try {
-      const updatedValue = !currentValue;
-
-      await updateDoc(doc(db, 'mission', missionId), {
-        displayed: updatedValue,
-      });
-
-      setMissions((prevMissions) =>
-        prevMissions.map((mission) =>
-          mission._id === missionId
-            ? { ...mission, displayed: updatedValue }
-            : mission
-        )
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  while (!missions) {
-    return <Loading></Loading>
   }
 
+  const ToogleOppened = async (missionId) => {
+    try {
+      await updateDoc(doc(db, 'mission', missionId), { opened: true })
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  const normalizedSearch = search.trim().toLowerCase()
+
+  const filteredMission = useMemo(() => {
+    if (!normalizedSearch) return missions
+    return [...missions].filter((mission) => (
+      `${mission.title}`.toLowerCase().includes(normalizedSearch)
+    ))
+  })
+
+  if (!missions) return <Loading></Loading>
+
   return (
-    <div className="page">
-      {missions.length === 0 ? (
-        <>
-          <h2 className='ml-3'>Aucune mission disponible</h2>
-          <AddMission />
-          <table className='table text-sm'>
-            <thead>
+    <div className='page'>
+      {
+        <div className=''>
+          <AddMission></AddMission>
+          <div className='flex flex-wrap items-center justify-between '>
+            <form className="flex flex-1 flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5 mt-0" onSubmit={(e) => e.preventDefault()}>
+              <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
+                <input type="search" placeholder="Rechercher un nom" value={search} onChange={(e) => setSearch(e.target.value)} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
+                <div className="text-gray-400 pr-5 pl-5 border-gray-300 flex justify-center items-center"><i class="fa-solid fa-magnifying-glass"></i></div>
+              </div>
+            </form>
+          </div>
+
+          {<table class="flex-1 w-full text-sm">
+            <thead className='bg-gray-600 text-white'>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Titre</th>
-                <th scope="col">Afficher</th>
-                <th scope="col">Editer</th>
-                <th scope="col">Supprimer</th>
+                <th scope="col" className="p-2">#</th>
+                <th scope="col" className="p-2"><button onClick={() => {
+                  setSortByDate(null)
+                  sortByName === null ?
+                    setSortByTitle(false) :
+                    setSortByTitle(!sortByName)
+                }}>Mission {sortByName === true && <i class="fa-solid fa-sort-down"></i>}{sortByName === false && <i class="fa-solid fa-sort-up"></i>}</button>
+                </th>
+                <th className='max-[800px]:hidden'>Description</th>
+                <th>Supprimer</th>
               </tr>
             </thead>
-          </table>
-        </>
+            <tbody className=''>
+              {
+                filteredMission.sort((a, b) => {
+                  if (sortByDate === true) {
+                    return a.missionDate - b.missionDate
+                  }
+                  else if (sortByDate === false) {
+                    return b.missionDate - a.missionDate
+                  }
+                  else if (sortByName === true) {
+                    return a.title.localeCompare(b.title, 'fr')
+                  }
+                  else {
+                    return b.title.localeCompare(a.title, 'fr')
+                  }
+                }).map((mission, index) => (
+                  <tr key={mission._id}
+                    onClick={() => {
+                      navigate(`/admin/messagerie/${mission._id}`)
+                      ToogleOppened(mission._id)
+                    }}
 
-      ) : (
-        <>
-          <AddMission />
-          <table className="table text-sm">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Titre</th>
-                <th scope="col">Afficher</th>
-                <th scope="col">Editer</th>
-                <th scope="col">Supprimer</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {missions.map((mission, index) => {
-                const isDeleting = deletingIds.includes(mission._id);
-
-                return (
-                  <tr
-                    key={mission._id}
-                    className={`transition-all duration-500 ease-in-out ${isDeleting
-                      ? 'opacity-0 translate-x-10'
-                      : 'opacity-100 translate-x-0'
-                      }`}
+                    className={`cursor-pointer hover:bg-blue-100 transition border hover:bg-gray-200`}
                   >
-                    <th scope="row">{index + 1}</th>
-
-                    <td className='truncate max-w-[40vw]'>
-                      <h6>{mission.title}</h6>
-                      <p className="text-gray-500 ">{mission.description}</p>
+                    <th scope="row" className='p-2'>{index + 1}</th>
+                    <td className='p-2 bg-red-00'>
+                      <div className='truncate w-[150px]'>
+                        <span>{mission.title.toUpperCase()}</span> <br />
+                        <span className='text-gray-400 min-[800px]:hidden'>{mission.description}</span>
+                      </div>
                     </td>
+                    <td className='max-[800px]:hidden'><div className='truncate max-w-[50vw]'>{mission.description}</div></td>
 
                     <td>
-                      <input
-                        type="checkbox"
-                        className="m-2"
-                        checked={mission.displayed}
-                        onChange={() =>
-                          toggleDisplay(mission._id, mission.displayed)
-                        }
-                      />
-                    </td>
-
-                    <td>
-                      <Link
-                        style={{ borderRadius: 5 }}
-                        to={`/admin/mission/${mission._id}`}
-                        className="m-2 h-[40px] w-[40px] p-2 flex justify-center items-center bg-green-400 hover:bg-green-300 rounded-1"
-                      >
-                        <i className="fa-solid fa-pencil"></i>
-                      </Link>
-                    </td>
-
-                    <td>
-                      <button
-                        onClick={() => deleteMission(mission._id)}
-                        className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-white"
-                      >
-                        <i className="fa-solid fa-trash"></i>
+                      <button onClick={(e) => {
+                        e.stopPropagation()
+                        deleteMission(mission._id)
+                      }} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
+                        <i class="fa-solid fa-trash"></i>
                       </button>
                     </td>
                   </tr>
-                );
-              })}
+                ))}
             </tbody>
-          </table>
-        </>
-      )}
+          </table>}
+        </div>
+      }
     </div>
-  );
-};
+  )
+}
 
-export default AdminMissions;
+export default AdminMissions
