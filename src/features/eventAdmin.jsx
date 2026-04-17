@@ -10,22 +10,27 @@ import Loading from '../components/LoadingPage'
 const AdminEvents = () => {
   const [events, setEvents] = useState()
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const fetchData = onSnapshot(collection(db, 'event'), snap => setEvents(
-      snap.docs.map(doc => ({
+    setLoading(true)
+    const fetchData = onSnapshot(collection(db, 'event'), snap => {
+      const data = snap.docs.map(doc => ({
         _id: doc.id,
         ...doc.data()
       }))
-    ))
+
+      setEvents(data.filter(e => !e.removed) || null)
+      setLoading(false)
+    })
+
     return () => fetchData
   }, [])
 
   const deleteEvent = async (eventId) => {
-    await deleteDoc(doc(db, 'event', eventId))
-      .catch((error) => {
-        console.log(error)
-      })
+    await updateDoc(doc(db, 'event', eventId), { removed: true })
+      .catch((e) => console.log(e)
+      )
   }
 
   const toggleDisplay = async (eventId, currentValue) => {
@@ -47,9 +52,8 @@ const AdminEvents = () => {
     }
   };
 
-  while (!events) {
-    return <Loading></Loading>
-  }
+  if(loading) return <Loading/>
+  if (!events) return null
 
 
   return (
@@ -87,7 +91,7 @@ const AdminEvents = () => {
                   </button>
 
                 </div>
-                <div className=''>{event.title}</div>
+                <div className='line-clamp-2'>{event.title}</div>
               </div>
             </div>
           ))

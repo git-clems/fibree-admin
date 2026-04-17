@@ -28,7 +28,6 @@ const Home = () => {
         const fetchData = async () => {
             setLoading(true)
             try {
-
                 const [eventFetch, infoFetch, partnerFetch, aboutFetch, statisticFetch, carouselFetch] = await Promise.all([
                     getDocs(collection(db, 'event')),
                     getDocs(collection(db, 'infos')),
@@ -59,7 +58,7 @@ const Home = () => {
     if (loading) return <Loading />
 
     if (!infos || !events || !partners || !about || !statistics || !carousel) {
-        return <Page404 noLinked={true} message={'OUPS ! Erreur interne'} errorNumber={' '} />
+        return null
     }
 
 
@@ -68,11 +67,11 @@ const Home = () => {
         <div className="page">
             <section className="flex flex-wrap items- justify-center p-2 bg-[url(/bg/bg1.png)] bg-cover">
                 {
-                    events.filter(e => e.displayed).length > 0 &&
+                    events.length > 0 &&
                     <div className="flex-1 max-[600px]:hidden rounded overflow-hidden m-2 mt-0 bg-gray-100 bg-white h-[max-content]">
                         <div className="flex justify-between items-center m-2">
                             <h3 className="text-red-500">Evènements</h3>
-                            <Link to={'/evenement'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
+                            <Link to={'/evenement'} className="bg-green-400 hover:bg-green-300 rounded-full pt-1 pb-1 pl-5 pr-5">
                                 <span className="text-nowrap">Voir plus<i class="fa-solid fa-arrow-right"></i></span>
                             </Link>
                         </div>
@@ -90,7 +89,7 @@ const Home = () => {
             <section className="rounded-2xl flex justify-evenly flex-wrap m-2">
                 <div className="flex-1 pl-2 pr-2 pb-2 max-w-120">
                     <h2>Qu'est-ce que la FIBREE ?</h2>
-                    <p className="text-gray-500">{about?.about}</p>
+                    <p className="text-gray-500 text-s">{about?.about}</p>
                     <Link to={'/a-propos'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
                         <span className="text-nowrap">En savoir plus sur la FIBREE <i class="fa-solid fa-arrow-right"></i></span>
                     </Link>
