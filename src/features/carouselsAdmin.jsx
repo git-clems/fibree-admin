@@ -72,13 +72,13 @@ const AdminCarousels = () => {
       <div className='flex justify-center flex-wrap'>
         {
           carousels.map(carousel => (
-            <div className='border  duration-100 m-1 rounded p-2 w-[300px] max-[600px]:w-full bg-white flex flex-col'>
+            <div className='border  duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
               {
                 carousel.image ?
-                  <img src={carousel.image} alt="" className={`h-[200px] bg-black rounded border object-contain duration-100 p-2`} /> :
-                  <img src={"/bg/carousel-bg.jpg"} alt="" className='h-[200px] rounded border object-contain' />
+                  <img src={carousel.image} alt="" className={`h-[200px] bg-black rounded-t-md object-cover duration-100`} /> :
+                  <img src={"/bg/carousel-bg.jpg"} alt="" className='h-[200px] rounded border object-cover' />
               }
-              <div className='flex justify-between items-center mt-2 mb-2'>
+              <div className='flex justify-between items-center mt-2 mb-2 p-2'>
                 <button className='btn btn-danger' onClick={(e) => {
                   e.stopPropagation()
                   deleteAddCarousel(carousel._id)

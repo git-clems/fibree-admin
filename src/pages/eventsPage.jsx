@@ -75,12 +75,12 @@ const Events = () => {
                                 <img src={event.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover bg-black' /> :
                                 <img src={'/bg/event-bg.jpg'} alt="" className='rounded-t-md h-[200px] w-[100%] object-contain' />
                         }
-                        <div className='flex justify-center font-bold items-center pl-3 pr-3 bg-green-500 text-white'>{event.type}</div>
+                        <div className='flex justify-center font-bold items-center pl-3 pr-3 bg-green-600 text-white'>{event.type}</div>
                         <div className='m-2 mt-0'>
                             <div className='mb-2'>{event.title}</div>
                             <div className='flex justify-between'>
-                                {event.online && <div className={`text-white font-bold bg-red-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> En ligne</div>}
-                                {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime}`}</div>}
+                                {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime} GMT`}</div>}
+                                {event.online && <div className={`text-white font-bold bg-blue-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> En ligne</div>}
                             </div>
                             {event.adress && <div className='mt-2 text-xs text-gray-500 truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
                         </div>

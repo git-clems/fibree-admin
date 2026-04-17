@@ -53,12 +53,13 @@ const Event = ({ eventId }) => {
             <div className="flex-1 ml-2">
                 <span className='font-bold text-orange-500'>{event.type}</span>
 
-                <div className='truncate max-w-[300px]'>{event.title}</div>
-                <div className="text-gray-400 truncate max-w-[300px]">{event.subtitle}</div>
+                <div className=''>{event.title}</div>
+                {/* <div className='truncate max-w-[300px]'>{event.title}</div> */}
+                {/* <div className="text-gray-400 truncate max-w-[300px]">{event.subtitle}</div> */}
 
                 <div className='flex justify-between mt-1'>
-                    {event.online && <div className={`text-white font-bold bg-red-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> En ligne</div>}
-                    {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime}`}</div>}
+                    {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime} GMT`}</div>}
+                    {event.online && <div className={`text-white font-bold bg-blue-500 w-[max-content] text-xs p-1 rounded`}> En ligne</div>}
                 </div>
 
 

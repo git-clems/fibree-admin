@@ -12,20 +12,19 @@ const AdminInfos = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const fetchData = onSnapshot(collection(db, 'infos'), snap => setInfos(
-      snap.docs.map(doc => ({
+    const fetchData = onSnapshot(collection(db, 'infos'), snap => {
+      const data = snap.docs.map(doc => ({
         _id: doc.id,
         ...doc.data()
       }))
-    ))
+      setInfos(data.filter(e => !e.removed))
+    })
     return () => fetchData
   }, [])
 
   const deleteInfo = async (infoId) => {
-    await deleteDoc(doc(db, 'infos', infoId))
-      .catch((error) => {
-        console.log(error)
-      })
+    await updateDoc(doc(db, 'infos', infoId), { removed: true }).catch((error) => console.log(error)
+    )
   }
 
   const toggleDisplay = async (infoId, currentValue) => {
@@ -61,10 +60,10 @@ const AdminInfos = () => {
             <div key={info._id} to={`/actualite/${info._id}`} className='border  duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
               {
                 info.images.length > 0 ?
-                  <img src={info.images[0]} alt="" className={`h-[200px] bg-black rounded-t-md object-contain duration-100 p-2`} /> :
-                  <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-contain' />
+                  <img src={info.images[0]} alt="" className={`h-[200px] bg-black rounded-t-md object-cover duration-100`} /> :
+                  <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-cover' />
               }
-              <div className='p-2 border-t border-gray-200'>
+              <div className='p-2 border-t border-gray-200 max-h-50 overflow-hidden h-[max-content]'>
                 <div className='flex justify-between items-center mt-2 mb-2'>
                   <button className='btn btn-danger' onClick={(e) => {
                     e.stopPropagation()
@@ -83,11 +82,11 @@ const AdminInfos = () => {
                   <button className='btn btn-primary' onClick={() => {
                     navigate(`/actualite/${info._id}`)
                   }}>
-                    Voir
+                    <i className='fa-solid fa-pencil'></i>
                   </button>
 
                 </div>
-                <div className='truncate'>{info.title}</div>
+                <div className='line-clamp-3'>{info.title}</div>
               </div>
             </div>
           ))

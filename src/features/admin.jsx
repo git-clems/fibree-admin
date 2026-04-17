@@ -88,7 +88,7 @@ const Admin = () => {
     }, [])
 
     const blocks = [
-        { link: '/admin/affiche', name: 'Affiches en carrousel', bg_color: 'rgb(0, 0, 0)', text_color: 'white' },
+        { link: '/admin/affiche-carousel', name: 'Affiches en carrousel', bg_color: 'rgb(0, 0, 0)', text_color: 'white' },
         { link: '/admin/evenement', name: 'Evènements', bg_color: 'rgba(255,0,0,0.6)', text_color: 'white' },
         { link: '/admin/actualite', name: 'Actualités', bg_color: 'rgba(233, 209, 70, 0.95)' },
         { link: '/admin/mission', name: 'Missions', bg_color: 'rgba(0, 64, 255, 0.6)', text_color: 'white' },
@@ -101,7 +101,7 @@ const Admin = () => {
         { link: '/admin/messagerie', name: 'Messageries', bg_color: "rgb(164, 199, 246)", badge: messageNotOpend },
         { link: '/admin/a-propos', name: 'A propos', bg_color: "rgba(40, 152, 217, 0.76)", text_color: 'white' },
         { link: '/admin/equipe', name: 'Equipe', bg_color: "rgba(187, 40, 217, 0.76)", text_color: 'white' },
-        { link: '/admin/projet', name: 'Projets à venir', bg_color: "rgba(182, 217, 40, 0.76)" },
+        { link: '/admin/projet', name: 'Projets', bg_color: "rgba(182, 217, 40, 0.76)" },
     ]
 
     const normalizedSearch = search.trim().toLowerCase()

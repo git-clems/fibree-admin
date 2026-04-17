@@ -89,12 +89,12 @@ const AddEvent = () => {
 
                                 <div class="mb-3">
                                     <label for="" class="form-label">Sous-titre</label>
-                                    <input type="text" onChange={inputHandler} name='subtitle' class="form-control" id="" placeholder="Sous-titre de l'info" />
+                                    <textarea type="text" onChange={inputHandler} name='subtitle' class="form-control" id="" placeholder="Sous-titre de l'info" />
                                 </div>
 
 
                                 <div class="mb-3 mt-3">
-                                    <label for="" class="form-label">Date de l'évènement et heure de l'évènement</label>
+                                    <label for="" class="form-label">Date et heure de l'évènement</label>
                                     <div className='flex'>
                                         <input style={{borderTopRightRadius : 0, borderBottomRightRadius : 0}} type="date" onChange={inputHandler} name='comingDate' class="form-control" id="" placeholder="" />
                                         <input style={{borderTopLeftRadius : 0, borderBottomLeftRadius : 0}} type="time" onChange={inputHandler} name='comingTime' class="form-control" id="" placeholder="" />

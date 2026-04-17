@@ -39,14 +39,16 @@ const DetailsEvent = () => {
                 <div className="m-3 w-full bg-gray-200 rounded p-3 max-[600px]:w-full">
                     <p className="name text-xl font-bold"><span className="text-orange-500">{event.type}</span> : {event.title}</p>
                     <p className="text-gray-500">{event.subtitle}</p>
-                    <div className='flex justify-between'>
-                        {event.online && <div className={`text-white font-bold bg-red-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> En ligne</div>}
-                        {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime}`}</div>}
+                    <div className='flex'>
+                        {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime} GMT`}</div>}
+                        {event.online && <div className={`ml-2 text-white font-bold bg-blue-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> En ligne</div>}
                     </div>
-                    {
-                        event.link &&
-                        <Link to={event.link} className='' target="_blank"><span className="pl-1 pr-1 bg-yellow-500 underline hover:text-blue-500">{event.linkMessage}</span></Link>
-                    }
+                    {event.adress && <div className='text-gray-500 mt-2 text-xs truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
+                    {event.link && <Link to={event.link} className='' target="_blank"><span className="pl-1 pr-1 bg-yellow-500 underline hover:text-blue-500">{event.linkMessage}</span></Link>}
+
+                    <div className="mt-3 text-xs">
+                        Publié le {event.publishDate.toDate().toLocaleString()}
+                    </div>
                 </div>
 
                 <div className="m-3 max-[600px]:w-full bg-gray-200 p-2 rounded" style={{ float: 'left' }}>

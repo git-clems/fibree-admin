@@ -41,6 +41,7 @@ import AdminDetailNewPartner from './features/newPartenaireDetailAdmin'
 import AdminNewPartners from './features/newPartenaireAdmin'
 import AdminDetailPartner from './features/partenaireDetailAdmin'
 import AdminStatistics from './features/statisticsAdmin'
+import ScrollTop from './components/scrollTop'
 
 
 const getMissions = async () => {
@@ -78,6 +79,7 @@ function App() {
       <AppBar></AppBar>
       <SmallAppBar></SmallAppBar>
       <ScrollToTop></ScrollToTop>
+      <ScrollTop />
       <Routes>
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/*' element={<Page404 />}></Route>
@@ -97,7 +99,7 @@ function App() {
         <Route path='/rejoindre' element={<JoinUs></JoinUs>}></Route>
         <Route path='/devenir-partenaire' element={<BePartner></BePartner>}></Route>
 
-        <Route path='/admin/affiche' element={<AdminCarousels />}></Route>
+        <Route path='/admin/affiche-carousel' element={<AdminCarousels />}></Route>
         <Route path='/admin/statistique' element={<AdminStatistics />}></Route>
         <Route path='/admin/mission' element={<AdminMissions />}></Route>
         <Route path='/admin/actualite' element={<AdminInfos />}></Route>

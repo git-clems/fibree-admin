@@ -12,7 +12,6 @@ const AdminJoins = () => {
   const [sortByName, setSortByName] = useState(null)
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
-  // const
 
   useEffect(() => {
     const fectData = async () => {
@@ -33,11 +32,6 @@ const AdminJoins = () => {
     fectData();
   }, [])
 
-  // const deleteJoin = async (joinId) => {
-  //   await deleteDoc(doc(db, 'join', joinId)).catch((err) => {
-  //     console.log(err);
-  //   })
-  // }
 
   const ToogleOppened = async (joinId) => {
     try {

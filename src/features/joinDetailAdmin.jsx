@@ -83,7 +83,8 @@ const JoinDetailAdmin = () => {
                         <div>
                             <i class="fa-solid fa-circle-user"></i> : <span>{join.gender} {join.fname} {join.lname.toUpperCase()}</span> <br />
                             <i class="fa-solid fa-phone"></i> : <span>{join.tel}</span> <br />
-                            <i className="fa-solid fa-location-dot"></i> : <span>{join.city}, {join.country}</span>
+                            <i className="fa-solid fa-location-dot"></i> : <span>{join.city}, {join.country}</span> <br />
+                            <i className="fa-solid fa-calendar"></i> : <span>{join.joinDate.toDate().toLocaleString()}</span>
                         </div>
                         <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
                     </div>
