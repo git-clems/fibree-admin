@@ -6,7 +6,7 @@ import { db } from '../auth/firebase';
 import afficheSchema from '../models/afficheModel';
 import Loading from '../components/LoadingPage';
 
-const AddCarousel = () => {
+export const AddCarousel = () => {
 
     const [affiche, setAffiche] = useState(afficheSchema)
     const [message, setMessage] = useState('')
@@ -79,4 +79,4 @@ const AddCarousel = () => {
     )
 }
 
-export default AddCarousel
+// export default AddCarousel
