@@ -4,7 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../auth/firebase';
 
 const MyCarousel = () => {
-  const interval = 5000;
+  const interval = 3000;
 
   const [affiches, setAffiche] = useState()
 
@@ -47,11 +47,11 @@ const MyCarousel = () => {
 
   return (
     affiches &&
-    < Carousel className="overflow-hidden rounded-md border-2 border-gray-300">
+    < Carousel className="overflow-hidden  border-gray-300">
       {affiches.map((affiche) => (
         (affiche.displayed) > 0 &&
         <Carousel.Item interval={interval}>
-          <img src={affiche.image} alt="" className="w-full max-[800px]:h-[200px] h-[400px] object-cover overflow-hidden rounded-md" />
+          <img src={affiche.image} alt="" className="w-full max-[800px]:h-[200px] h-[400px] object-contain overflow-hidden rounded-md" />
           {/* <Carousel.Caption>
             <p className='bg-[rgba(0,0,0,0.5)] rounded-md truncate'>{affiche.title}</p>
           </Carousel.Caption> */}

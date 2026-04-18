@@ -15,24 +15,20 @@ const AdminCarousels = () => {
 
   useEffect(() => {
     const fetchData = onSnapshot(collection(db, 'carousel'), snap => {
-      setLoading(true)
       const data = snap.docs.map(doc => ({
         _id: doc.id,
         ...doc.data()
       })).filter(e => !e.removed)
 
-      if (data) {
-        setCarousels(data)
-      } else {
-        setCarousels(null)
-      }
+      setCarousels(data)
+
       setLoading(false)
     })
 
-    return () => fetchData
+    return () => fetchData()
   }, [])
 
-  const deleteAddCarousel = async (carouselId) => {
+  const deleteCarousel = async (carouselId) => {
     await updateDoc(doc(db, 'carousel', carouselId), { removed: true })
   }
 
@@ -49,8 +45,7 @@ const AdminCarousels = () => {
   };
 
   if (loading) return <Loading></Loading>
-  if (!carousels) return null
-
+  if (!carousels?.length) return <p className="m-5 text-gray-500">Aucun carousel</p>
 
   return (
     <div className='page'>
@@ -60,19 +55,20 @@ const AdminCarousels = () => {
           carousels.map(carousel => (
             <div key={carousel._id} className='border bg-gray-100 duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg- flex flex-col'>
               {
-                carousel.image ?
-                  <img src={carousel.image} alt="" className={`h-[200px] bg-black rounded-t-md object-cover duration-100`} /> :
-                  <img src={"/bg/carousel-bg.jpg"} alt="" className='h-[200px] rounded object-cover' />
+                carousel.image
+                  // <img src={carousel.image} alt="" className={`h-[200px] bg-black rounded-t-md object-contain duration-100`} /> :
+                  ? <img src={`${carousel.image}?tr=w-300,h-200`} alt="" className="h-[200px] object-contain rounded-t-md" />
+                  : <img src={"/bg/photo-bg.jpg"} alt="" className='h-[200px] rounded object-contain' />
               }
               <div className='flex justify-between items-center mt-2 border-t border-gray-300 p-2'>
                 <button className='btn btn-danger' onClick={(e) => {
-                  deleteAddCarousel(carousel._id)
+                  deleteCarousel(carousel._id)
                 }}>
                   <i className='fa-solid fa-trash'></i>
                 </button>
 
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
+                <div className="form-check form-switch">
+                  <input className="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
                     toggleDisplay(carousel._id, carousel.displayed)
                   }}
                     checked={carousel.displayed} />

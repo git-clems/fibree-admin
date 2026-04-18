@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState, } from 'react'
-import axios from 'axios'
+import { useEffect, useMemo, useState, } from 'react'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, Timestamp } from 'firebase/firestore';
 import { db } from '../../auth/firebase';
 import carouselSchema from '../../models/carouselModel';
 import Loading from '../../components/LoadingPage';
+import { upload } from '@imagekit/react'
+
 
 const AddCarousel = () => {
     const [open, setOpen] = useState(false)
@@ -12,6 +13,62 @@ const AddCarousel = () => {
     const [initialCarousel, setInitialCarousel] = useState(carouselSchema)
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const [file, setFile] = useState(null)
+    const [uploading, setUploading] = useState(false)
+
+    const handleFile = (e) => {
+        setFile(e.target.files[0])
+    }
+    const authenticator = async () => {
+        try {
+            // Perform the request to the upload authentication endpoint.
+            const response = await fetch("http://localhost:3000/auth");
+            if (!response.ok) {
+                // If the server response is not successful, extract the error text for debugging.
+                const errorText = await response.text();
+                throw new Error(`Request failed with status ${response.status}: ${errorText}`);
+            }
+
+            // Parse and destructure the response JSON for upload credentials.
+            const data = await response.json();
+            const { signature, expire, token, publicKey } = data;
+            return { signature, expire, token, publicKey };
+        } catch (error) {
+            // Log the original error for debugging before rethrowing a new error.
+            console.error("Authentication error:", error);
+            throw new Error("Authentication request failed");
+        }
+    };
+
+    const uploadImage = async () => {
+        if (!file) return null
+
+        try {
+            setUploading(true)
+
+            const authParams = await authenticator()
+            const { token, expire, signature, publicKey } = authParams
+
+            const uploadResponse = await upload({
+                file,
+                fileName: file.name,
+                folder: "/carousel",
+                token: token,
+                signature: signature,
+                expire: expire,
+                publicKey: publicKey
+            })
+
+            return await uploadResponse.url
+        } catch (error) {
+            console.log(error)
+            setMessage("L'image n'a pas été enregistrée !")
+            return null
+        } finally {
+            setUploading(false)
+        }
+    }
 
     const inputHandler = (e) => {
         const { name, value } = e.target;
@@ -31,10 +88,12 @@ const AddCarousel = () => {
     }, [open]);
 
     const SubmitForm = async (e) => {
-        setLoading(true)
         e.preventDefault()
+        setLoading(true)
         try {
-            await addDoc(collection(db, 'carousel'), carousel)
+            const imageUrl = await uploadImage()
+
+            await addDoc(collection(db, 'carousel'), { ...carousel, image: imageUrl || null, createAt: Timestamp.fromDate(new Date()) })
             setMessage('Carousel enregistrée avec succès !')
             setOpen(false)
         } catch (error) {
@@ -43,12 +102,7 @@ const AddCarousel = () => {
             setLoading(false)
         }
     }
-
     
-    const isTitled = useMemo(()=>{
-        if (!initialCarousel || !carousel) return false
-        return carousel.title?.trim() !== ''
-    }, [initialCarousel, carousel])
 
     return (
         <div className='p-2 rounded-t-md '>
@@ -63,24 +117,24 @@ const AddCarousel = () => {
             duration-200 transition-transform`
             }>
 
-
                 <form onSubmit={SubmitForm} className={'bg- border border-gray-200 bg-white max-w-[500px] mt-2 rounded-md flex-col h-[max-content] '}>
                     <div className='border-b border-gray-300 line-clamp-1 font-bold m-2'>Nouveau carousel</div>
 
                     <div className="max-h-[70vh] overflow-auto mt-4 m-1">
                         <div className="mb-3 m-1">
                             <label for="exampleFormControlInput1" className="form-label">Nom</label>
-                            <input type="text" onChange={inputHandler} value={carousel?.title || ""} required name='title' className="form-control" id="exampleFormControlInput1" placeholder="Nom du carousel" />
+                            <input type="text" onChange={inputHandler} value={carousel?.title || ""} name='title' className="form-control" id="exampleFormControlInput1" placeholder="Nom du carousel" />
                         </div>
 
                         <div className="mb-3 m-1">
-                            <label for="inputGroupFile02" className="form-label">Images</label>
-                            <input type="file" accept="image/*" title='image' className="form-control" id="inputGroupFile02" placeholder='Choisir une image' />
+                            <label for="" className="form-label">Images</label>
+                            <input type="file" required accept="image/*" onChange={handleFile} title='image' className="form-control" id="" placeholder='Choisir une image' />
+                            {uploading && <div className='text-blue-500'>Image en téléchargement...</div>}
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary m-1" onClick={() => { setOpen(false) }}>Annuler</button>
-                        <button type="submit" className="btn btn-primary m-1" disabled={!isTitled || loading}>{loading ? "Chargement..." : "Ajouter"}</button>
+                        <button type="button" className="btn btn-secondary m-1" disabled={loading || uploading} onClick={() => { setOpen(false) }}>Annuler</button>
+                        <button type="submit" className="btn btn-primary m-1" disabled={loading || uploading}>{loading ? "Chargement..." : "Ajouter"}</button>
                     </div>
                     <div className={`text-center ${message.includes('succès') ? 'text-green-500' : 'text-red-500'} `}>
                         <span className=''>{message}</span>

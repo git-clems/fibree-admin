@@ -124,3 +124,24 @@ function App() {
 }
 
 export default App
+
+
+// import { Image } from '@imagekit/react';
+
+// const image_kit_id = 'public_Yf8kGagNQGu9bORpq8UIvFJa4S4='
+
+// function App() {
+//   return (
+//     <Image
+//       urlEndpoint={`https://ik.imagekit.io/${image_kit_id}`}
+//       src="https://ik.imagekit.io/ejxp4lffuk/works/bg-photo.jpg"
+//       width={500}
+//       height={500}
+//       alt="Picture of the author"
+//     />
+//   )
+// }
+
+// export default App
+
+
