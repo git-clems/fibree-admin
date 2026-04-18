@@ -49,7 +49,6 @@ const AddPartenaire = () => {
     }
 
     return (
-
         <div className='p-2 rounded-t-md '>
             <div className='flex justify-between'>
                 <h2>Partenaires</h2>

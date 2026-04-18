@@ -1,7 +1,7 @@
-const afficheSchema = {
+const carouselSchema = {
     title: "",
     displayed: false,
     image: ""
 }
 
-export default afficheSchema
+export default carouselSchema
