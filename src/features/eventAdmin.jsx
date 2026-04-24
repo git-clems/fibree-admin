@@ -59,7 +59,7 @@ const AdminEvents = () => {
   return (
     <div className='page'>
       <AddEvent></AddEvent>
-      <div className='flex justify-center flex-wrap'>
+      <div className='flex flex-wrap'>
         {
           events.map(event => (
             <div key={event._id} to={`/evenement/${event._id}`} className='border  duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>

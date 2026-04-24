@@ -54,14 +54,14 @@ const AdminInfos = () => {
   return (
     <div className='page'>
       <AddInfo></AddInfo>
-      <div className='flex justify-center flex-wrap'>
+      <div className='flex flex-wrap'>
         {
           infos.map(info => (
-            <div key={info._id} to={`/actualite/${info._id}`} className='border  duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
+            <div key={info._id} className='border shadow-[0_0_15px_rgba(0, 0, 0, 0.2)] m-1 rounded w-[300px] max-[600px]:w-full bg-white'>
               {
-                info.images.length > 0 ?
-                  <img src={info.images[0]} alt="" className={`h-[200px] bg-black rounded-t-md object-cover duration-100`} /> :
-                  <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-cover' />
+                info.images.length > 0
+                  ? <img src={info.images[0]} alt="" className={`h-[200px] rounded-t-md object-cover duration-100`} /> 
+                  : <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-cover' />
               }
               <div className='p-2 border-t border-gray-200 max-h-50 overflow-hidden h-[max-content]'>
                 <div className='flex justify-between items-center mt-2 mb-2'>

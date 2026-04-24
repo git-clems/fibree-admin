@@ -61,11 +61,11 @@ const AddInfo = () => {
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleFormControlInput1" class="form-label">Sous-titre</label>
-                                    <input type="text" onChange={inputHandler} required name='subtitle' class="form-control" id="exampleFormControlInput1" placeholder="Sous-titre de l'info" />
+                                    <input type="text" onChange={inputHandler} name='subtitle' class="form-control" id="exampleFormControlInput1" placeholder="Sous-titre de l'info" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleFormControlTextarea1" class="form-label">Descrption de l'évènement</label>
-                                    <textarea class="form-control" required name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea class="form-control" name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="3"></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputGroupFile02" class="form-label">Images</label>

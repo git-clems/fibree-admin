@@ -99,15 +99,15 @@ const Home = () => {
             </section>
             {
                 (infos && infos.length > 0) &&
-                <section className="bg-gray-100 pt-3 pb-3 max-[800px]:p-0 mt-5 flex flex-col items-center">
+                <section className="bg-gray-100 pt-3 pb-3 max-[800px]:p-0 mt-5 flex flex-col items-">
                     <div className="flex items-center">
                         <h2 className="max-[800px]:ml-3 ml-5"> Nos dernières actualités</h2>
                     </div>
-                    <div className="flex-1 flex flex-wrap justify-center">
+                    <div className="flex-1 flex flex-wrap">
                         {infos.map(info => <Info infoId={info._id}></Info>)}
                     </div>
 
-                    <Link to={'/actualite'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
+                    <Link to={'/actualite'} className="bg-green-400 hover:bg-green-300 rounded-full w-[max-content] self-center pt-2 pb-2 pl-5 pr-5">
                         <span className="text-nowrap">Voir toutes nos actualités <i class="fa-solid fa-arrow-right"></i></span>
                     </Link>
                 </section>

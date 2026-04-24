@@ -97,7 +97,7 @@ const Events = () => {
         <div className='page'>
             <div className="m-2">
                 <h2 className='ml-2'>Evènements</h2>
-                <div className="flex-1 flex flex-wrap justify-center">
+                <div className="flex-1 flex flex-wrap">
                     {events.map((event) => (event.displayed && (<Event eventId={event._id}></Event>)))}
                 </div>
             </div>
