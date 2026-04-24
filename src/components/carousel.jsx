@@ -16,7 +16,7 @@ const MyCarousel = () => {
           _id: doc.id,
           ...doc.data()
         }))
-        setAffiche(data)
+        setAffiche(data.filter(e => !e.removed))
       } catch (error) {
         console.log(error);
       }
@@ -47,11 +47,11 @@ const MyCarousel = () => {
 
   return (
     affiches &&
-    < Carousel className="overflow-hidden  border-gray-300">
+    < Carousel className="overflow-hidden">
       {affiches.map((affiche) => (
-        (affiche.displayed) > 0 &&
+        (affiche.displayed && affiche.image) &&
         <Carousel.Item interval={interval}>
-          <img src={affiche.image} alt="" className="w-full max-[800px]:h-[200px] h-[400px] object-contain overflow-hidden rounded-md" />
+          <img src={affiche.image} alt="yfhgjhn" className="w-full max-[800px]:h-[200px] h-[400px] object-contain overflow-hidden rounded-md" />
           {/* <Carousel.Caption>
             <p className='bg-[rgba(0,0,0,0.5)] rounded-md truncate'>{affiche.title}</p>
           </Carousel.Caption> */}

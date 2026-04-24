@@ -24,7 +24,7 @@ const ScrollTop = () => {
       style={{ borderRadius: '100%' }}
       className={`bg-white text-black rounded-full ${
         position > 50 ? 'block' : 'hidden'
-      } fixed bottom-10 right-10 h-12 w-12 shadow-[0_0_15px_rgba(0,0,0,0.9)] border-sky-50 flex justify-center items-center cursor-pointer`}
+      } fixed bottom-10 right-10 h-12 w-12 shadow-[0_0_5px_rgba(0,0,0,0.9)] hover:shadow-[0_0_15px_rgba(0,0,0,0.9)] duration-100 border-sky-50 flex justify-center items-center cursor-pointer`}
       onClick={GoUp}
     >
       <i className="fa-solid fa-angles-up"></i>
