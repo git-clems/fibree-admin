@@ -5,6 +5,9 @@ import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'fire
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
 import Page404 from '../pages/404'
+import { PublishTime } from './admin'
+// import { formatDay } from './admin'
+
 
 
 const AdminContacts = () => {
@@ -14,7 +17,6 @@ const AdminContacts = () => {
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
   const [deleting, setDeleting] = useState(false)
-  // const
 
   useEffect(() => {
     const fectData = async () => {
@@ -88,9 +90,9 @@ const AdminContacts = () => {
             </form>
           </div>
 
-          {<table class="flex-1 w-full text-sm">
+          <table class="flex-1 w-full text-sm">
             <thead className='bg-gray-600 text-white'>
-              <tr>
+              <tr className='w-full'>
                 <th scope="col" className="p-2">#</th>
                 <th scope="col" className="p-2"><button onClick={() => {
                   setSortByDate(null)
@@ -99,65 +101,77 @@ const AdminContacts = () => {
                     setSortByName(!sortByName)
                 }}>Expéditeur {sortByName === true && <i class="fa-solid fa-sort-down"></i>}{sortByName === false && <i class="fa-solid fa-sort-up"></i>}</button>
                 </th>
-                <th className='max-[800px]:hidden'>Objet</th>
+                <th className='max-[600px]:hidden'>Objet</th>
                 <th scope="col" className="p-2">
                   <button onClick={() => {
                     setSortByName(null)
                     sortByDate === null ?
                       setSortByDate(false) :
                       setSortByDate(!sortByDate)
-                  }}>Reçu le {sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
+                  }}>Reçu {sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
                 </th>
-                <th>Supprimer</th>
+                <th></th>
               </tr>
             </thead>
-            <tbody>
-              {
-                filteredContact.sort((a, b) => {
-                  if (sortByDate === true) {
-                    return a.contactDate - b.contactDate
-                  }
-                  else if (sortByDate === false) {
-                    return b.contactDate - a.contactDate
-                  }
-                  else if (sortByName === true) {
-                    return a.lname.localeCompare(b.lname, 'fr')
-                  }
-                  else {
-                    return b.lname.localeCompare(a.lname, 'fr')
-                  }
-                }).map((contact, index) => (
-                  <tr key={contact._id}
-                    onClick={() => {
-                      navigate(`/admin/messagerie/${contact._id}`)
-                      ToogleOppened(contact._id)
-                    }}
+            {
+              !contacts?.length
+                ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun message</div>
+                : <tbody>
+                  {
+                    filteredContact.sort((a, b) => {
+                      if (sortByDate === true) {
+                        return a.contactDate - b.contactDate
+                      }
+                      else if (sortByDate === false) {
+                        return b.contactDate - a.contactDate
+                      }
+                      else if (sortByName === true) {
+                        return a.lname.localeCompare(b.lname, 'fr')
+                      }
+                      else {
+                        return b.lname.localeCompare(a.lname, 'fr')
+                      }
+                    }).map((contact, index) => (
+                      <tr key={contact._id}
+                        onClick={() => {
+                          navigate(`/admin/messagerie/${contact._id}`)
+                          ToogleOppened(contact._id)
+                        }}
 
-                    className={`cursor-pointer hover:bg-blue-100 transition border ${contact.opened && 'bg-gray-200'}`}
-                  >
-                    <th scope="row" className='p-2'>{index + 1}</th>
-                    <td className='p-2 bg-red-00'>
-                      <div className='truncate w-[150px]'>
-                        <span>{contact.lname.toUpperCase()} {contact.fname}</span> <br />
-                        <span className='text-gray-400 min-[800px]:hidden'>{contact.object}</span>
-                      </div>
-                    </td>
-                    <td className='max-[800px]:hidden'><div className='truncate max-w-[50vw]'>{contact.object}</div></td>
-                    <td className='p-2'>
-                      {contact.contactDate?.toDate().toLocaleString('fr-FR')}
-                    </td>
-                    <td>
-                      <button onClick={(e) => {
-                        e.stopPropagation()
-                        deleteContact(contact._id)
-                      }} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
-                        <i class="fa-solid fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>}
+                        // className={`cursor-pointer hover:bg-blue-100 transition border ${contact.opened && 'font-bold'}`}
+                        className={`cursor-pointer hover:bg-yellow-50 transition border ${contact.opened && 'bg-gray-100'}`}
+                      >
+                        <th scope="row" className='p-2'>{index + 1}</th>
+                        <td className='p-2 bg-red-00'>
+                          <div className='truncate w-[150px]'>
+                            <span>{contact.lname.toUpperCase()} {contact.fname}</span> <br />
+                            <span className='text-gray-400 min-[600px]:hidden'>{contact.object}</span>
+                          </div>
+                        </td>
+                        <td className='max-[600px]:hidden'><div className='truncate max-w-[50vw]'>{contact.object}</div></td>
+                        <td className='p-2'>
+                          {
+                            PublishTime(contact.contactDate?.toDate())
+                              ? contact.contactDate?.toDate().toLocaleString('fr-FR', { hour: "numeric", minute: "numeric" })
+                              : isSameYear(contact.contactDate?.toDate())
+                                ? <span>{contact.contactDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'short' })} {contact.contactDate?.toDate().toLocaleString('fr-FR', { hour: "numeric", minute: "numeric" })}</span>
+                                : contact.contactDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
+                          }
+                        </td>
+                        <td>
+                          <button onClick={(e) => {
+                            e.stopPropagation()
+                            deleteContact(contact._id)
+                          }} className="m-2 h-[22px] w-[22px] max-[600px]:h-[35px] max-[600px]:w-[35px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+            }
+          </table>
         </div>
       }
     </div>

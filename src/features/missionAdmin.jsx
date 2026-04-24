@@ -79,66 +79,58 @@ const AdminMissions = () => {
             </form>
           </div>
 
-          {<table class="flex-1 w-full text-sm">
-            <thead className='bg-gray-600 text-white'>
-              <tr>
-                <th scope="col" className="p-2">#</th>
-                <th scope="col" className="p-2"><button onClick={() => {
-                  setSortByDate(null)
-                  sortByName === null ?
-                    setSortByTitle(false) :
-                    setSortByTitle(!sortByName)
-                }}>Mission {sortByName === true && <i class="fa-solid fa-sort-down"></i>}{sortByName === false && <i class="fa-solid fa-sort-up"></i>}</button>
-                </th>
-                <th className='max-[800px]:hidden'>Description</th>
-                <th>Supprimer</th>
-              </tr>
-            </thead>
-            <tbody className=''>
-              {
-                filteredMission.sort((a, b) => {
-                  if (sortByDate === true) {
-                    return a.missionDate - b.missionDate
-                  }
-                  else if (sortByDate === false) {
-                    return b.missionDate - a.missionDate
-                  }
-                  else if (sortByName === true) {
-                    return a.title.localeCompare(b.title, 'fr')
-                  }
-                  else {
-                    return b.title.localeCompare(a.title, 'fr')
-                  }
-                }).map((mission, index) => (
-                  <tr key={mission._id}
-                    onClick={() => {
-                      navigate(`/admin/messagerie/${mission._id}`)
-                      ToogleOppened(mission._id)
-                    }}
+          {
+            <table class="flex-1 w-full text-sm">
+              <thead className='bg-gray-600 text-white'>
+                <tr>
+                  <th scope="col" className="p-2">#</th>
+                  <th scope="col" className="p-2"><button onClick={() => {
+                    setSortByDate(null)
+                    sortByName === null
+                      ? setSortByTitle(false)
+                      : setSortByTitle(!sortByName)
+                  }}>Mission {sortByName === true && <i class="fa-solid fa-sort-down"></i>}{sortByName === false && <i class="fa-solid fa-sort-up"></i>}</button>
+                  </th>
+                  {/* <th className='max-[800px]:hidden'>Description</th> */}
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody className=''>
+                {
+                  filteredMission.sort((a, b) => {
+                    if (sortByDate === true) {
+                      return a.missionDate - b.missionDate
+                    }
+                    else if (sortByDate === false) {
+                      return b.missionDate - a.missionDate
+                    }
+                    else if (sortByName === true) {
+                      return a.title.localeCompare(b.title, 'fr')
+                    }
+                    else {
+                      return b.title.localeCompare(a.title, 'fr')
+                    }
+                  }).map((mission, index) => (
+                    <tr key={mission._id} className='border'>
+                      <th scope="row" className='p-2'>{index + 1}</th>
+                      <td className='p-2 bg-red-00'>
+                          <span className=''>{mission.title.toUpperCase()}</span> <br />
+                          <span className='text-gray-400 line-clamp-2'>{mission.description}</span>
+                      </td>
 
-                    className={`cursor-pointer hover:bg-blue-100 transition border hover:bg-gray-200`}
-                  >
-                    <th scope="row" className='p-2'>{index + 1}</th>
-                    <td className='p-2 bg-red-00'>
-                      <div className='truncate w-[150px]'>
-                        <span>{mission.title.toUpperCase()}</span> <br />
-                        <span className='text-gray-400 min-[800px]:hidden'>{mission.description}</span>
-                      </div>
-                    </td>
-                    <td className='max-[800px]:hidden'><div className='truncate max-w-[50vw]'>{mission.description}</div></td>
-
-                    <td>
-                      <button onClick={(e) => {
-                        e.stopPropagation()
-                        deleteMission(mission._id)
-                      }} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
-                        <i class="fa-solid fa-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>}
+                      <td>
+                        <button onClick={(e) => {
+                          e.stopPropagation()
+                          deleteMission(mission._id)
+                        }} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          }
         </div>
       }
     </div>

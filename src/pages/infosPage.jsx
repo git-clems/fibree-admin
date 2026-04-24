@@ -4,6 +4,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../auth/firebase';
 import Loading from '../components/LoadingPage';
 
+
 const Infos = () => {
     const [infos, setInfos] = useState()
     useEffect(() => {

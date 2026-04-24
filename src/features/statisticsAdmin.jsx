@@ -9,11 +9,10 @@ import Page404 from '../pages/404'
 
 const AdminStatistics = () => {
   const [statistics, setStatistics] = useState()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
-    setLoading(true)
     const fetchData = onSnapshot(collection(db, 'statistic'), snap => {
       setLoading(true)
       const data = snap.docs.map(doc => ({
@@ -68,38 +67,41 @@ const AdminStatistics = () => {
       <AddStatistic></AddStatistic>
       <div className='flex justify-center flex-wrap'>
         {
-          statistics.map(statistic => (
-            <div className='border  duration-100 m-1 rounded p-2 w-[300px] max-[600px]:w-full bg-white flex flex-col justify-cente items-center bg-red-200'>
-              {
-                statistic.image ?
-                  <img src={statistic.image} alt="" className={`h-[200px] rounded object-contain hover:object-cover duration-100 p-2`} /> :
-                  <img src={"/bg/statistic-bg.jpg"} alt="" className='h-[200px] rounded object-contain' />
-              }
-              <h4>{statistic.value}</h4>
-              <p>{statistic.description}</p>
-              <div className='flex justify-between items-center w-full mt-2 mb-2'>
-                <button className='btn btn-danger' onClick={(e) => {
-                  e.stopPropagation()
-                  deleteAddStatistic(statistic._id)
-                }}>
-                  <i className='fa-solid fa-trash'></i>
-                </button>
+          !statistics?.length
+            ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun chiffre enregistré</div>
+            :
+            statistics.map(statistic => (
+              <div className='border  duration-100 m-1 rounded p-2 w-[300px] max-[600px]:w-full bg-white flex flex-col justify-cente items-center bg-red-200'>
+                {
+                  statistic.image ?
+                    <img src={statistic.image} alt="" className={`h-[200px] rounded object-contain hover:object-cover duration-100 p-2`} /> :
+                    <img src={"/bg/statistic-bg.jpg"} alt="" className='h-[200px] rounded object-contain' />
+                }
+                <h4>{statistic.value}</h4>
+                <p>{statistic.description}</p>
+                <div className='flex justify-between items-center w-full mt-2 mb-2'>
+                  <button className='btn btn-danger' onClick={(e) => {
+                    e.stopPropagation()
+                    deleteAddStatistic(statistic._id)
+                  }}>
+                    <i className='fa-solid fa-trash'></i>
+                  </button>
 
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
-                    toggleDisplay(statistic._id, statistic.displayed)
-                  }}
-                    checked={statistic.displayed} />
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
+                      toggleDisplay(statistic._id, statistic.displayed)
+                    }}
+                      checked={statistic.displayed} />
+                  </div>
+
+                  <button className='btn btn-primary' onClick={() => { }}>
+                    <i className='fa-solid fa-pen'></i>
+                  </button>
+
                 </div>
-
-                <button className='btn btn-primary' onClick={() => { }}>
-                  <i className='fa-solid fa-pen'></i>
-                </button>
-
+                <div className=''>{statistic.title}</div>
               </div>
-              <div className=''>{statistic.title}</div>
-            </div>
-          ))
+            ))
         }
       </div>
     </div>

@@ -1,7 +1,49 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import LayoutAdmin from '../components/layoutAdmin'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, onSnapshot, Timestamp } from 'firebase/firestore'
 import { db } from '../auth/firebase'
+
+
+const today = new Date()
+
+
+export const PublishTime = (timestamp) => {
+  if (!timestamp) return ""
+
+  const date = timestamp.toDate()
+  const now = new Date()
+
+  const diffMs = now - date
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  const isSameDay =
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear()
+
+  const isYesterday = diffDays === 1
+
+  if (isSameDay) {
+    return `Aujourd'hui à ${date.toLocaleTimeString('fr-FR', {
+      hour: "2-digit",
+      minute: "2-digit"
+    })}`
+  }
+
+  if (isYesterday) {
+    return "Hier"
+  }
+
+  if (diffDays < 7) {
+    return `il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`
+  }
+
+  return date.toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+}
 
 const Admin = () => {
     const [search, setSearch] = useState('')
@@ -36,12 +78,12 @@ const Admin = () => {
             previousCountRef.current = newCount
             setMessageNotOpend(newCount)
 
-            
+
         })
-        
+
         return () => unsubscribe()
     }, [])
-    
+
     // console.log(messageNotOpend);
     useEffect(() => {
         try {
@@ -102,6 +144,7 @@ const Admin = () => {
         { link: '/admin/a-propos', name: 'A propos', bg_color: "rgba(40, 152, 217, 0.76)", text_color: 'white' },
         { link: '/admin/equipe', name: 'Equipe', bg_color: "rgba(187, 40, 217, 0.76)", text_color: 'white' },
         { link: '/admin/projet', name: 'Projets', bg_color: "rgba(182, 217, 40, 0.76)" },
+        { link: '/admin/section', name: 'Sections', bg_color: "rgba(171, 0, 0, 0.97)", text_color: 'white' },
     ]
 
     const normalizedSearch = search.trim().toLowerCase()
@@ -145,7 +188,7 @@ const Admin = () => {
                                 text_color={block.text_color}
                                 badge={block.badge}
                             />))
-                        :<p className="m-5 text-gray-500">Aucun bloc trouvé.</p>}
+                        : <p className="m-5 text-gray-500">Aucun bloc trouvé.</p>}
             </div>
         </div>
     )

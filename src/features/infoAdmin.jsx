@@ -56,40 +56,41 @@ const AdminInfos = () => {
       <AddInfo></AddInfo>
       <div className='flex flex-wrap'>
         {
-          infos.map(info => (
-            <div key={info._id} className='border shadow-[0_0_15px_rgba(0, 0, 0, 0.2)] m-1 rounded w-[300px] max-[600px]:w-full bg-white'>
-              {
-                info.images.length > 0
-                  ? <img src={info.images[0]} alt="" className={`h-[200px] rounded-t-md object-cover duration-100`} /> 
-                  : <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-cover' />
-              }
-              <div className='p-2 border-t border-gray-200 max-h-50 overflow-hidden h-[max-content]'>
-                <div className='flex justify-between items-center mt-2 mb-2'>
-                  <button className='btn btn-danger' onClick={(e) => {
-                    e.stopPropagation()
-                    deleteInfo(info._id)
-                  }}>
-                    <i className='fa-solid fa-trash'></i>
-                  </button>
+          !infos?.length ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucune actualité enrégistrée</div> :
+            infos.map(info => (
+              <div key={info._id} className='border shadow-[0_0_15px_rgba(0, 0, 0, 0.2)] m-1 rounded w-[300px] max-[600px]:w-full bg-white'>
+                {
+                  info.images.length > 0
+                    ? <img src={info.images[0]} alt="" className={`h-[200px] rounded-t-md object-cover duration-100`} />
+                    : <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-cover' />
+                }
+                <div className='p-2 border-t border-gray-200 max-h-50 overflow-hidden h-[max-content]'>
+                  <div className='flex justify-between items-center mt-2 mb-2'>
+                    <button className='btn btn-danger' onClick={(e) => {
+                      e.stopPropagation()
+                      deleteInfo(info._id)
+                    }}>
+                      <i className='fa-solid fa-trash'></i>
+                    </button>
 
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
-                      toggleDisplay(info._id, info.displayed)
-                    }}
-                      checked={info.displayed} />
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
+                        toggleDisplay(info._id, info.displayed)
+                      }}
+                        checked={info.displayed} />
+                    </div>
+
+                    <button className='btn btn-primary' onClick={() => {
+                      navigate(`/actualite/${info._id}`)
+                    }}>
+                      <i className='fa-solid fa-pencil'></i>
+                    </button>
+
                   </div>
-
-                  <button className='btn btn-primary' onClick={() => {
-                    navigate(`/actualite/${info._id}`)
-                  }}>
-                    <i className='fa-solid fa-pencil'></i>
-                  </button>
-
+                  <div className='line-clamp-3'>{info.title}</div>
                 </div>
-                <div className='line-clamp-3'>{info.title}</div>
               </div>
-            </div>
-          ))
+            ))
         }
       </div>
     </div>

@@ -16,7 +16,7 @@ const MemberDetailAdmin = () => {
     const SuspendMember = async (memberId) => {
         try {
             const snapDoc = await getDoc(doc(db, 'member', id))
-            const memberFound = {...snapDoc.data(), _id: snapDoc.id }
+            const memberFound = { ...snapDoc.data(), _id: snapDoc.id }
 
             const { _id, ...rest } = memberFound
             const suspendedMember = { ...rest, suspended: !memberFound.suspended, suspendedtDate: Timestamp.fromDate(new Date()) }
@@ -72,24 +72,21 @@ const MemberDetailAdmin = () => {
                         type="button"
                         onClick={downloadPDF}
                         className="btn btn-primary"
-                    >
-                        Télécharger en PDF <i class="fa-solid fa-download"></i>
+                    >Télécharger en PDF <i class="fa-solid fa-download"></i>
                     </button>
                 </div>
                 <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="border overflow-hidden rounded-md">
                     <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
-                            <i class="fa-solid fa-circle-user"></i><span className="ml-2">{member.gender === 'male' ? <span>M. </span> : <span>Mme. </span>} {member.fname} {member.lname.toUpperCase()}</span> <br />
-                            {member.tel && <div><i class="fa-solid fa-phone"></i><span className="ml-2">{member.tel}</span> <br /></div>}
-                            <i className="fa-solid fa-location-dot"></i> : <span>{member.city}, {member.country}</span>
+                            <div className="flex text-sky-100" ><span className="ml-2"><i class="fa-solid fa-circle-user"></i> {member.gender} {member.fname} {member.lname.toUpperCase()}</span> {member.role && <div className="ml-2 pl-2 pr-2 border rounded">{member.role}</div>} {member.section && <div className="ml-2 pl-2 pr-2 border rounded">{member.section}</div>}</div>
+                            <div className="flex text-sky-100" ><span className="ml-2"><i class="fa-solid fa-phone"></i> {member.tel}</span></div>
+                            <div className="flex text-sky-100" ><span className="ml-2"><i class="fa-solid fa-location-dot"></i> {member.city}, {member.country} </span> </div>
                         </div>
                         <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
                     </div>
 
                     <div className="p-2">
-
                         <div className="mt-1 space-y-3">
-
                             <div style={{ borderColor: "rgba(0,0,0,0.3)" }} className="flex justify-between border-b pb-2 gap-3">
                                 <span className="font-semibold">Email</span>
                                 <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{member.email}</span>
@@ -100,7 +97,6 @@ const MemberDetailAdmin = () => {
                                 <span style={{ color: "rgba(0, 0, 0, 0.56)" }}>{member.profession}</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
 

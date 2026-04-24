@@ -40,7 +40,7 @@ const DetailsInfo = () => {
                     <p className="name text-xl font-bold">{info.title}</p>
                     <p className="text-gray-500">{info.subtitle}</p>
                     <div className='flex justify-between'>
-                        {info.publishDate && <div className='text-sm truncate rounded '>Publié le {info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {info.comingTime && `à ${info.comingTime}`}</div>}
+                        {info.publishDate && <div className='text-sm truncate rounded '>Publié le {info.publishDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })} à {info.publishDate?.toDate().toLocaleString('fr-FR', { hour: 'numeric', minute: 'numeric' })}</div>}
                     </div>
                     {
                         info.link &&

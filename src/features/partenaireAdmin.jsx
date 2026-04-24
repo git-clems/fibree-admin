@@ -83,33 +83,32 @@ const AdminPartenaires = () => {
         </form>
 
         <div className='flex flex-wrap m-1'>
-          {
-            searchedPartner.length > 0 ?
-              searchedPartner.map((partner) => (
-                <div key={partner._id} to={`/admin/partenaire/${partner._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
-                  <img src={partner.image} alt="" className='h-[200px] object-contain' />
-                  <div className='flex justify-between items-center w-full mt-2 mb-2 p-2 border-t border-gray-200'>
-                    <button className='btn btn-danger'
-                      onClick={() => { deleteAddPartner(partner._id) }}>
-                      <i className='fa-solid fa-trash'></i>
-                    </button>
+          {!partenaires?.length
+            ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun partenaire enregistré</div>
+            : searchedPartner.map((partner) => (
+              <div key={partner._id} to={`/admin/partenaire/${partner._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
+                <img src={partner.image} alt="" className='h-[200px] object-contain' />
+                <div className='flex justify-between items-center w-full mt-2 mb-2 p-2 border-t border-gray-200'>
+                  <button className='btn btn-danger'
+                    onClick={() => { deleteAddPartner(partner._id) }}>
+                    <i className='fa-solid fa-trash'></i>
+                  </button>
 
-                    <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"
-                        onChange={() => { toggleDisplay(partner._id, partner.displayed) }}
-                        checked={partner.displayed} />
-                    </div>
-
-                    <button className='btn btn-primary' onClick={() => { }}>
-                      <i className='fa-solid fa-pen'></i>
-                    </button>
-
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"
+                      onChange={() => { toggleDisplay(partner._id, partner.displayed) }}
+                      checked={partner.displayed} />
                   </div>
-                  <p className='p-2'>{partner.name}</p>
+
+                  <button className='btn btn-primary' onClick={() => { }}>
+                    <i className='fa-solid fa-pen'></i>
+                  </button>
 
                 </div>
-              )) :
-              <p className='text-center ml-5'>Aucun partenaire de ce nom !</p>
+                <p className='p-2'>{partner.name}</p>
+
+              </div>
+            ))
           }
         </div>
       </div>

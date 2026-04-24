@@ -3,10 +3,11 @@ import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
 import { useNavigate } from 'react-router'
+import { PublishTime } from './admin'
 
 
 const AdminSuspended = () => {
-  const [suspendeds, setSuspended] = useState()
+  const [suspended, setSuspended] = useState()
   const [sortByDate, setSortByDate] = useState(false)
   const [sortByName, setSortByName] = useState(null)
   const [search, setSearch] = useState('')
@@ -39,8 +40,8 @@ const AdminSuspended = () => {
   const normalizedSearch = search.trim().toLowerCase()
 
   const filteredSuspended = useMemo(() => {
-    if (!normalizedSearch) return suspendeds
-    return [...suspendeds].filter((suspended) => (
+    if (!normalizedSearch) return suspended
+    return [...suspended].filter((suspended) => (
       `${suspended.fname} ${suspended.lname}`.toLowerCase().includes(normalizedSearch)
     ))
   })
@@ -52,7 +53,15 @@ const AdminSuspended = () => {
       {
         <div className='mb-5'>
           <div className='flex flex-wrap items-center justify-between '>
-            <h4 className='m-3'>{suspendeds.length} membres suspendus</h4>
+            <h4 className='m-3'>
+              {
+                suspended.length === 0
+                  ? "Aucun membre suspendu"
+                  : suspended.length === 1
+                    ? "Un membre suspendu"
+                    : `${suspended.length} membres suspendus`
+              }
+            </h4>
             <form className="flex flex-1 flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5" onSubmit={(e) => e.preventDefault()}>
               <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
                 <input type="search" placeholder="Rechercher un nom" value={search} onChange={(e) => setSearch(e.target.value)} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
@@ -78,7 +87,7 @@ const AdminSuspended = () => {
                     sortByDate === null ?
                       setSortByDate(false) :
                       setSortByDate(!sortByDate)
-                  }}>Suspendu le {sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
+                  }}>Suspendu{sortByDate === true && <i class="fa-solid fa-sort-down"></i>}{sortByDate === false && <i class="fa-solid fa-sort-up"></i>}</button>
                 </th>
               </tr>
             </thead>
@@ -108,7 +117,8 @@ const AdminSuspended = () => {
                       {suspended.fname} {suspended.lname}
                     </td>
                     <td className='p-2'>
-                      {suspended.suspendedtDate?.toDate().toLocaleString('fr-FR')}
+                      {/* {suspended.suspendedtDate?.toDate().toLocaleString('fr-FR')} */}
+                      {PublishTime(suspended.suspendedtDate)}
                     </td>
                   </tr>
                 ))}
