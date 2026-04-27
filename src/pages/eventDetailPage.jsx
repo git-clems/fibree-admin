@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import Page404 from "./404";
+import { PublishTime } from '../features/admin'
 
 const DetailsEvent = () => {
     const [event, setEvent] = useState();
@@ -17,7 +18,6 @@ const DetailsEvent = () => {
                 const snapDoc = await getDoc(doc(db, 'event', id))
                 if (snapDoc.exists()) {
                     setEvent({ _id: snapDoc.id, ...snapDoc.data() });
-                    // console.log(event.backUp);
                 } else {
                     setEvent(null)
                 }
@@ -39,7 +39,7 @@ const DetailsEvent = () => {
     return (
         <div className="page details-page">
             <div className="flex flex-wrap">
-                <div className="m-2 w-full bg-gray-200 rounded p-3 max-[600px]:w-full">
+                <div className="m-2 w-full rounded p-3 max-[600px]:w-full">
                     <p className="name text-xl font-bold"><span className="text-orange-500">{event.type}</span> : {event.title}</p>
                     <p className="text-gray-500">{event.subtitle}</p>
                     <div className='flex'>
@@ -47,9 +47,12 @@ const DetailsEvent = () => {
                         {event.online && <div className={`ml-2 text-white font-bold bg-blue-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> <i class="fa-solid fa-video"></i> En ligne</div>}
                     </div>
                     {event.adress && <div className='text-gray-500 mt-2 text-xs truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
-                    {event.link && <Link to={event.link} className='' target="_blank"><span className="pl-1 pr-1 bg-yellow-500 underline hover:text-blue-500">{event.linkMessage}</span></Link>}
+                    <div className="mt-2">
+                        {event.link && <Link to={event.link} className='' target="_blank"><span className="pl-1 pr-1 bg-yellow-500 underline hover:text-blue-500">{event.linkMessage}</span></Link>}
+                    </div>
 
-                    <div className="mt-3 text-xs">Publié le {event.publishDate.toDate().toLocaleString()}</div>
+                    {/* <div className="mt-3 text-xs">Publié le {event.publishDate.toDate().toLocaleString("FR-fr", { day: 'numeric', month: 'long', year: 'numeric' })} à {event.publishDate.toDate().toLocaleString("FR-fr", { hour: 'numeric', minute: 'numeric' })}</div> */}
+                    <div className="mt-2 text-xs">Date de publication : {PublishTime(event.publishDate)}</div>
                 </div>
 
                 <div className="m-2 w-full bg-gray-200 p-2 rounded" style={{ float: 'left' }}>

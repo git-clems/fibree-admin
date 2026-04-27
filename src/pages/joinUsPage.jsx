@@ -177,7 +177,7 @@ const JoinUs = () => {
                 <h5 className="ml-3 mr-3">Vous souhaitez faire partie de la fédération ? Vous avez des idées à développer ? Veuillez remplir ce formulaire.</h5>
 
                 <p className='ml-3 mb-3'>Les champs marqué par <span className='text-red-500'> * </span> sont obligatoires.</p>
-                <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md p-2 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
+                <form  className='min-[800px]:border-3 border-gray-300 rounded-md p-2 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
                     <div className="flex mb-3 justify-between flex-wrap">
                         <div className="min-w-[300px] m-1 mt-3 flex-1">
                             <label htmlFor="" className="form-label">Nom <span className='text-red-500'> * </span>  </label>

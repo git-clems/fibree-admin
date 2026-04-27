@@ -85,18 +85,18 @@ const UpdateCarousel = ({ carouselId }) => {
                 {
                     !carousel ? <Loading /> :
 
-                        <form onSubmit={SubmitForm} className={'bg- border border-gray-200 bg-white max-w-[500px] mt-2 rounded-md flex-col h-[max-content] '}>
+                        <form onSubmit={SubmitForm} className={'border border-gray-200 bg-white max-w-[500px] mt-2 rounded-md flex-col h-[max-content] '}>
                             <div className='border-b border-gray-300 line-clamp-1 font-bold m-2'>{initialCarousel.title}</div>
 
                             <div className="max-h-[70vh] overflow-auto mt-4 m-1">
                                 <div className="mb-3 m-1">
-                                    <label for="exampleFormControlInput1" className="form-label">Nom</label>
-                                    <input type="text" value={carousel?.title || ''} onChange={inputHandler} required name='title' className="form-control" id="exampleFormControlInput1" placeholder="Nom du carousel" />
+                                    <label for="" className="form-label">Nom</label>
+                                    <input type="text" value={carousel?.title || ''} onChange={inputHandler} required name='title' className="form-control" placeholder="Nom du carousel" />
                                 </div>
 
                                 <div className="mb-3 m-1">
                                     <label for="inputGroupFile02" className="form-label">Images</label>
-                                    <input type="file" accept="image/*" title='image' className="form-control" id="inputGroupFile02" placeholder='Choisir une image' />
+                                    <input type="file" accept="image/*" title='image' className="form-control" placeholder='Choisir une image' />
                                 </div>
                             </div>
                             <div className="modal-footer">

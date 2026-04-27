@@ -26,7 +26,7 @@ const AddInfo = () => {
         await addDoc(collection(db, 'infos'), info).then((res) => {
             setMessage('Information enregistré avec succès !')
             setLoading(false)
-            const modalElement = document.getElementById('staticBackdrop');
+            const modalElement = document.getElementById('');
             const modal = window.bootstrap.Modal.getInstance(modalElement);
             document.body.classList.remove('modal-open');
             document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
@@ -41,35 +41,35 @@ const AddInfo = () => {
         <div>
             <div className='flex justify-between p-3'>
                 <h2>Les actualités</h2>
-                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#">
                     <span className="max-[800px]:hidden">Ajouter une actualité</span> <i class="fa-solid fa-plus"></i>
                 </button>
             </div>
 
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade"  data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="Label" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="" onSubmit={SubmitForm}>
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Nouvelle information</h1>
+                                <h1 class="modal-title fs-5">Nouvelle information</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body max-h-[70vh] overflow-auto">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">Titre</label>
-                                    <input type="text" onChange={inputHandler} required name='title' class="form-control" id="exampleFormControlInput1" placeholder="Titre de l'info" />
+                                    <label for="" class="form-label">Titre</label>
+                                    <input type="text" onChange={inputHandler} required name='title' class="form-control"  placeholder="Titre de l'info" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">Sous-titre</label>
-                                    <input type="text" onChange={inputHandler} name='subtitle' class="form-control" id="exampleFormControlInput1" placeholder="Sous-titre de l'info" />
+                                    <label for="" class="form-label">Sous-titre</label>
+                                    <input type="text" onChange={inputHandler} name='subtitle' class="form-control"  placeholder="Sous-titre de l'info" />
                                 </div>
                                 <div class="mb-3">
                                     <label for="exampleFormControlTextarea1" class="form-label">Descrption de l'évènement</label>
-                                    <textarea class="form-control" name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea class="form-control" name='description' onChange={inputHandler} title='description' rows="3"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="inputGroupFile02" class="form-label">Images</label>
-                                    <input type="file" accept="image/*" title='images' class="form-control" id="inputGroupFile02" placeholder='Choisir une image' />
+                                    <label for="" class="form-label">Images</label>
+                                    <input type="file" accept="image/*" title='images' class="form-control" placeholder='Choisir une image' />
                                 </div>
                             </div>
                             <div class="modal-footer">

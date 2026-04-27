@@ -43,27 +43,27 @@ const AddMission = () => {
                 </button>
             </div>
 
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="" onSubmit={SubmitForm}>
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Nouvelle mission</h1>
+                                <h1 class="modal-title fs-5">Nouvelle mission</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body max-h-[70vh] overflow-auto">
                                 <div class="mb-3">
-                                    <label for="exampleFormControlInput1" class="form-label">Titre</label>
-                                    <input type="text" onChange={inputHandler} required name='title' class="form-control" id="exampleFormControlInput1" placeholder="Titre de l'mission" />
+                                    <label for="" class="form-label">Titre</label>
+                                    <input type="text" onChange={inputHandler} required name='title' class="form-control" placeholder="Titre de l'mission" />
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="exampleFormControlTextarea1" class="form-label">Descrption de la mission</label>
-                                    <textarea class="form-control" required name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    <textarea class="form-control" required name='description' onChange={inputHandler} title='description' rows="3"></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputGroupFile02" class="form-label">Image</label>
-                                    <input type="file" accept="image/*" title='images' class="form-control" id="inputGroupFile02" placeholder='Choisir une image' />
+                                    <input type="file" accept="image/*" title='images' class="form-control" placeholder='Choisir une image' />
                                 </div>
                             </div>
                             <div class="modal-footer">

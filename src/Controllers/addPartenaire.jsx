@@ -62,21 +62,21 @@ const AddPartenaire = () => {
             }>
 
                 <form onSubmit={SubmitForm} className={'bg-white border border-gray-200 p-2 mt-2 rounded-md flex-col h-[max-content] '}>
-                    <h1 class="modal-title fs-5 border-b border-gray-300" id="staticBackdropLabel">Nouveau partenaire</h1>
+                    <h1 class="border-b border-gray-300">Nouveau partenaire</h1>
 
-                    <div class="modal-body max-h-[70vh] overflow-auto mt-4">
+                    <div class="max-h-[70vh] overflow-auto mt-4">
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Nom</label>
-                            <input type="text" onChange={inputHandler} required name='name' class="form-control" id="exampleFormControlInput1" placeholder="Nom du partenaire" />
+                            <label for="" class="form-label">Nom</label>
+                            <input type="text" onChange={inputHandler} required name='name' class="form-control" placeholder="Nom du partenaire" />
                         </div>
 
                         <div class="mb-3">
                             <label for="inputGroupFile02" class="form-label">Images</label>
-                            <input type="file" accept="image/*" title='images' class="form-control" id="inputGroupFile02" placeholder='Choisir une image' />
+                            <input type="file" accept="image/*" title='images' class="form-control" placeholder='Choisir une image' />
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal" onClick={() => { setOpen(false) }}>Annuler</button>
+                        <button type="button" class="btn btn-secondary m-1" onClick={() => { setOpen(false) }}>Annuler</button>
                         <button type="submit" class="btn btn-primary m-1" disabled={loading}>{loading ? "Chargement..." : "Enregistrer"}</button>
                     </div>
                     <div className={`text-center ${message.includes('succès') ? 'text-green-500' : 'text-red-500'} `}>
