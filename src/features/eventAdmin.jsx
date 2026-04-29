@@ -5,6 +5,7 @@ import AddEvent from '../Controllers/event/addEvent'
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
+import UpdateEvent from '../Controllers/event/updateEvent'
 
 
 const AdminEvents = () => {
@@ -85,11 +86,7 @@ const AdminEvents = () => {
                         checked={event.displayed} />
                     </div>
 
-                    <button className='btn btn-primary' onClick={() => {
-                      navigate(`/evenement/${event._id}`)
-                    }}>
-                      Voir
-                    </button>
+                    <UpdateEvent eventId={event._id}></UpdateEvent>
 
                   </div>
                   <div className='line-clamp-2'>{event.title}</div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
-import AddInfo from '../Controllers/addInfo'
+import AddInfo from '../Controllers/info/addInfo'
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'

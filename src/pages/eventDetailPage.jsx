@@ -50,9 +50,11 @@ const DetailsEvent = () => {
                     <div className="mt-2">
                         {event.link && <Link to={event.link} className='' target="_blank"><span className="pl-1 pr-1 bg-yellow-500 underline hover:text-blue-500">{event.linkMessage}</span></Link>}
                     </div>
-
-                    {/* <div className="mt-3 text-xs">Publié le {event.publishDate.toDate().toLocaleString("FR-fr", { day: 'numeric', month: 'long', year: 'numeric' })} à {event.publishDate.toDate().toLocaleString("FR-fr", { hour: 'numeric', minute: 'numeric' })}</div> */}
-                    <div className="mt-2 text-xs">Date de publication : {PublishTime(event.publishDate)}</div>
+                    {
+                        event?.updateAt
+                            ? <div className="mt-2 text-xs">Dernière mise à jour : {PublishTime(event.updateAt)}</div>
+                            : <div className="mt-2 text-xs">Date de publication : {PublishTime(event.publishDate)}</div>
+                    }
                 </div>
 
                 <div className="m-2 w-full bg-gray-200 p-2 rounded" style={{ float: 'left' }}>

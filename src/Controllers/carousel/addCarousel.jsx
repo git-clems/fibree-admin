@@ -126,16 +126,21 @@ const AddCarousel = () => {
                                     {errors?.image && (<span className='text-red-500'>{errors.image}</span>)}
                                 </div>
                                 <input type="file" accept="image/*" onChange={handleFile} title='image' className="form-control" placeholder='Choisir une image' />
-                                {uploading && <div className='text-blue-500'>Image en téléchargement...</div>}
                             </div>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary m-1" disabled={loading || uploading} onClick={() => { setOpen(false) }}>Annuler</button>
-                            <button type="submit" className="btn btn-primary m-1" disabled={loading || uploading}>{loading ? "Chargement..." : "Ajouter"}</button>
+                            <button type="submit" className="btn btn-primary m-1 h-10 w-30 flex justify-center items-center" disabled={loading || uploading}>
+                                {
+                                    loading || uploading
+                                        ? <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        : "Modifier"
+                                }
+                            </button>
                         </div>
-                        <div className={`text-center ${message.includes('succès') ? 'text-green-500' : 'text-red-500'} `}>
-                            <span className=''>{message}</span>
-                        </div>
+                        <div className={`text-center ${message.includes('succès') ? 'text-green-500' : 'text-red-500'} `}>{message}</div>
                     </form>
                 </div>
             }
