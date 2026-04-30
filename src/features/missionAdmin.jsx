@@ -5,7 +5,8 @@ import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'fire
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
 import Page404 from '../pages/404'
-import AddMission from '../Controllers/addMission'
+import AddMission from '../Controllers/mission/addMission'
+import UpdateMission from '../Controllers/mission/updateMission'
 
 const AdminMissions = () => {
   const [missions, setMissions] = useState()
@@ -14,7 +15,6 @@ const AdminMissions = () => {
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
   const [deleting, setDeleting] = useState(false)
-  // const
 
   useEffect(() => {
     const fectData = async () => {
@@ -44,22 +44,24 @@ const AdminMissions = () => {
     }
   }
 
-  const ToogleOppened = async (missionId) => {
+  const toggleDisplay = async (missionId, currentValue) => {
     try {
-      await updateDoc(doc(db, 'mission', missionId), { opened: true })
+      const updatedValue = !currentValue;
+      await updateDoc(doc(db, 'mission', missionId), {
+        displayed: updatedValue,
+      });
 
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   const normalizedSearch = search.trim().toLowerCase()
 
   const filteredMission = useMemo(() => {
     if (!normalizedSearch) return missions
     return [...missions].filter((mission) => (
-      `${mission.title}`.toLowerCase().includes(normalizedSearch)
+      `${mission.title} ${mission.description}`.toLowerCase().includes(normalizedSearch)
     ))
   })
 
@@ -83,7 +85,7 @@ const AdminMissions = () => {
             <table class="flex-1 w-full text-sm">
               <thead className='bg-gray-600 text-white'>
                 <tr>
-                  <th scope="col" className="p-2">#</th>
+                  <th className='p-2'>Illustration</th>
                   <th scope="col" className="p-2"><button onClick={() => {
                     setSortByDate(null)
                     sortByName === null
@@ -91,43 +93,60 @@ const AdminMissions = () => {
                       : setSortByTitle(!sortByName)
                   }}>Mission {sortByName === true && <i class="fa-solid fa-sort-down"></i>}{sortByName === false && <i class="fa-solid fa-sort-up"></i>}</button>
                   </th>
-                  {/* <th className='max-[800px]:hidden'>Description</th> */}
+
                   <th></th>
                 </tr>
               </thead>
               <tbody className=''>
                 {
-                  filteredMission.sort((a, b) => {
-                    if (sortByDate === true) {
-                      return a.missionDate - b.missionDate
-                    }
-                    else if (sortByDate === false) {
-                      return b.missionDate - a.missionDate
-                    }
-                    else if (sortByName === true) {
-                      return a.title.localeCompare(b.title, 'fr')
-                    }
-                    else {
-                      return b.title.localeCompare(a.title, 'fr')
-                    }
-                  }).map((mission, index) => (
-                    <tr key={mission._id} className='border'>
-                      <th scope="row" className='p-2'>{index + 1}</th>
-                      <td className='p-2 bg-red-00'>
-                          <span className=''>{mission.title.toUpperCase()}</span> <br />
-                          <span className='text-gray-400 line-clamp-2'>{mission.description}</span>
-                      </td>
+                  !filteredMission.length
+                    ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucune mission</div>
+                    : filteredMission.sort((a, b) => {
+                      if (sortByDate === true) {
+                        return a.missionDate - b.missionDate
+                      }
+                      else if (sortByDate === false) {
+                        return b.missionDate - a.missionDate
+                      }
+                      else if (sortByName === true) {
+                        return a.title.localeCompare(b.title, 'fr')
+                      }
+                      else {
+                        return b.title.localeCompare(a.title, 'fr')
+                      }
+                    }).map((mission, index) => (
+                      <tr key={mission._id} className='border'>
 
-                      <td>
-                        <button onClick={(e) => {
-                          e.stopPropagation()
-                          deleteMission(mission._id)
-                        }} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
-                          <i class="fa-solid fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                        <th scope="row" className='p-2'>
+                          <img src={mission?.image || "/bg/mission-bg.jpg"}
+                            onError={(e) => {
+                              e.target.src = "/bg/mission-bg.jpg"
+                            }}
+                            alt="" className='w-[60px] h-[60px] object-contain border rounded' />
+                        </th>
+
+                        <td className='p-2 bg-red-00 border'>
+                          <span className='font-bold'>{mission.title.toUpperCase()}</span> <br />
+                          <span className='text-gray-400 line-clamp-2'>{mission.description}</span>
+                        </td>
+
+                        <td className='flex items-center ml-2'>
+                          <div class="form-check form-switch">
+                            <input type='checkbox' class="cursor-pointer form-check-input" id="" role="switch" checked={mission.displayed} onChange={() => { toggleDisplay(mission._id, mission.displayed) }} />
+                          </div>
+
+                          <UpdateMission missionId={mission._id}></UpdateMission>
+
+                          <button onClick={(e) => {
+                            e.stopPropagation()
+                            deleteMission(mission._id)
+                          }} className="m-2 h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                }
               </tbody>
             </table>
           }

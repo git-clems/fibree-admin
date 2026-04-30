@@ -5,6 +5,7 @@ import AddInfo from '../Controllers/info/addInfo'
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
+import UpdateInfo from '../Controllers/info/updateInfo'
 
 
 const AdminInfos = () => {
@@ -34,13 +35,6 @@ const AdminInfos = () => {
         displayed: updatedValue,
       });
 
-      // Mise à jour du state (UI instantanée)
-      setInfos((prevInfos) =>
-        prevInfos.map((info) =>
-          info._id === infoId ?
-            { ...info, displayed: updatedValue }
-            : info
-        ));
     } catch (error) {
       console.log(error);
     }
@@ -56,14 +50,11 @@ const AdminInfos = () => {
       <AddInfo></AddInfo>
       <div className='flex flex-wrap'>
         {
-          !infos?.length ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucune actualité enrégistrée</div> :
+          !infos?.length
+            ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucune actualité enrégistrée</div> :
             infos.map(info => (
-              <div key={info._id} className='border shadow-[0_0_15px_rgba(0, 0, 0, 0.2)] m-1 rounded w-[300px] max-[600px]:w-full bg-white'>
-                {
-                  info.images.length > 0
-                    ? <img src={info.images[0]} alt="" className={`h-[200px] rounded-t-md object-cover duration-100`} />
-                    : <img src={"/bg/info-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-cover' />
-                }
+              <div key={info._id} className='border duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
+                <img src={info.image || "/bg/info-bg.jpg"} alt="" className={`h-[200px] rounded-t-md object-cover`} />
                 <div className='p-2 border-t border-gray-200 max-h-50 overflow-hidden h-[max-content]'>
                   <div className='flex justify-between items-center mt-2 mb-2'>
                     <button className='btn btn-danger' onClick={(e) => {
@@ -74,18 +65,13 @@ const AdminInfos = () => {
                     </button>
 
                     <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
-                        toggleDisplay(info._id, info.displayed)
-                      }}
+                      <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="switchCheckDefault"
+                        onChange={() => {
+                          toggleDisplay(info._id, info.displayed)
+                        }}
                         checked={info.displayed} />
                     </div>
-
-                    <button className='btn btn-primary' onClick={() => {
-                      navigate(`/actualite/${info._id}`)
-                    }}>
-                      <i className='fa-solid fa-pencil'></i>
-                    </button>
-
+                    <UpdateInfo infoId={info._id}></UpdateInfo>
                   </div>
                   <div className='line-clamp-3'>{info.title}</div>
                 </div>

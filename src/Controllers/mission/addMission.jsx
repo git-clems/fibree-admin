@@ -3,13 +3,13 @@ import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { db } from '../../auth/firebase';
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
-import infoSchema from '../../models/infoModel'
+import missionSchema from '../../models/missionModel'
 import { authenticator } from '../../auth/imageKit'
 import { upload } from '@imagekit/javascript';
 
-const AddInfo = () => {
+const AddMission = () => {
 
-    const [info, setInfo] = useState(infoSchema)
+    const [mission, setMission] = useState(missionSchema)
     const [typeCheck, setTypeCheck] = useState(false)
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
@@ -22,7 +22,7 @@ const AddInfo = () => {
         } else {
             document.body.style.overflow = "auto";
             setMessage('')
-            setInfo(infoSchema)
+            setMission(missionSchema)
             setErrors({})
             setFile(null)
         }
@@ -49,7 +49,7 @@ const AddInfo = () => {
             const uploadResponse = await upload({
                 file,
                 fileName: file.name,
-                folder: "/info",
+                folder: "/mission",
                 token: token,
                 signature: signature,
                 expire: expire,
@@ -67,8 +67,8 @@ const AddInfo = () => {
 
     const inputHandler = (e) => {
         const { name, value, type, checked } = e.target;
-        setInfo({
-            ...info, [name]:
+        setMission({
+            ...mission, [name]:
                 type === "checkbox"
                     ? checked
                     : value
@@ -77,7 +77,7 @@ const AddInfo = () => {
 
     const ErrorHandler = () => {
         const newErrors = {}
-        if (!info.title?.trim()) {
+        if (!mission.title?.trim()) {
             newErrors.title = 'Le titre est obligatoire'
         }
 
@@ -98,13 +98,13 @@ const AddInfo = () => {
         try {
             const imageUrl = await uploadImage()
 
-            await addDoc(collection(db, 'infos'), {
-                ...info,
+            await addDoc(collection(db, 'mission'), {
+                ...mission,
                 image: imageUrl,
                 createAt: Timestamp.fromDate(new Date())
             })
 
-            setMessage('Information enregistré avec succès !')
+            setMessage('Mission enregistré avec succès !')
             setOpen(false)
         } catch (error) {
             setMessage("Une erreur s'est produite !!")
@@ -116,8 +116,8 @@ const AddInfo = () => {
     return (
         <div className='p-2 rounded-t-md '>
             <div className='flex justify-between'>
-                <h2>Actualités</h2>
-                <button className='btn btn-primary' onClick={() => setOpen(!open)}><span className="max-[800px]:hidden">Ajouter une évènement</span> <i class="fa-solid fa-plus"></i></button>
+                <h2>Nos missions</h2>
+                <button className='btn btn-primary' onClick={() => setOpen(!open)}><span className="max-[800px]:hidden">Ajouter une mission</span> <i class="fa-solid fa-plus"></i></button>
             </div>
             {
                 open &&
@@ -125,7 +125,7 @@ const AddInfo = () => {
                     <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
 
                         <div class="flex justify-between rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
-                            <h1 class="fs-5" id="staticBackdropLabel">Nouvel évènement</h1>
+                            <h1 class="fs-5" id="staticBackdropLabel">Nouvelle mission</h1>
                             <button type="button" class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
                         </div>
                         <div class="m-2 p-2 max-h-[70vh] overflow-auto">
@@ -134,25 +134,17 @@ const AddInfo = () => {
 
                                 <div class="mt-4 m-1 flex-1 min-w-[300px]">
                                     <div className='flex justify-between'>
-                                        <label className="form-label">Titre <span className='text-red-500'> * </span> </label>
+                                        <label className="form-label">Intitulé <span className='text-red-500'> * </span> </label>
                                         {errors?.title && (<span className='text-red-500'>{errors.title}</span>)}
                                     </div>
-                                    <input type="text" onChange={inputHandler} name='title' value={info?.title || ''} className={`form-control`} placeholder="Titre de l'évènement" />
+                                    <input type="text" onChange={inputHandler} name='title' value={mission?.title || ''} className={`form-control`} placeholder="Intitulé de la mission" />
                                 </div>
                             </div>
 
                             <div class="mt-4 m-1">
-                                <label for="" class="form-label">Sous-titre</label>
-                                <textarea type="text" onChange={inputHandler} name='subtitle' class="form-control" placeholder="Sous-titre de l'évènement" />
+                                <label for="" class="form-label">Description de la mission</label>
+                                <textarea class="form-control" name='description' onChange={inputHandler} title='description' rows="6"></textarea>
                             </div>
-
-
-                            <div class="mt-4 m-1">
-                                <label for="exampleFormControlTextarea1" class="form-label">Contenu de l'actualité</label>
-                                <textarea class="form-control" name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="10"></textarea>
-                            </div>
-
-
 
                             <div class="mt-4 m-1">
                                 <label class="form-label">Image d'illustration</label>
@@ -176,4 +168,4 @@ const AddInfo = () => {
     )
 }
 
-export default AddInfo
+export default AddMission

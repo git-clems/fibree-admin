@@ -64,12 +64,8 @@ const AdminEvents = () => {
         {
           !events?.length ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun évènement enrégistré</div> :
             events.map(event => (
-              <div key={event._id} to={`/evenement/${event._id}`} className='border  duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
-                {
-                  event.image ?
-                    <img src={event.image} alt="" className={`h-[200px] bg-black rounded-t-md object-cover`} /> :
-                    <img src={"/bg/event-bg.jpg"} alt="" className='h-[200px] rounded-t-md object-cover' />
-                }
+              <div key={event._id} className='border duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
+                <img src={event.image ? event.image : "/bg/event-bg.jpg"} alt="" className={`h-[200px] bg-black rounded-t-md object-cover`} />
                 <div className='p-2 border-t border-gray-200'>
                   <div className='flex justify-between items-center mt-2 mb-2'>
                     <button className='btn btn-danger' onClick={(e) => {
@@ -80,7 +76,7 @@ const AdminEvents = () => {
                     </button>
 
                     <div class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
+                      <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
                         toggleDisplay(event._id, event.displayed)
                       }}
                         checked={event.displayed} />

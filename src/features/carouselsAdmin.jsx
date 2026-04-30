@@ -68,7 +68,7 @@ const AdminCarousels = () => {
                   </button>
 
                   <div className="form-check form-switch">
-                    <input className="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
+                    <input className="form-check-input cursor-pointer" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
                       toggleDisplay(carousel._id, carousel.displayed)
                     }}
                       checked={carousel.displayed} />

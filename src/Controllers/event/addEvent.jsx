@@ -69,11 +69,9 @@ const AddEvent = () => {
         const { name, value, type, checked } = e.target;
         setEvent({
             ...event, [name]:
-                name === 'comingDate'
-                    ? Timestamp.fromDate(new Date(value))
-                    : type === "checkbox"
-                        ? checked
-                        : value
+                type === "checkbox"
+                    ? checked
+                    : value
         })
     }
 
@@ -202,7 +200,7 @@ const AddEvent = () => {
 
                             <div class="mt-4 m-1">
                                 <label for="exampleFormControlTextarea1" class="form-label">Descrption de l'évènement</label>
-                                <textarea class="form-control" name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="3"></textarea>
+                                <textarea class="form-control" name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="10"></textarea>
                             </div>
 
 

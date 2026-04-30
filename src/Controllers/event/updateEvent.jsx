@@ -38,6 +38,7 @@ const UpdateEvent = ({ eventId }) => {
         fetchData()
     }, [open, eventId])
 
+
     useEffect(() => {
         if (open) {
             document.body.style.overflow = "hidden";
@@ -89,11 +90,9 @@ const UpdateEvent = ({ eventId }) => {
         const { name, value, type, checked } = e.target;
         setEvent({
             ...event, [name]:
-                name === 'comingDate'
-                    ? Timestamp.fromDate(new Date(value))
-                    : type === "checkbox"
-                        ? checked
-                        : value
+                type === "checkbox"
+                    ? checked
+                    : value
         })
     }
 
@@ -128,7 +127,7 @@ const UpdateEvent = ({ eventId }) => {
                 updateAt: Timestamp.fromDate(new Date())
             })
 
-            setMessage('Information enregistré avec succès !')
+            setMessage('Evènement enregistré avec succès !')
             setOpen(false)
         } catch (error) {
             setMessage("Une erreur s'est produite !!")
@@ -146,11 +145,12 @@ const UpdateEvent = ({ eventId }) => {
                 open &&
                 <div className="fixed bg-[rgba(0,0,0,0.5)] flex justify-center h-100 w-100 top-0 pt-0 left-0 z-500 duration-200 transition-transform">
                     {
-                        !event ? <Loading></Loading> :
-                            <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
+                        !event
+                            ? <Loading></Loading>
+                            : <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
 
                                 <div class="flex justify-between rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
-                                    <h5 class="line-clamp-1">{initialEvent?.title}</h5>
+                                    <span class="font-bold text-xl line-clamp-1" id="">{initialEvent?.title}</span>
                                     <button type="button" class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
                                 </div>
                                 <div class="m-2 p-2 max-h-[70vh] overflow-auto">
@@ -197,7 +197,8 @@ const UpdateEvent = ({ eventId }) => {
                                     <div class="mt-4 m-1">
                                         <label for="" class="form-label">Date et heure de l'évènement</label>
                                         <div className='flex'>
-                                            <input style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} type="date" onChange={inputHandler} name='comingDate' class="form-control" placeholder="" />
+                                            {/* <input style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} type="date" onChange={inputHandler} value={event?.comingDate.toDate().toLocaleTimeString('fr-FR', {day: '2-digit', month: '2-digit', year: '2-digit'})} name='comingDate' class="form-control" placeholder="" /> */}
+                                            <input style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }} type="date" onChange={inputHandler} value={event?.comingDate} name='comingDate' class="form-control" placeholder="" />
                                             <input style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} type="time" onChange={inputHandler} value={event?.comingTime} name='comingTime' class="form-control" placeholder="" />
                                         </div>
                                     </div>
@@ -206,7 +207,7 @@ const UpdateEvent = ({ eventId }) => {
                                         <label htmlFor="" className="form-label"> Adresse de l'évènement </label>
                                         <input type='text' onChange={inputHandler} className={`form-control`} value={event?.adress || ''} name='adress' rows="3" placeholder='Adresse' ></input>
                                         <div className="flex mt-4 m-1 items-start">
-                                            <input className="form-check-input mt-1" type="checkbox" checked= {event?.online || false} name='online' onChange={inputHandler} />
+                                            <input className="form-check-input mt-1" type="checkbox" checked={event?.online || false} name='online' onChange={inputHandler} />
                                             <label className="form-check-label ml-2 mr-2" htmlFor="" >Evènement en ligne  </label>
                                         </div>
                                     </div>
@@ -223,7 +224,7 @@ const UpdateEvent = ({ eventId }) => {
 
                                     <div class="mt-4 m-1">
                                         <label for="exampleFormControlTextarea1" class="form-label">Descrption de l'évènement</label>
-                                        <textarea class="form-control" value={event?.description || ''} name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="3"></textarea>
+                                        <textarea class="form-control" value={event?.description || ''} name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="10"></textarea>
                                     </div>
 
 

@@ -8,41 +8,44 @@ const today = new Date()
 
 
 export const PublishTime = (timestamp) => {
-  if (!timestamp) return ""
+    if (!timestamp) return ""
 
-  const date = timestamp.toDate()
-  const now = new Date()
+    const date = timestamp.toDate()
+    const now = new Date()
 
-  const diffMs = now - date
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+    const diffMs = now - date
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 
-  const isSameDay =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear()
+    const isSameDay =
+        date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear()
 
-  const isYesterday = diffDays === 1
+    const isYesterday = diffDays === 1
 
-  if (isSameDay) {
-    return `Aujourd'hui à ${date.toLocaleTimeString('fr-FR', {
-      hour: "2-digit",
-      minute: "2-digit"
-    })}`
-  }
+    if (isSameDay) {
+        return `Aujourd'hui à ${date.toLocaleTimeString('fr-FR', {
+            hour: "2-digit",
+            minute: "2-digit"
+        })}`
+    }
 
-  if (isYesterday) {
-    return "Hier"
-  }
+    if (isYesterday) {
+        return `Hier à ${date.toLocaleTimeString('fr-FR', {
+            hour: "2-digit",
+            minute: "2-digit"
+        })}`
+    }
 
-  if (diffDays < 7) {
-    return `il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`
-  }
+    if (diffDays < 7) {
+        return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`
+    }
 
-  return date.toLocaleDateString('fr-FR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  })
+    return date.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    })
 }
 
 const Admin = () => {
@@ -84,7 +87,6 @@ const Admin = () => {
         return () => unsubscribe()
     }, [])
 
-    // console.log(messageNotOpend);
     useEffect(() => {
         try {
             onSnapshot(collection(db, 'join'), snap => {
@@ -178,8 +180,8 @@ const Admin = () => {
 
             <div className="flex flex-wrap max-[800px]:justify-center">
                 {
-                    filteredBlocks.length > 0 ?
-                        filteredBlocks.map((block) => (
+                    filteredBlocks.length > 0
+                        ? filteredBlocks.map((block) => (
                             <LayoutAdmin
                                 key={block.link}
                                 link={block.link}

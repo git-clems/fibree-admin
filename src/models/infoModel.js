@@ -3,7 +3,7 @@ const infoSchema = {
     subtitle: "",
     description: "",
     displayed: false,
-    images: "",
+    image: "",
     publishDate: new Date(),
     location: "",
 }

@@ -39,11 +39,11 @@ const Home = () => {
 
                 setEvents(eventFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })).filter(e => !e.removed && e.displayed).slice(0, 3))
                 setInfos(infoFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })).filter(e => !e.removed && e.displayed).slice(0, 4))
-                setPartners(partnerFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
+                setPartners(partnerFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })).filter(e => !e.removed && e.displayed))
                 const aboutData = aboutFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() }))
                 setAbout(aboutData[0])
-                setStatistics(statisticFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
-                setCarousel(carouselFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })))
+                setStatistics(statisticFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })).filter(e => !e.removed && e.displayed))
+                setCarousel(carouselFetch.docs.map(doc => ({ _id: doc.id, ...doc.data() })).filter(e => !e.removed && e.displayed))
 
             } catch (error) {
                 console.log(error);
@@ -65,12 +65,13 @@ const Home = () => {
 
     return (
         <div className="page">
-            <section className="flex flex-wrap items- justify-center p-2 bg-[url(/bg/bg1.png)] bg-cover">
+            <section className="flex flex-wrap items- justify-center pt-2 pb-2 bg-[url(/bg/bg1.png)] bg-cover">
                 {
                     events.length > 0 &&
-                    <div className="flex-1 max-[600px]:hidden rounded overflow-hidden m-2 mt-0 bg-gray-100 bg-white h-[max-content]">
+                    <div className="flex-1 rounded overflow-hidden m-1 mt-0 bg-gray-100 bg-white h-[max-content]">
+                    {/* <div className="flex-1 max-[600px]:hidden rounded overflow-hidden m-2 mt-0 bg-gray-100 bg-white h-[max-content]"> */}
                         <div className="flex justify-between items-center m-2">
-                            <h3 className="text-red-500">Evènements</h3>
+                            <span className="font-bold text-xl">Evènements</span>
                             <Link to={'/evenement'} className="bg-green-400 hover:bg-green-300 rounded-full pt-1 pb-1 pl-5 pr-5">
                                 <span className="text-nowrap">Voir plus<i class="fa-solid fa-arrow-right"></i></span>
                             </Link>

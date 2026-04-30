@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, Timestamp } from "firebase/firestore";
 import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import Page404 from "./404";
@@ -9,11 +9,10 @@ import { PublishTime } from '../features/admin'
 const DetailsEvent = () => {
     const [event, setEvent] = useState();
     const { id } = useParams();
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true)
             try {
                 const snapDoc = await getDoc(doc(db, 'event', id))
                 if (snapDoc.exists()) {
@@ -40,10 +39,10 @@ const DetailsEvent = () => {
         <div className="page details-page">
             <div className="flex flex-wrap">
                 <div className="m-2 w-full rounded p-3 max-[600px]:w-full">
-                    <p className="name text-xl font-bold"><span className="text-orange-500">{event.type}</span> : {event.title}</p>
+                    <p className="name text-xl"><span className="text-orange-500 font-bold">{event.type}</span> : {event.title}</p>
                     <p className="text-gray-500">{event.subtitle}</p>
                     <div className='flex'>
-                        {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {event.comingDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime} GMT`}</div>}
+                        {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {Timestamp.fromDate(new Date(event?.comingDate)).toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime} GMT`}</div>}
                         {event.online && <div className={`ml-2 text-white font-bold bg-blue-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> <i class="fa-solid fa-video"></i> En ligne</div>}
                     </div>
                     {event.adress && <div className='text-gray-500 mt-2 text-xs truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
