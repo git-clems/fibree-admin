@@ -14,7 +14,7 @@ const Partenaires = () => {
                     _id: e.id,
                     ...e.data()
                 }))
-                setPartenaires(data)
+                setPartenaires(data.filter(e=> !e.removed))
             } catch (error) {
                 console.log(error);
             }

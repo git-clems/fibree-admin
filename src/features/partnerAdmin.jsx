@@ -3,11 +3,12 @@ import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/fire
 import { db } from '../auth/firebase'
 import { Link } from 'react-router'
 import Loading from '../components/LoadingPage'
-import AddPartenaire from '../Controllers/addPartenaire'
+import AddPartenaire from '../Controllers/partner/addPartner'
 import Page404 from '../pages/404'
+import UpdatePartner from '../Controllers/partner/updatePatner'
 
-const AdminPartenaires = () => {
-  const [partenaires, setPartenaires] = useState()
+const AdminPartners = () => {
+  const [partners, setPartners] = useState()
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
 
@@ -20,9 +21,9 @@ const AdminPartenaires = () => {
           _id: doc.id,
           ...doc.data()
         }))
-        setPartenaires(data)
+        setPartners(data.filter(e => !e.removed))
       } else {
-        setPartenaires(null)
+        setPartners(null)
         setLoading(false)
       }
       setLoading(false)
@@ -33,7 +34,7 @@ const AdminPartenaires = () => {
 
 
   const deleteAddPartner = async (partnerId) => {
-    await deleteDoc(doc(db, 'partner', partnerId))
+    await updateDoc(doc(db, 'partner', partnerId), { removed: true })
       .catch((error) => {
         console.log(error)
       })
@@ -46,13 +47,6 @@ const AdminPartenaires = () => {
         displayed: updatedValue,
       });
 
-
-      setPartenaires((prevPartners) =>
-        prevPartners.map((partner) =>
-          partner._id === partnerId ?
-            { ...partner, displayed: updatedValue }
-            : partner
-        ));
     } catch (error) {
       console.log(error);
     }
@@ -60,12 +54,12 @@ const AdminPartenaires = () => {
 
   const partner = search.trim().toLowerCase()
   const searchedPartner = useMemo(() => {
-    if (!partner) return partenaires
-    return [...partenaires].filter(e => e.name.trim().toLowerCase().includes(partner))
+    if (!partner) return partners
+    return [...partners].filter(e => e.name.trim().toLowerCase().includes(partner))
   })
 
   if (loading) return <Loading></Loading>
-  if (!partenaires) return <Page404 prev={"Rafraichir la page"} prevLink={'/admin/partenaire'}></Page404>
+  if (!partners) return <Page404 prev={"Rafraichir la page"} prevLink={'/admin/partenaire'}></Page404>
 
   return (
     <div class="page ">
@@ -83,7 +77,7 @@ const AdminPartenaires = () => {
         </form>
 
         <div className='flex flex-wrap m-1'>
-          {!partenaires?.length
+          {!partners?.length
             ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun partenaire enregistré</div>
             : searchedPartner.map((partner) => (
               <div key={partner._id} to={`/admin/partenaire/${partner._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
@@ -95,14 +89,12 @@ const AdminPartenaires = () => {
                   </button>
 
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"
+                    <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="switchCheckDefault"
                       onChange={() => { toggleDisplay(partner._id, partner.displayed) }}
                       checked={partner.displayed} />
                   </div>
 
-                  <button className='btn btn-primary' onClick={() => { }}>
-                    <i className='fa-solid fa-pen'></i>
-                  </button>
+                  <UpdatePartner partnerId={partner._id}></UpdatePartner>
 
                 </div>
                 <p className='p-2'>{partner.name}</p>
@@ -117,4 +109,4 @@ const AdminPartenaires = () => {
 }
 
 
-export default AdminPartenaires
+export default AdminPartners

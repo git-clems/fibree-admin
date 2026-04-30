@@ -262,7 +262,8 @@ const UpdateCarousel = ({ carouselId }) => {
                                             ? <div class="spinner-border" role="status">
                                                 <span class="visually-hidden">Loading...</span>
                                             </div>
-                                            : "Modifier"}
+                                            : "Modifier"
+                                        }
                                     </button>
                                 </div>
                                 <div className={`text-center ${message.includes('succès') ? 'text-green-500' : 'text-red-500'} `}>{message}</div>

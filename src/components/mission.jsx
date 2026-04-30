@@ -61,12 +61,8 @@ const Missions = () => {
                         <div class="slide-track flex">
                             {missions.map((mission) => (
                                 mission.displayed &&
-                                <div className='slide m-2
-                                border-gray-300 rounded-md
-                                w-[25vw] min-w-[250px] border-1
-                                max-[800px]:w-50 max-[800px]:min-w-50
-                                bg-[white]'>
-                                    <img src={mission.image} alt="" className='rounded-t-md' />
+                                <div className='border rounded m-1 p-1 w-[25vw] min-w-[250px] flex flex-col bg-white justify-between'>
+                                    <img src={mission.image} alt="" className='rounded-t-md w-[100%] h-[250px] object-contain' />
                                     <p className='font-bold p-2'>{mission.title}</p>
                                 </div>
                             ))}

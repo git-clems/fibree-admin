@@ -1,17 +1,19 @@
+import { Route, Routes } from 'react-router'
+import { addDoc, collection } from 'firebase/firestore'
+import { db } from './auth/firebase'
 import './App.css'
 import Home from './pages/homePage'
 import DetailInfo from './pages/infoDetailPage'
 import Page404 from './pages/404'
 import AppBar from './components/appbar'
 import ScrollToTop from './components/goTop'
-import { Route, Routes } from 'react-router'
 import SmallAppBar from './components/appbarSmall'
 import FootBar from './components/footBar'
 import AdminCarousels from './features/carouselsAdmin'
 import AdminMissions from './features/missionAdmin'
 import AdminInfos from './features/infoAdmin'
 import Infos from './pages/infosPage'
-import AdminPartenaires from './features/partenaireAdmin'
+import AdminPartenaires from './features/partnerAdmin'
 import AdminEvents from './features/eventAdmin'
 import Missions from './pages/missionsPage'
 import Projects from './pages/projectsPage'
@@ -32,43 +34,13 @@ import DetailsEvent from './pages/eventDetailPage'
 import JoinDetailAdmin from './features/joinDetailAdmin'
 import AdminContacts from './features/contactAdmin'
 import ContactDetailAdmin from './features/contactDetailAdmin'
-import { addDoc, collection } from 'firebase/firestore'
-import { db } from './auth/firebase'
 import Events from './pages/eventsPage'
 import AdminSuspended from './features/suspendedAdmin'
-import AdminDetailNewPartner from './features/newPartenaireDetailAdmin'
-import AdminNewPartners from './features/newPartenaireAdmin'
-import AdminDetailPartner from './features/partenaireDetailAdmin'
+import AdminDetailNewPartner from './features/newPartnerDetailAdmin'
+import AdminNewPartners from './features/newPartnerAdmin'
+import AdminDetailPartner from './features/partnerDetailAdmin'
 import AdminStatistics from './features/statisticsAdmin'
 import ScrollTop from './components/scrollTop'
-
-
-const getMissions = async () => {
-  try {
-    for (const element of data) {
-      const { _id, publishDate, ...rest } = element
-
-      const cleanElement = { ...rest, contactDate: new Date() }
-
-      // const cleanElement = {
-      //   ...rest,
-      //   publishDate: publishDate?.$date
-      //     ? new Date(publishDate.$date)
-      //     : null,
-      // }
-
-      await addDoc(collection(db, 'contact'), cleanElement)
-    }
-
-    console.log('Import terminé ✅')
-  } catch (error) {
-    console.error("Erreur lors de l'import :", error)
-  }
-}
-
-// console.log(data);
-
-// getMissions()
 
 
 function App() {

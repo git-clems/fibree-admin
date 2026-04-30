@@ -3,13 +3,13 @@ import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { db } from '../../auth/firebase';
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
-import infoSchema from '../../models/infoModel'
+import partnerSchema from '../../models/partnerModel'
 import { authenticator } from '../../auth/imageKit'
 import { upload } from '@imagekit/javascript';
 
-const AddInfo = () => {
+const AddPartner = () => {
 
-    const [info, setInfo] = useState(infoSchema)
+    const [partner, setPartner] = useState(partnerSchema)
     const [typeCheck, setTypeCheck] = useState(false)
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)
@@ -22,7 +22,7 @@ const AddInfo = () => {
         } else {
             document.body.style.overflow = "auto";
             setMessage('')
-            setInfo(infoSchema)
+            setPartner(partnerSchema)
             setErrors({})
             setFile(null)
         }
@@ -49,7 +49,7 @@ const AddInfo = () => {
             const uploadResponse = await upload({
                 file,
                 fileName: file.name,
-                folder: "/info",
+                folder: "/partner",
                 token: token,
                 signature: signature,
                 expire: expire,
@@ -67,8 +67,8 @@ const AddInfo = () => {
 
     const inputHandler = (e) => {
         const { name, value, type, checked } = e.target;
-        setInfo({
-            ...info, [name]:
+        setPartner({
+            ...partner, [name]:
                 type === "checkbox"
                     ? checked
                     : value
@@ -77,8 +77,8 @@ const AddInfo = () => {
 
     const ErrorHandler = () => {
         const newErrors = {}
-        if (!info.title?.trim()) {
-            newErrors.title = 'Le titre est obligatoire'
+        if (!partner.name?.trim()) {
+            newErrors.name = 'Le titre est obligatoire'
         }
 
 
@@ -98,13 +98,13 @@ const AddInfo = () => {
         try {
             const imageUrl = await uploadImage()
 
-            await addDoc(collection(db, 'infos'), {
-                ...info,
+            await addDoc(collection(db, 'partner'), {
+                ...partner,
                 image: imageUrl,
                 createAt: Timestamp.fromDate(new Date())
             })
 
-            setMessage('Information enregistré avec succès !')
+            setMessage('Partenaire enregistré avec succès !')
             setOpen(false)
         } catch (error) {
             setMessage("Une erreur s'est produite !!")
@@ -116,8 +116,8 @@ const AddInfo = () => {
     return (
         <div className='p-2 rounded-t-md '>
             <div className='flex justify-between'>
-                <h2>Actualités</h2>
-                <button className='btn btn-primary' onClick={() => setOpen(!open)}><span className="max-[800px]:hidden">Ajouter une évènement</span> <i class="fa-solid fa-plus"></i></button>
+                <h2>Nos partners</h2>
+                <button className='btn btn-primary' onClick={() => setOpen(!open)}><span className="max-[800px]:hidden">Ajouter une partenaire</span> <i class="fa-solid fa-plus"></i></button>
             </div>
             {
                 open &&
@@ -125,7 +125,7 @@ const AddInfo = () => {
                     <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
 
                         <div class="flex justify-between rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
-                            <h1 class="fs-5" id="staticBackdropLabel">Nouvel évènement</h1>
+                            <h1 class="fs-5" id="staticBackdropLabel">Nouveau partenaire</h1>
                             <button type="button" disabled={loading || uploading} class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
                         </div>
                         <div class="m-2 p-2 max-h-[70vh] overflow-auto">
@@ -134,29 +134,16 @@ const AddInfo = () => {
 
                                 <div class="mt-4 m-1 flex-1 min-w-[300px]">
                                     <div className='flex justify-between'>
-                                        <label className="form-label">Titre <span className='text-red-500'> * </span> </label>
-                                        {errors?.title && (<span className='text-red-500'>{errors.title}</span>)}
+                                        <label className="form-label">Nom <span className='text-red-500'> * </span> </label>
+                                        {errors?.name && (<span className='text-red-500'>{errors.name}</span>)}
                                     </div>
-                                    <input type="text" onChange={inputHandler} name='title' value={info?.title || ''} className={`form-control`} placeholder="Titre de l'évènement" />
+                                    <input type="text" onChange={inputHandler} name='name' value={partner?.name || ''} className={`form-control`} placeholder="Nom du partenaire" />
                                 </div>
                             </div>
 
                             <div class="mt-4 m-1">
-                                <label for="" class="form-label">Sous-titre</label>
-                                <textarea type="text" onChange={inputHandler} name='subtitle' class="form-control" placeholder="Sous-titre de l'évènement" />
-                            </div>
-
-
-                            <div class="mt-4 m-1">
-                                <label for="exampleFormControlTextarea1" class="form-label">Contenu de l'actualité</label>
-                                <textarea class="form-control" name='description' onChange={inputHandler} title='description' id="exampleFormControlTextarea1" rows="10"></textarea>
-                            </div>
-
-
-
-                            <div class="mt-4 m-1">
                                 <label class="form-label">Image d'illustration</label>
-                                <input type="file" accept="image/*" onChange={handleFile} title='image' class="form-control" placeholder='Choisir une image' />
+                                <input type="file" accept="image/*" onChange={handleFile} class="form-control" placeholder='Choisir une image' />
                             </div>
                         </div>
 
@@ -176,4 +163,4 @@ const AddInfo = () => {
     )
 }
 
-export default AddInfo
+export default AddPartner

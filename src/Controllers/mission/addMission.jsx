@@ -104,7 +104,7 @@ const AddMission = () => {
                 createAt: Timestamp.fromDate(new Date())
             })
 
-            setMessage('Mission enregistré avec succès !')
+            setMessage('Mission enregistrée avec succès !')
             setOpen(false)
         } catch (error) {
             setMessage("Une erreur s'est produite !!")
@@ -125,8 +125,8 @@ const AddMission = () => {
                     <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
 
                         <div class="flex justify-between rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
-                            <h1 class="fs-5" id="staticBackdropLabel">Nouvelle mission</h1>
-                            <button type="button" class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
+                            <span class="font-bold text-xl">Nouvelle mission</span>
+                            <button type="button" disabled={loading || uploading} class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
                         </div>
                         <div class="m-2 p-2 max-h-[70vh] overflow-auto">
 

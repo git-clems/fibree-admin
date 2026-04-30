@@ -124,7 +124,7 @@ const UpdateInfo = ({ infoId }) => {
                 updateAt: Timestamp.fromDate(new Date())
             })
 
-            setMessage('Actualité enregistrée avec succès !')
+            setMessage('Actualité modifié avec succès !')
             setOpen(false)
         } catch (error) {
             setMessage("Une erreur s'est produite !!")
@@ -148,7 +148,7 @@ const UpdateInfo = ({ infoId }) => {
 
                                 <div class="flex justify-between items-center rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
                                     <span class="font-bold text-xl line-clamp-1" id="">{initialInfo?.title}</span>
-                                    <button type="button" class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
+                                    <button disabled={loading || uploading} type="button" class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
                                 </div>
                                 <div class="m-2 p-2 max-h-[70vh] overflow-auto">
 

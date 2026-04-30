@@ -128,7 +128,7 @@ const AddEvent = () => {
 
                         <div class="flex justify-between rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
                             <h1 class="fs-5" id="staticBackdropLabel">Nouvel évènement</h1>
-                            <button type="button" class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
+                            <button type="button" disabled={loading || uploading} class="btn-close" onClick={() => setOpen(!open)} aria-label="Close"></button>
                         </div>
                         <div class="m-2 p-2 max-h-[70vh] overflow-auto">
 
