@@ -80,9 +80,9 @@ const AdminPartners = () => {
           {!partners?.length
             ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun partenaire enregistré</div>
             : searchedPartner.map((partner) => (
-              <div key={partner._id} to={`/admin/partenaire/${partner._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col shadow-[0_0_5px_rgba(0,0,0,0.2)]  rounded-md'>
+              <div key={partner._id} to={`/admin/partenaire/${partner._id}`} className='bg-white  w-[250px] max-[600px]:w-[100%]  m-1 border-1 border-gray-200 duration-100 justify-center flex flex-col shadow-[0_0_5px_rgba(0,0,0,0.2)] rounded-md'>
                 <img src={partner.image} alt="" className='h-[200px] object-contain' />
-                <div className='flex justify-between items-center w-full mt-2 mb-2 p-2 border-t border-gray-200'>
+                <div className='flex justify-between items-center w-full mt-2 mb-0 p-2 pb-0 border-t border-gray-200'>
                   <button className='btn btn-danger'
                     onClick={() => { deleteAddPartner(partner._id) }}>
                     <i className='fa-solid fa-trash'></i>
@@ -97,7 +97,7 @@ const AdminPartners = () => {
                   <UpdatePartner partnerId={partner._id}></UpdatePartner>
 
                 </div>
-                <p className='p-2'>{partner.name}</p>
+                <p className='p-2 pt-0 pb-0 line-clamp-2'>{partner.name}</p>
 
               </div>
             ))

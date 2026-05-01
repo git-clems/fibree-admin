@@ -45,7 +45,6 @@ const AdminCarousels = () => {
   };
 
   if (loading) return <Loading></Loading>
-  // if (!carousels?.length) return <Page404 message={'Aucun carousel'} noLinked={true} errorNumber={' '} />
 
   return (
     <div className='page'>
@@ -54,12 +53,8 @@ const AdminCarousels = () => {
         {
           !carousels?.length ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun carousel</div> :
             carousels.map(carousel => (
-              <div key={carousel._id} className='border bg-gray-100 duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg- flex flex-col'>
-                {
-                  carousel.image
-                    ? <img src={`${carousel.image}?tr=w-300,h-200`} alt="" className="h-[200px] object-contain rounded-t-md" />
-                    : <img src={"/bg/photo-bg.jpg"} alt="" className='h-[200px] rounded object-contain' />
-                }
+              <div key={carousel._id} className='shadow-[0_0_5px_rgba(0,0,0,0.2)] border bg-white duration-100 m-1 rounded w-[300px] max-[600px]:w-full flex flex-col'>
+                <img src={carousel.image || "/bg/photo-bg.jpg"} onError={(e) => e.target.src = "/bg/photo-bg.jpg"} alt="" className="h-[200px] object-contain rounded-t-md" />
                 <div className='flex justify-between items-center mt-2 border-t border-gray-300 p-2'>
                   <button className='btn btn-danger' onClick={(e) => {
                     deleteCarousel(carousel._id)

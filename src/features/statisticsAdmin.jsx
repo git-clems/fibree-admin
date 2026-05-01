@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import AddStatistic from '../Controllers/addStatistic'
+import AddStatistic from '../Controllers/statistic/addStatistic'
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
 import Page404 from '../pages/404'
+import UpdateStatistic from '../Controllers/statistic/updateStatistic'
 
 
 const AdminStatistics = () => {
@@ -21,7 +22,7 @@ const AdminStatistics = () => {
       }))
 
       if (data) {
-        setStatistics(data)
+        setStatistics(data.filter(e => !e.removed))
       } else {
         setStatistics(null)
       }
@@ -32,7 +33,7 @@ const AdminStatistics = () => {
   }, [])
 
   const deleteAddStatistic = async (statisticId) => {
-    await deleteDoc(doc(db, 'statistic', statisticId))
+    await updateDoc(doc(db, 'statistic', statisticId), { removed: true })
       .catch((error) => {
         console.log(error)
       })
@@ -65,19 +66,18 @@ const AdminStatistics = () => {
   return (
     <div className='page'>
       <AddStatistic></AddStatistic>
-      <div className='flex justify-center flex-wrap'>
+      <div className='flex flex-wrap'>
         {
           !statistics?.length
             ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun chiffre enregistré</div>
-            :
-            statistics.map(statistic => (
-              <div className='border  duration-100 m-1 rounded p-2 w-[300px] max-[600px]:w-full bg-white flex flex-col justify-cente items-center bg-red-200'>
+            : statistics.map(statistic => (
+              <div key={statistic._id} className='border  duration-100 m-1 rounded p-2 w-[300px] max-[600px]:w-full bg-white flex flex-col justify-cente items-center bg-red-200'>
                 {
                   statistic.image ?
                     <img src={statistic.image} alt="" className={`h-[200px] rounded object-contain hover:object-cover duration-100 p-2`} /> :
                     <img src={"/bg/statistic-bg.jpg"} alt="" className='h-[200px] rounded object-contain' />
                 }
-                <h4>{statistic.value}</h4>
+                <h4>{statistic.metric}</h4>
                 <p>{statistic.description}</p>
                 <div className='flex justify-between items-center w-full mt-2 mb-2'>
                   <button className='btn btn-danger' onClick={(e) => {
@@ -88,15 +88,13 @@ const AdminStatistics = () => {
                   </button>
 
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
+                    <input class="form-check-input cursor-pointer" type="checkbox" role="switch" id="switchCheckDefault" onChange={() => {
                       toggleDisplay(statistic._id, statistic.displayed)
                     }}
                       checked={statistic.displayed} />
                   </div>
 
-                  <button className='btn btn-primary' onClick={() => { }}>
-                    <i className='fa-solid fa-pen'></i>
-                  </button>
+                  <UpdateStatistic statisticId={statistic._id} />
 
                 </div>
                 <div className=''>{statistic.title}</div>

@@ -30,14 +30,14 @@ export const PublishTime = (timestamp) => {
         })}`
     }
 
-    if (isYesterday) {
+    if (isYesterday || diffDays === 0) {
         return `Hier à ${date.toLocaleTimeString('fr-FR', {
             hour: "2-digit",
             minute: "2-digit"
         })}`
     }
 
-    if (diffDays < 7) {
+    if (diffDays < 7 ) {
         return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`
     }
 

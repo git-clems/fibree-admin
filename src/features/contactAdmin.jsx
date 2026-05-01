@@ -150,13 +150,7 @@ const AdminContacts = () => {
                         </td>
                         <td className='max-[600px]:hidden'><div className='truncate max-w-[50vw]'>{contact.object}</div></td>
                         <td className='p-2'>
-                          {
-                            PublishTime(contact.contactDate?.toDate())
-                              ? contact.contactDate?.toDate().toLocaleString('fr-FR', { hour: "numeric", minute: "numeric" })
-                              : isSameYear(contact.contactDate?.toDate())
-                                ? <span>{contact.contactDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'short' })} {contact.contactDate?.toDate().toLocaleString('fr-FR', { hour: "numeric", minute: "numeric" })}</span>
-                                : contact.contactDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
-                          }
+                          {PublishTime(contact.contactDate)}
                         </td>
                         <td>
                           <button onClick={(e) => {

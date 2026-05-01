@@ -5,6 +5,7 @@ import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
 import Page404 from "../pages/404";
+import { PublishTime } from "./admin";
 
 
 const ContactDetailAdmin = () => {
@@ -59,8 +60,8 @@ const ContactDetailAdmin = () => {
                     <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
                         <div>
                             <h5>{contact.object}</h5>
-                            <span className="text-sky-100">Expéditeur : {contact.fname} {contact.lname} {`<${contact.email}>`}</span> <br />
-                            <span className="text-sky-100">Date : {contact.contactDate?.toDate().toLocaleString('fr-FR')}</span>
+                            <span className="text-sky-100">Expéditeur : {contact.fname} {contact.lname?.toUpperCase()} {`<${contact.email}>`}</span> <br />
+                            <span className="text-sky-100">Date : {PublishTime(contact.contactDate)}</span>
                         </div>
                     </div>
 

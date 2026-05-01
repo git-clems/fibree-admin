@@ -153,13 +153,7 @@ const AdminMembers = () => {
                       </td>
                       <td className='max-[600px]:hidden'>{member.section}</td>
                       <td className='p-2 max-[600px]:hidden'>
-                        {
-                          PublishTime(member.acceptedDate)
-                            ? member.acceptedDate?.toDate().toLocaleString('fr-FR', { hour: "numeric", minute: "numeric" })
-                            : isSameYear(member.acceptedDate?.toDate())
-                              ? <span>{member.acceptedDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'short' })} {member.acceptedDate?.toDate().toLocaleString('fr-FR', { hour: "numeric", minute: "numeric" })}</span>
-                              : member.acceptedDate?.toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
-                        }
+                        {PublishTime(member.acceptedDate)}
                       </td>
                     </tr>
                   ))

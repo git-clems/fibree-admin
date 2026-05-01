@@ -16,7 +16,10 @@ const DetailsEvent = () => {
             try {
                 const snapDoc = await getDoc(doc(db, 'event', id))
                 if (snapDoc.exists()) {
-                    setEvent({ _id: snapDoc.id, ...snapDoc.data() });
+                    if (snapDoc.data().removed || !snapDoc.data().displayed)
+                        setEvent(null)
+                    else
+                        setEvent({ _id: snapDoc.id, ...snapDoc.data() });
                 } else {
                     setEvent(null)
                 }

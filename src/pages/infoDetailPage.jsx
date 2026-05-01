@@ -17,7 +17,10 @@ const DetailsInfo = () => {
             try {
                 const snapDoc = await getDoc(doc(db, 'infos', id))
                 if (snapDoc.exists()) {
-                    setInfo({ _id: snapDoc.id, ...snapDoc.data() });
+                    if (snapDoc.data().removed || !snapDoc.data().displayed)
+                        setEvent(null)
+                    else
+                        setInfo({ _id: snapDoc.id, ...snapDoc.data() });
                 } else {
                     setInfo(null)
                 }
@@ -40,13 +43,11 @@ const DetailsInfo = () => {
                 <div className="m-2 w-full bg-gray-200 rounded p-2 max-[600px]:w-full">
                     <p className="name text-xl font-bold">{info.title}</p>
                     <p className="text-gray-500">{info.subtitle}</p>
-                    {/* <div className='flex justify-between'>
-                        {info.publishDate && <div className='text-sm truncate rounded '>Date de publication: {PublishTime(info?.publishDate)}</div>}
-                    </div> */}
+
                     {
                         info?.updateAt
-                            ? <div className="mt-2 text-xs">Dernière mise à jour : {PublishTime(info.updateAt)}</div>
-                            : <div className="mt-2 text-xs">Date de publication : {PublishTime(info.publishDate)}</div>
+                            ? <div className="mt-2 text-xs">Modifé : {PublishTime(info.updateAt)}</div>
+                            : <div className="mt-2 text-xs">Date de publication : {PublishTime(info.createAt)}</div>
                     }
                     {
                         info.link &&
@@ -55,12 +56,11 @@ const DetailsInfo = () => {
                 </div>
 
                 <div className="m-2 max-[600px]:w-full bg-gray-200 p-2 w-full rounded" style={{ float: 'left' }}>
-                    <img src={info.image || '/bg/info-bg.jpg'} alt="" className="
+                    <img src={info.image} alt="" className="
                         rounded
                         border-1
                         border-gray-300
                         float-right
-                        
                         max-h-100
                         object-cover
                         max-[600px]:w-full

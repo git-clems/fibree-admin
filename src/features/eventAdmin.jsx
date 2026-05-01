@@ -64,7 +64,7 @@ const AdminEvents = () => {
         {
           !events?.length ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun évènement enrégistré</div> :
             events.map(event => (
-              <div key={event._id} className='border duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col'>
+              <div key={event._id} className='border duration-100 m-1 rounded w-[300px] max-[600px]:w-full bg-white flex flex-col shadow-[0_0_5px_rgba(0,0,0,0.2)]'>
                 <img src={event.image ? event.image : "/bg/event-bg.jpg"} alt="" className={`h-[200px] bg-black rounded-t-md object-cover`} />
                 <div className='p-2 border-t border-gray-200'>
                   <div className='flex justify-between items-center mt-2 mb-2'>

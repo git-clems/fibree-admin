@@ -15,7 +15,7 @@ const Infos = () => {
                     _id: doc.id,
                     ...doc.data()
                 }))
-                setInfos(data)
+                setInfos(data.filter(e=>!e.removed))
             } catch (error) {
                 console.log(error);
             }

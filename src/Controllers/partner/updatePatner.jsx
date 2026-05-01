@@ -1,5 +1,4 @@
 import React, { useEffect, useState, } from 'react'
-import axios from 'axios'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { db } from '../../auth/firebase';
 import { addDoc, collection, doc, getDoc, Timestamp, updateDoc } from 'firebase/firestore';
@@ -98,8 +97,8 @@ const UpdatePartner = ({ partnerId }) => {
 
     const ErrorHandler = () => {
         const newErrors = {}
-        if (!partner.title?.trim()) {
-            newErrors.title = 'Le nom est obligatoire'
+        if (!partner.name?.trim()) {
+            newErrors.name = 'Le nom est obligatoire'
         }
 
         setErrors(newErrors)
@@ -110,7 +109,6 @@ const UpdatePartner = ({ partnerId }) => {
         e.preventDefault()
 
         const isValid = ErrorHandler()
-
         if (!isValid) return
 
         setLoading(true)
@@ -136,7 +134,7 @@ const UpdatePartner = ({ partnerId }) => {
     return (
         <div className='p-2 rounded-t-md '>
             <div className='flex justify-between'>
-                <button className="m-1 max-[600px]:h-[30px] max-[600px]:w-[30px] h-[40px] w-[40px] flex justify-center items-center bg-blue-600 hover:bg-blue-400 rounded-1 text-[white]" onClick={() => setOpen(!open)}><i class="fa-solid fa-pen"></i></button>
+                <button className="m-1 h-[40px] w-[40px] flex justify-center items-center bg-blue-600 hover:bg-blue-400 rounded-1 text-[white]" onClick={() => setOpen(!open)}><i class="fa-solid fa-pen"></i></button>
             </div>
             {
                 open &&
@@ -144,7 +142,7 @@ const UpdatePartner = ({ partnerId }) => {
                     {
                         !partner
                             ? <Loading></Loading>
-                            : <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
+                            : <form onSubmit={SubmitForm} className={'bg-gray-100 m-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
 
                                 <div class="flex justify-between rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
                                     <span class="text-xl font-bold" id="">{initialPartner.name}</span>
@@ -172,7 +170,7 @@ const UpdatePartner = ({ partnerId }) => {
                                 <div className='shadow-[0_0_5px_rgba(0,0,0,0.2)] p-2'>
                                     <div class="flex justify-between">
                                         <button type="button" className="btn btn-secondary" disabled={loading || uploading} onClick={() => { setOpen(false) }}>Annuler</button>
-                                        <button type="submit" className="btn btn-primary" disabled={loading || uploading}>{loading || uploading ? "Chargement..." : "Enregistrer"}</button>
+                                        <button type="submit" className="btn btn-primary" disabled={loading || uploading}>{loading || uploading ? "Chargement..." : "Modifier"}</button>
                                     </div>
                                     <div className={`text-center ${message.includes('succès') ? 'text-green-500' : 'text-red-500'} `}>
                                         <span className=''>{message}</span>

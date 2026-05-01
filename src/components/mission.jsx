@@ -14,7 +14,7 @@ const Missions = () => {
                     ...doc.data()
                 }))
                 if (data) {
-                    setMissions(data)
+                    setMissions(data.filter(e => !e.removed))
                 } else {
                     setMissions(null)
                 }

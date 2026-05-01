@@ -120,7 +120,7 @@ const UpdateInfo = ({ infoId }) => {
 
             await updateDoc(doc(db, 'infos', infoId), {
                 ...info,
-                image: imageUrl || initialInfo.image,
+                image: imageUrl ? imageUrl : initialInfo.image,
                 updateAt: Timestamp.fromDate(new Date())
             })
 
@@ -185,7 +185,7 @@ const UpdateInfo = ({ infoId }) => {
                                 <div className='shadow-[0_0_5px_rgba(0,0,0,0.2)] p-2'>
                                     <div class="flex justify-between">
                                         <button type="button" className="btn btn-secondary m-1" disabled={loading || uploading} onClick={() => { setOpen(false) }}>Annuler</button>
-                                        <button type="submit" class="btn btn-primary" disabled={loading || uploading}>{loading ? "Chargement..." : "Enregistrer"}</button>
+                                        <button type="submit" class="btn btn-primary" disabled={loading || uploading}>{loading ? "Chargement..." : "Modifer"}</button>
                                     </div>
                                     <div className={`text-center ${message.includes('succès') ? 'text-green-500' : 'text-red-500'} `}>
                                         <span className=''>{message}</span>

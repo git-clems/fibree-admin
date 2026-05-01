@@ -131,11 +131,6 @@ const AdminMissions = () => {
                         </td>
 
                         <td className='flex items-center justify-center max-[600px]:flex-wrap pl-2'>
-                          <div class="form-check form-switch">
-                            <input type='checkbox' className=" cursor-pointer form-check-input" id="" role="switch" checked={mission.displayed} onChange={() => { toggleDisplay(mission._id, mission.displayed) }} />
-                          </div>
-
-                          <UpdateMission missionId={mission._id}></UpdateMission>
 
                           <button onClick={(e) => {
                             e.stopPropagation()
@@ -143,6 +138,13 @@ const AdminMissions = () => {
                           }} className="m-1 max-[600px]:h-[30px] max-[600px]:w-[30px] h-[40px] w-[40px] flex justify-center items-center bg-[red] hover:bg-red-400 rounded-1 text-[white]">
                             <i class="fa-solid fa-trash"></i>
                           </button>
+
+                          <UpdateMission missionId={mission._id}></UpdateMission>
+
+                          <div class="form-check form-switch">
+                            <input type='checkbox' className="cursor-pointer form-check-input" role="switch" checked={mission.displayed} onChange={() => { toggleDisplay(mission._id, mission.displayed) }} />
+                          </div>
+
                         </td>
                       </tr>
                     ))

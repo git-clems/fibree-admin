@@ -69,7 +69,6 @@ const Home = () => {
                 {
                     events.length > 0 &&
                     <div className="flex-1 rounded overflow-hidden m-1 mt-0 bg-gray-100 bg-white h-[max-content]">
-                    {/* <div className="flex-1 max-[600px]:hidden rounded overflow-hidden m-2 mt-0 bg-gray-100 bg-white h-[max-content]"> */}
                         <div className="flex justify-between items-center m-2">
                             <span className="font-bold text-xl">Evènements</span>
                             <Link to={'/evenement'} className="bg-green-400 hover:bg-green-300 rounded-full pt-1 pb-1 pl-5 pr-5">
@@ -125,7 +124,7 @@ const Home = () => {
 
             {
                 statistics.length > 0 &&
-                <section className="mt-5 bg-blue-50 flex flex-col justify-center items-center pt-3 pb-3">
+                <section className="mt-5 bg-blue-50 pt-3 pb-3">
                     <h2 className="text-center">Nos chiffres clés</h2>
                     <div className="flex flex-wrap rounded-md m-2">
                         {statistics.map(statistic => <Statistic statisticId={statistic._id}></Statistic>)}

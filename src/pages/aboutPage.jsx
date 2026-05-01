@@ -28,7 +28,7 @@ const About = () => {
         setMissions(missionSnap.docs.map(doc => ({
           _id: doc.id,
           ...doc.data()
-        })))
+        })).filter(e => !e.removed && e.displayed))
       } catch (error) {
         setAbout(null)
         setMissions(null)
@@ -77,7 +77,7 @@ const About = () => {
           <img src={about.team.image} alt="" className='max-h-80 border-9 border-yellow-100 rounded-2xl m-1' />
         }
         <div className='min-w-[300px] p-3 ml-5 rounded-3'>
-          <h4 className='flex justify-between'>Equipe</h4>
+          <h4 className='flex justify-between'>Une équipe engagée pour faire émerger les entrepreneurs de demain</h4>
           <p className='min-[800px]:max-w-[50vw]'>{about.team.description}</p>
 
           <Link to={'/equipe'} className="ml-5 bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
@@ -89,7 +89,7 @@ const About = () => {
 
       <section className='flex-wrap p-2 flex justify-around mt-5'>
         <div className='min-w-[300px] p-3 ml-5 rounded-3'>
-          <h4 className='flex justify-between'>Gouvernance</h4>
+          <h4 className='flex justify-between'>Une organisation structurée pour un impact durable</h4>
           <p className='min-[800px]:max-w-[50vw]'>{about.leadership.description}</p>
 
           <Link to={'/gouvernance'} className="bg-green-400 hover:bg-green-300 rounded-full pt-2 pb-2 pl-5 pr-5">
@@ -102,9 +102,9 @@ const About = () => {
       </section>
 
 
-      <section className='mt-5'>
+      <section className='mt-5 p-2'>
         <h4 className='mt-3 ml-5'>Partenaires</h4>
-        <p className='min-[800px]:max-w-[50vw] p-3'>{about.partnership.description}</p>
+        <p className='min-[800px]:max-w-[50vw]'>{about.partnership.description}</p>
         <Partenaires></Partenaires>
       </section>
 

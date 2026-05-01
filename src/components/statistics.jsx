@@ -30,7 +30,7 @@ const Statistic = ({ statisticId }) => {
                 statistic.displayed &&
                 <div className='max-w-[350px] m-2 min-w-[250px] w-[25vw] max-[600px]:w-100 bg-white m-2 border border-gray-500 rounded-md flex flex-col items-center p-2'>
                     <img src={statistic.image} alt="" className='w-50' />
-                    <h2 className='font-bold pl-2 pr-2 w-[100%] text-center'>{statistic.value}</h2>
+                    <h2 className='font-bold pl-2 pr-2 w-[100%] text-center'>{statistic.metric}</h2>
                     <div className='pl-2 pr-2 text-gray-500 w-[100%] text-center'>{statistic.description}</div>
                 </div>
             }

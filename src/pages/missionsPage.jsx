@@ -13,11 +13,11 @@ const Mission = () => {
         const FetchData = async () => {
             try {
                 const querry = await getDocs(collection(db, 'mission'))
-                const data = querry.docs.map(doc=>({
-                    _id : doc.id,
+                const data = querry.docs.map(doc => ({
+                    _id: doc.id,
                     ...doc.data()
                 }))
-                setMissions(data)
+                setMissions(data.filter(e => !e.removed && e.displayed))
             } catch (error) {
                 console.log(error);
             }
@@ -36,16 +36,16 @@ const Mission = () => {
             {
                 missions &&
                 missions.map((mission, index) => (
-                    index % 2 == 0 ?
-                        <section className='flex flex-wrap justify-between m-2'>
+                    index % 2 == 0
+                        ? <section className='flex flex-wrap justify-between m-2'>
                             <div className='flex-1 max-w-[1000px] min-w-[300px]'>
                                 <h4><span className='text-orange-500'>{index + 1} - {mission.title}</span></h4>
                                 <p className='pl-3'>{mission.description}</p>
                             </div>
-                            <img src={mission.image} alt="" className='min-w-[200px] object-cover m-3 border-10 border-yellow-50 rounded-xl' />
-                        </section> :
-                        <section className='flex flex-wrap justify-between m-2'>
-                            <img src={mission.image} alt="" className='min-w-[200px] object-cover m-3 border-10 border-yellow-50 rounded-xl' />
+                            <img src={mission.image} alt="" className='max-w-[200px] object-cover m-3 border-10 border-yellow-100 rounded-xl' />
+                        </section>
+                        : <section className='flex flex-wrap justify-between m-2'>
+                            <img src={mission.image} alt="" className='max-w-[200px] object-cover m-3 border-10 border-yellow-100 rounded-xl' />
                             <div className='flex-1 max-w-[1000px] min-w-[300px]'>
                                 <h4><span className='text-green-600'> {index + 1} - {mission.title}</span></h4>
                                 <p className='ml-3'>{mission.description}</p>

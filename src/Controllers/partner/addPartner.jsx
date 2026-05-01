@@ -78,7 +78,7 @@ const AddPartner = () => {
     const ErrorHandler = () => {
         const newErrors = {}
         if (!partner.name?.trim()) {
-            newErrors.name = 'Le titre est obligatoire'
+            newErrors.name = 'Le nom est obligatoire'
         }
 
 
@@ -122,7 +122,7 @@ const AddPartner = () => {
             {
                 open &&
                 <div className="fixed bg-[rgba(0,0,0,0.5)] flex justify-center h-100 w-100 top-0 pt-0 left-0 z-500 duration-200 transition-transform">
-                    <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
+                    <form onSubmit={SubmitForm} className={'bg-gray-100 mt-2 m-2 rounded-md flex-col h-[max-content] min-[600px]:w-[60%]'}>
 
                         <div class="flex justify-between rounded-t-md shadow-[0_0_5px_rgba(0,0,0,0.2)] overflow-hidden p-2">
                             <h1 class="fs-5" id="staticBackdropLabel">Nouveau partenaire</h1>

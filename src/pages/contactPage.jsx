@@ -3,7 +3,7 @@ import ContrySelector from '../components/countrySection'
 import Loading from '../components/LoadingPage'
 import contactSchema from '../models/contactModel'
 import html2pdf from 'html2pdf.js'
-import { addDoc, collection, doc } from 'firebase/firestore'
+import { addDoc, collection, doc, Timestamp } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import { useNavigate } from 'react-router'
 
@@ -18,7 +18,6 @@ const Contact = () => {
   const inputHandler = (e) => {
     const { name, value } = e.target
     setContact({ ...contact, [name]: value })
-    // console.log(name, value);
   }
 
   const naviagate = useNavigate()
@@ -27,7 +26,7 @@ const Contact = () => {
     e.preventDefault()
     setLoading(true)
 
-    await addDoc(collection(db, 'contact'), contact)
+    await addDoc(collection(db, 'contact'), { ...contact, contactDate: Timestamp.fromDate(new Date()) })
       .then((res) => {
         setSend(true)
         setLoading(false)
@@ -119,9 +118,6 @@ const Contact = () => {
             <button
               type="button"
               onClick={() => {
-                // setContact(contactSchema)
-                // setSend(false)
-                // nav
                 naviagate('/')
               }}
               className="btn btn-primary m-2"
@@ -203,7 +199,7 @@ const Contact = () => {
 
           <div className="min-w-[300px] m-1 mt-3 flex-1">
             <label htmlFor="" className="form-label">Votre message <span className='text-red-500'> * </span>  </label>
-            <textarea onChange={inputHandler} className="form-control" id="message" name='message' rows="3" placeholder='Rédiger ici votre message' required></textarea>
+            <textarea onChange={inputHandler} className="form-control" id="message" name='message' rows="10" placeholder='Rédiger ici votre message' required></textarea>
           </div>
 
 

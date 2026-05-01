@@ -9,7 +9,6 @@ const contactSchema = {
     object: "",
     message: "",
     ugc: false,
-    contactDate: Timestamp.fromDate(new Date()),
     opened: false
 }
 

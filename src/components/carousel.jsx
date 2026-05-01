@@ -51,10 +51,7 @@ const MyCarousel = () => {
       {affiches.map((affiche) => (
         (affiche.displayed && affiche.image) &&
         <Carousel.Item interval={interval}>
-          <img src={affiche.image} alt="yfhgjhn" className="w-full max-[800px]:h-[200px] h-[400px] object-contain overflow-hidden rounded-md" />
-          {/* <Carousel.Caption>
-            <p className='bg-[rgba(0,0,0,0.5)] rounded-md truncate'>{affiche.title}</p>
-          </Carousel.Caption> */}
+          <img src={affiche.image} alt="" className="w-full max-[800px]:h-[200px] h-[400px] object-contain overflow-hidden rounded-md" />
         </Carousel.Item>))}
     </Carousel >
   );

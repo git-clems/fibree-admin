@@ -102,7 +102,7 @@ const AddEvent = () => {
 
             await addDoc(collection(db, 'event'), {
                 ...event,
-                image: imageUrl,
+                image: imageUrl || "https://ik.imagekit.io/ejxp4lffuk/event/event-bg.jpg",
                 createAt: Timestamp.fromDate(new Date())
             })
 
