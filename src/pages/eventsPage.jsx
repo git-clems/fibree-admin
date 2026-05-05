@@ -101,7 +101,7 @@ const Events = () => {
                 <div className="m-2">
                     <h2 className='ml-2'>Evènements</h2>
                     <div className="flex-1 flex flex-wrap">
-                        {events.sort((a, b) => b.publishDate - a.publishDate).map((event) => <Event eventId={event._id}></Event>)}
+                        {events.sort((a, b) => b.createAt - a.createAt).map((event) => <Event eventId={event._id}></Event>)}
                     </div>
                 </div>
             </div>

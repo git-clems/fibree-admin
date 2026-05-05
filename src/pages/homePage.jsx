@@ -75,7 +75,7 @@ const Home = () => {
                                 <span className="text-nowrap">Voir plus<i class="fa-solid fa-arrow-right"></i></span>
                             </Link>
                         </div>
-                        {events.map((event) => (<Event eventId={event._id} />))}
+                        {events.sort((a, b) => b.createAt - a.createAt).map((event) => (<Event eventId={event._id} />))}
                     </div>
                 }
                 {

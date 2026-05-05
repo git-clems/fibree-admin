@@ -14,6 +14,21 @@ const Contact = () => {
   const [loading, setLoading] = useState(false)
   const [send, setSend] = useState(false)
   const [objectCheck, setObjectCheck] = useState(false)
+  const [errors, setErrors] = useState({})
+
+  const handleErrors = () => {
+    const newError = {}
+    if (!contact.city) newError.city = "Entrez votre ville de résidence"
+    if (!contact.country?.trim()) newError.country = "Entrez votre pays de résidence"
+    if (!contact.email?.trim()) newError.email = "Entrez votre courriel"
+    if (!contact.fname?.trim()) newError.fname = "Entrez votre prénom"
+    if (!contact.lname?.trim()) newError.lname = "Entrez votre nom de famille"
+    if (!contact.message?.trim()) newError.message = "Entrez votre message"
+
+    setErrors(newError)
+
+    return Object.keys(newError).length === 0
+  }
 
   const inputHandler = (e) => {
     const { name, value } = e.target
@@ -24,6 +39,9 @@ const Contact = () => {
 
   const HandleSubmit = async (e) => {
     e.preventDefault()
+
+    if (!handleErrors()) return
+
     setLoading(true)
 
     await addDoc(collection(db, 'contact'), { ...contact, contactDate: Timestamp.fromDate(new Date()) })
@@ -144,52 +162,61 @@ const Contact = () => {
         <form action="" className='min-[800px]:border-3 border-gray-300 rounded-md min-[600px]:p-4 max-[600px]:p-2 pt-0 bg-gray-100' onSubmit={HandleSubmit}>
           <div className="flex mb-3 justify-between flex-wrap">
             <div className="min-w-[300px] m-1 mt-3 flex-1">
-              <label htmlFor="" className="form-label">Nom <span className='text-red-500'> * </span>  </label>
-              <input type="text" onChange={inputHandler} className="form-control" name='lname' required id="nom" />
+              <div className='flex justify-between'>
+                <label htmlFor="" className="form-label">Nom <span className='text-red-500'> * </span>  </label>
+                {errors?.lname && (<span className='text-red-500'>{errors?.lname}</span>)}
+              </div>
+              <input type="text" onChange={inputHandler} className="form-control" name='lname' id="nom" />
             </div>
 
             <div className="min-w-[300px] m-1 mt-3 flex-1">
-              <label htmlFor="" className="form-label">Prénom(s) <span className='text-red-500'> * </span>  </label>
-              <input type="text" onChange={inputHandler} className="form-control" name='fname' required id="prenom" />
+              <div className='flex justify-between'>
+                <label htmlFor="" className="form-label">Prénoms(s) <span className='text-red-500'> * </span>  </label>
+                {errors?.fname && (<span className='text-red-500'>{errors?.fname}</span>)}
+              </div>
+              <input type="text" onChange={inputHandler} className="form-control" name='fname' id="prenom" />
             </div>
           </div>
 
           <div className="flex mb-3 justify-between flex-wrap">
             <div className="min-w-[300px] m-1 mt-3 flex-1">
-              <label htmlFor="" className="form-label">Email <span className='text-red-500'> * </span>  </label>
-              <input type="email" onChange={inputHandler} className="form-control" id="email" name='email' placeholder="exemple@gmail.com" required />
+              <div className='flex justify-between'>
+                <label htmlFor="" className="form-label">Email <span className='text-red-500'> * </span>  </label>
+                {errors?.email && (<span className='text-red-500'>{errors?.email}</span>)}
+              </div>
+              <input type="email" onChange={inputHandler} className={`form-control`} id="email" name='email' placeholder="exemple@gmail.com" />
             </div>
 
             <div className="min-w-[300px] m-1 mt-3 flex-1">
               <label htmlFor="" className="form-label">Numéro de téléphone <span className='text-red-500'> * </span>  </label>
-              <input type="tel" onChange={inputHandler} className="form-control" id="telephone" name='tel' placeholder="+123 11 22 33 44" required />
+              <input type="tel" onChange={inputHandler} className="form-control" id="telephone" name='tel' placeholder="+123 11 22 33 44" />
             </div>
           </div>
 
           <div className="flex mb-3 justify-between flex-wrap">
             <div className="min-w-[300px] m-1 mt-3 flex-1">
               <label htmlFor="" className="form-label">Pays de résidence <span className='text-red-500'> * </span>  </label>
-              <select class="form-select" autocomplete="country" id="country" onChange={inputHandler} required name="country">
+              <select class="form-select" autocomplete="country" id="country" onChange={inputHandler} name="country">
                 <ContrySelector></ContrySelector>
               </select>
             </div>
 
             <div className="min-w-[300px] m-1 mt-3 flex-1">
               <label htmlFor="" className="form-label">Ville de résidence <span className='text-red-500'> * </span>  </label>
-              <input type="text" onChange={inputHandler} className="form-control" id="city" name='city' required />
+              <input type="text" onChange={inputHandler} className="form-control" id="city" name='city' />
             </div>
           </div>
           <div className="min-w-[300px] m-1 mt-3 flex-1">
             <label htmlFor="" className="form-label">Objet <span className='text-red-500'> * </span>  </label>
             {!objectCheck ?
-              <select class="form-select" autocomplete="object" id="object" onChange={inputHandler} required name="object">
+              <select class="form-select" autocomplete="object" id="object" onChange={inputHandler} name="object">
                 <option value="">Choisir un objet</option>
                 <option value="Renseignement">Renseignement</option>
                 <option value="Partenariat">Partenariat</option>
                 <option value="Devenir membre">Devenir membre</option>
                 <option value="Aider la FIBREE">Aider la FIBREE</option>
               </select> :
-              <input type="text" onChange={inputHandler} className="form-control" id="object" name='object' placeholder="Inserez l'objet de votre message" required />
+              <input type="text" onChange={inputHandler} className="form-control" id="object" name='object' placeholder="Inserez l'objet de votre message" />
             }
             <div className="flex m-1 mt-3 items-start">
               <input className="form-check-input mt-1" type="checkbox" id="checkDefault" onChange={() => setObjectCheck(!objectCheck)} />
@@ -199,12 +226,12 @@ const Contact = () => {
 
           <div className="min-w-[300px] m-1 mt-3 flex-1">
             <label htmlFor="" className="form-label">Votre message <span className='text-red-500'> * </span>  </label>
-            <textarea onChange={inputHandler} className="form-control" id="message" name='message' rows="10" placeholder='Rédiger ici votre message' required></textarea>
+            <textarea onChange={inputHandler} className="form-control" id="message" name='message' rows="10" placeholder='Rédiger ici votre message' ></textarea>
           </div>
 
 
           <div className="flex m-1 mt-3 items-start">
-            <input className="form-check-input mt-1" type="checkbox" id="checkDefault" required />
+            <input className="form-check-input mt-1" type="checkbox" id="checkDefault" />
             <label className="form-check-label ml-2 mr-2" htmlFor="" name='ugc' onChange={inputHandler}>Je ne suis pas un robot <span className='text-red-500'> * </span>  </label>
           </div>
           <div className='flex justify-center m-1 mt-3'>

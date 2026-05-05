@@ -33,21 +33,13 @@ const AdminEvents = () => {
       .catch((e) => console.log(e)
       )
   }
-
+  
   const toggleDisplay = async (eventId, currentValue) => {
     try {
       const updatedValue = !currentValue;
       await updateDoc(doc(db, 'event', eventId), {
         displayed: updatedValue,
       });
-
-      // Mise à jour du state (UI instantanée)
-      setEvents((prevEvents) =>
-        prevEvents.map((event) =>
-          event._id === eventId ?
-            { ...event, displayed: updatedValue }
-            : event
-        ));
     } catch (error) {
       console.log(error);
     }
