@@ -76,7 +76,7 @@ const AdminPartners = () => {
           </div>
         </form>
 
-        <div className='flex flex-wrap m-1'>
+        <div className='flex flex-wrap m-1 bg-white'>
           {!partners?.length
             ? <div className='flex justify-center items-center w-full h-[80vh]'>Aucun partenaire enregistré</div>
             : searchedPartner.map((partner) => (

@@ -9,7 +9,7 @@ import { PublishTime } from "../features/admin";
 const DetailsInfo = () => {
     const [info, setInfo] = useState();
     const { id } = useParams();
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {

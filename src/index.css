@@ -30,6 +30,7 @@
 .page {
   padding-top: 80px;
   min-height: 100vh;
+  background-color: rgba(251, 251, 251, 0.774);
 }
 
 a {

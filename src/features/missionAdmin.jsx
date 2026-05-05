@@ -75,14 +75,14 @@ const AdminMissions = () => {
           <div className='flex flex-wrap items-center justify-between '>
             <form className="flex flex-1 flex-wrap max-w-[1000px] items-center justify-center max-[800px]:m-2 min-[800px]:m-5 mt-0" onSubmit={(e) => e.preventDefault()}>
               <div className="flex w-full border-2 border-gray-300 rounded-full focus-within:outline focus-within:outline-2 focus-within:outline-blue-300 focus-within:border-white duration-50">
-                <input type="search" placeholder="Rechercher un nom" value={search} onChange={(e) => setSearch(e.target.value)} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
+                <input type="search" placeholder="Rechercher une mission" value={search} onChange={(e) => setSearch(e.target.value)} className="border-l-none outline-none rounded-l-full h-[40px] pl-2 flex-1" />
                 <div className="text-gray-400 pr-5 pl-5 border-gray-300 flex justify-center items-center"><i class="fa-solid fa-magnifying-glass"></i></div>
               </div>
             </form>
           </div>
 
           {
-            <table class="flex-1 w-full text-sm">
+            <table class="flex-1 w-full text-sm bg-white">
               <thead className='bg-gray-600 text-white'>
                 <tr>
                   <th className='p-2'>Illustration</th>

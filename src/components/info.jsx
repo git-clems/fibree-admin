@@ -50,9 +50,9 @@ const Info = ({ infoId }) => {
 
     return (
         info.displayed &&
-        <Link to={`/actualite/${infoId}`} className='max-w-[350px] m-2 max-h-[350px] h-[max-content] min-w-[250px] min-h-[250px] w-[25vw] max-[600px]:w-full bg-white m-2 border border-gray-500 rounded-md hover:shadow-[0_0_10px_rgba(0,0,0,0.5)] duration-200'>
+        <Link to={`/actualite/${infoId}`} className='max-w-[350px] m-2 max-h-[350px] min-w-[250px] min-h-[250px] w-[25vw] max-[600px]:w-full bg-white m-2 border border-gray-500 rounded-md hover:shadow-[0_0_10px_rgba(0,0,0,0.5)] duration-200'>
+            <span className='text-sky-50 text-xs text-center position-absolute rounded-tl shadow-[0_1px_5px_rgba(0,0,25,0.9)] bg-sky-700 font-bold pl-2 pr-2 pt-1 pb-1'>{PublishTime(info?.createAt)}</span>
             <img src={info.image} alt="" className='rounded-t-md h-[200px] w-[100%] object-cover rounded-t-md' />
-            <span className='text-sky-50 text-xs shadow-[0_0_10px_rgba(0,0,0,0.5)] bg-sky-700 font-bold pl-2 pr-2 pt-1 pb-1 rounded-r'>{PublishTime(info?.createAt)}</span>
             <div className='line-clamp-2 font-bold pl-2 pr-2 '>{info.title}</div>
             <div className='line-clamp-2 pl-2 pr-2 text-gray-500 text-sm'>{info.subtitle}</div>
         </Link>

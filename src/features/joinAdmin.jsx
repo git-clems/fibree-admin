@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
+import { PublishTime } from './admin'
 
 
 const AdminJoins = () => {
@@ -124,9 +125,8 @@ const AdminJoins = () => {
                       {join.fname} {join.lname.toUpperCase()}
                     </td>
                     <td className='p-2'>
-                      {join.joinDate?.toDate().toLocaleString('fr-FR')}
+                      {PublishTime(join.joinDate)}
                     </td>
-                    {/* <td>{join?.accepted && <span className='text-green-700'><i class="fa-solid fa-check"></i></span>}</td> */}
                   </tr>
                 ))}
             </tbody>

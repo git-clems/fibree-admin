@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 import Loading from '../components/LoadingPage'
+import { PublishTime } from './admin'
 
 
 const AdminNewPartners = () => {
@@ -122,7 +123,7 @@ const AdminNewPartners = () => {
                       {newPartner.name.toUpperCase()}
                     </td>
                     <td className='p-2 text-end'>
-                      {newPartner.sendDate?.toDate().toLocaleString('fr-FR')}
+                      {PublishTime(newPartner.sendDate)}
                     </td>
                   </tr>
                 ))}

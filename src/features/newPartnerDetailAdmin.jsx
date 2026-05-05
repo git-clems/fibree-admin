@@ -5,6 +5,7 @@ import { db } from "../auth/firebase";
 import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
 import Page404 from "../pages/404";
+import { PublishTime } from "./admin";
 
 
 const newPartnerDetailAdmin = () => {
@@ -81,9 +82,10 @@ const newPartnerDetailAdmin = () => {
         <div ref={recapRef} style={{ backgroundColor: 'white', borderColor: 'gray' }} className="border overflow-hidden rounded-md">
           <div style={{ backgroundColor: 'green', color: "white" }} className="p-2 flex justify-between">
             <div>
-              <i class="fa-solid fa-circle-user"></i> <span className="ml-2"> {newPartner.name}</span> <br />
-              <i class="fa-solid fa-phone"></i> : <span className="ml-2">{newPartner.tel}</span> <br />
-              <i className="fa-solid fa-location-dot"></i> : <span>{newPartner.city}, {newPartner.country}</span>
+              <i class="fa-solid fa-circle-user"></i> <span className=""> {newPartner.name}</span> <br />
+              <i class="fa-solid fa-phone"></i> <span className="ml-">{newPartner.tel}</span> <br />
+              <i className="fa-solid fa-location-dot"></i> <span>{newPartner.city}, {newPartner.country}</span> <br />
+              <i className="fa-solid fa-calendar"></i> <span>{PublishTime(newPartner.sendDate)}</span>
             </div>
             <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
           </div>

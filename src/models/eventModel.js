@@ -11,7 +11,6 @@ const eventSchema = {
     comingDate : "",
     city : "",
     online : false,
-    publishDate : Timestamp.fromDate(new Date()),
 }
 
 export default eventSchema

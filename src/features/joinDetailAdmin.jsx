@@ -6,6 +6,7 @@ import Loading from "../components/LoadingPage";
 import html2pdf from 'html2pdf.js'
 import Page404 from "../pages/404";
 import memberSchema from '../models/memberModel'
+import { PublishTime } from "./admin";
 
 
 const JoinDetailAdmin = () => {
@@ -84,7 +85,7 @@ const JoinDetailAdmin = () => {
                             <i class="fa-solid fa-circle-user"></i> : <span>{join.gender} {join.fname} {join.lname.toUpperCase()}</span> <br />
                             <i class="fa-solid fa-phone"></i> : <span>{join.tel}</span> <br />
                             <i className="fa-solid fa-location-dot"></i> : <span>{join.city}, {join.country}</span> <br />
-                            <i className="fa-solid fa-calendar"></i> : <span>{join.joinDate.toDate().toLocaleString()}</span>
+                            <i className="fa-solid fa-calendar"></i> : <span>{PublishTime(join.joinDate)}</span>
                         </div>
                         <img src="/logo/logo.png" alt="" className='h-[100px] w-[100px] rounded-md' />
                     </div>

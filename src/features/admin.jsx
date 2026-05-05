@@ -37,9 +37,24 @@ export const PublishTime = (timestamp) => {
         })}`
     }
 
-    if (diffDays < 7 ) {
-        return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`
+    if (diffDays < 0) {
+        if (diffDays == -1) return `Demain à ${date.toLocaleTimeString('fr-FR', {
+            hour: "2-digit",
+            minute: "2-digit"
+        })}`
+        if (diffDays >= -6) return `Dans ${-diffDays} jours`
+        if (diffDays === -7) return `Dans une semaine`
+        if (diffDays <= -8)
+            return date.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: "2-digit",
+                minute: "2-digit"
+            })
     }
+
+    if (diffDays < 7) return `Il y a ${diffDays} jour${diffDays > 1 ? 's' : ''}`
 
     return date.toLocaleDateString('fr-FR', {
         day: 'numeric',

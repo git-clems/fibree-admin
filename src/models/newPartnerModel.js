@@ -2,7 +2,6 @@ import { Timestamp } from "firebase/firestore"
 
 const newPartner = {
     name: "",
-    lname: "",
     email: "",
     country: "",
     city: "",
@@ -13,7 +12,6 @@ const newPartner = {
     expectation: "",
     ugc: false,
     accepted : false,
-    sendDate : Timestamp.fromDate(new Date())
 }
 
 export default newPartner

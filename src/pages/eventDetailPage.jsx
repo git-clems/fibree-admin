@@ -45,8 +45,8 @@ const DetailsEvent = () => {
                     <p className="name text-xl"><span className="text-orange-500 font-bold">{event.type}</span> : {event.title}</p>
                     <p className="text-gray-500">{event.subtitle}</p>
                     <div className='flex'>
-                        {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {Timestamp.fromDate(new Date(event?.comingDate)).toDate().toLocaleString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })} {event.comingTime && `à ${event.comingTime} GMT`}</div>}
-                        {event.online && <div className={`ml-2 text-white font-bold bg-blue-500 w-[max-content] ${event.comingDate && ""} text-xs p-1 rounded`}> <i class="fa-solid fa-video"></i> En ligne</div>}
+                        {event.comingDate && <div className='text-xs font-bold text-white truncate bg-red-500 rounded p-1 '> <i className='fa-solid fa-calendar'></i> {PublishTime(Timestamp.fromDate(new Date(`${event?.comingDate}T${event?.comingTime}`)))}</div>}
+                        {event.online && <div className={`ml-2 text-white font-bold bg-blue-500 w-[max-content] text-xs p-1 rounded`}> <i class="fa-solid fa-video"></i> En ligne</div>}
                     </div>
                     {event.adress && <div className='text-gray-500 mt-2 text-xs truncate'> <i className='fa-solid fa-location-dot'></i> {event.adress} </div>}
                     <div className="mt-2">
@@ -55,7 +55,7 @@ const DetailsEvent = () => {
                     {
                         event?.updateAt
                             ? <div className="mt-2 text-xs">Dernière mise à jour : {PublishTime(event.updateAt)}</div>
-                            : <div className="mt-2 text-xs">Date de publication : {PublishTime(event.publishDate)}</div>
+                            : <div className="mt-2 text-xs">Date de publication : {PublishTime(event.createAt)}</div>
                     }
                 </div>
 

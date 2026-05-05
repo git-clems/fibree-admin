@@ -3,7 +3,7 @@ import ContrySelector from '../components/countrySection'
 import Loading from '../components/LoadingPage'
 import newPartner from "../models/newPartnerModel"
 import html2pdf from 'html2pdf.js'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, Timestamp } from 'firebase/firestore'
 import { db } from '../auth/firebase'
 
 const BePartner = () => {
@@ -13,12 +13,11 @@ const BePartner = () => {
     const [loading, setLoading] = useState(false)
     const [send, setSend] = useState(false)
     const [objectCheck, setObjectCheck] = useState(false)
+    const [errors, setErrors] = useState({})
 
     const inputHandler = (e) => {
         const { name, value } = e.target
         setPartner({ ...partner, [name]: value })
-        console.log(name, value);
-
     }
 
     const HandleSubmit = async (e) => {
@@ -26,7 +25,7 @@ const BePartner = () => {
         setLoading(true)
 
         try {
-            addDoc(collection(db, 'new-partner'), partner)
+            addDoc(collection(db, 'new-partner'), { ...partner, sendDate: Timestamp.fromDate(new Date()) })
             setLoading(false)
             setSend(true)
         } catch (error) {
@@ -159,7 +158,7 @@ const BePartner = () => {
                         <label htmlFor="" className="form-label"><sup>1</sup> Qui ête-vous ?<span className='text-red-500'> * </span>  </label>
                         {
                             objectCheck ?
-                                <input type='text' onChange={inputHandler} className="form-control" id="profession" name='profession' rows="3" placeholder='Dites nous qui vous êtes' required></input> :
+                                <input type='text' onChange={inputHandler} className="form-control" id="profession" name='profession' rows="6" placeholder='Dites nous qui vous êtes' required></input> :
                                 <select class="form-select" autocomplete="profession" id="profession" onChange={inputHandler} required name="profession">
                                     <option value="">Choisir</option>
                                     <option value="Entreprise">Entreprise</option>
@@ -210,17 +209,17 @@ const BePartner = () => {
 
                     <div className="min-w-[300px] m-1 mt-3 flex-1">
                         <label htmlFor="" className="form-label">Votre motivation <span className='text-red-500'> * </span>  </label>
-                        <textarea onChange={inputHandler} className="form-control" id="motivation" name='motivation' rows="3" placeholder='Rédiger ici une motivation bien explicite' required></textarea>
+                        <textarea onChange={inputHandler} className="form-control" id="motivation" name='motivation' rows="6" placeholder='Rédiger ici une motivation bien explicite' required></textarea>
                     </div>
 
                     <div className="min-w-[300px] m-1 mt-3 flex-1">
                         <label htmlFor="" className="form-label">Que comptez-vous apporter à la FIBREE ? <span className='text-red-500'> * </span>  </label>
-                        <textarea onChange={inputHandler} className="form-control" id="add" rows="3" name='contribution' placeholder='' required></textarea>
+                        <textarea onChange={inputHandler} className="form-control" id="add" rows="6" name='contribution' placeholder='' required></textarea>
                     </div>
 
                     <div className="min-w-[300px] m-1 mt-3 flex-1">
                         <label htmlFor="" className="form-label">Qu'espérez vous avoir avec la FIBREE ? <span className='text-red-500'> * </span>  </label>
-                        <textarea onChange={inputHandler} className="form-control" id="add" rows="3" name='expectation' placeholder='' required></textarea>
+                        <textarea onChange={inputHandler} className="form-control" id="add" rows="6" name='expectation' placeholder='' required></textarea>
                     </div>
 
                     <div className="flex m-1 mt-3 items-start">

@@ -31,7 +31,7 @@ const Partenaires = () => {
                     {partenaires.map((partenaire) => (
                         partenaire.displayed &&
                         <div key={partenaire._id} className='slide m-2 flex items-center flex-col'>
-                            <img src={partenaire.image} alt="" className='h-[200px] w-[200px] object-contain border-2 border-gray-200 rounded-md' />
+                            <img src={partenaire.image} alt="" className='h-[200px] w-[200px] bg-white object-contain border-2 border-gray-200 rounded-md' />
                             <p className='w-[200px] p-2 text-center'>{partenaire.name}</p>
                         </div>
                     ))}
